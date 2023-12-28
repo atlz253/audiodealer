@@ -28,9 +28,7 @@ const Root: FC = () => {
 
   return (
     <AuthContext.Provider value={{ auth, setAuth }}>
-      <BrowserRouter>
         <AppRouter />
-      </BrowserRouter>
     </AuthContext.Provider>
   );
 };

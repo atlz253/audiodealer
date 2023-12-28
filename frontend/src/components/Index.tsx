@@ -1,7 +1,7 @@
-import React, { FC, useContext } from "react";
+import { useContext } from "react";
 import { AuthContext, IAuthContext } from "../context";
 
-const IndexPage: FC = () => {
+const Index: React.FC = () => {
   const { auth } = useContext<IAuthContext>(AuthContext);
 
   return (
@@ -14,4 +14,4 @@ const IndexPage: FC = () => {
   );
 };
 
-export default IndexPage;
+export default Index;

@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Route, Routes } from "react-router-dom";
+import { Route, RouterProvider, Routes, createHashRouter } from "react-router-dom";
 import { admin_routes, dealer_routes } from "../configs/routes";
 import App from "./App";
 import { AuthContext } from "../context";
@@ -13,19 +13,13 @@ export const AppRouter = () => {
     return <AuthPage />;
   }
 
-  let routes = dealer_routes;
+  let routes = createHashRouter(dealer_routes);
 
   if (auth.type === "admin") {
-    routes = admin_routes;
+    routes = createHashRouter(admin_routes);
   }
 
   return (
-    <Routes>
-      <Route element={<App />}>
-        {routes.map((route) => (
-          <Route key={route.path} path={route.path} element={route.element} />
-        ))}
-      </Route>
-    </Routes>
+    <RouterProvider router={routes} />
   );
 };
