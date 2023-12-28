@@ -5,9 +5,9 @@ import IAuthorization from "../../../common/interfaces/IAuthorization";
 import Logger from "../logger";
 
 class Authorizations {
-    public static async Insert(authorization: IAuthorization): Promise<number> {
-        const query: QueryConfig = {
-            text: `
+  public static async Insert(authorization: IAuthorization): Promise<number> {
+    const query: QueryConfig = {
+      text: `
                 INSERT INTO
                     authorizations (
                         login,
@@ -21,20 +21,19 @@ class Authorizations {
                 RETURNING 
                     authorization_id as id
             `,
-            values: [
-                authorization.login,
-                authorization.password
-            ]
-        };
-    
-        const result = await pool.query<ID>(query);
-    
-        return result.rows[0].id;
-    }
+      values: [authorization.login, authorization.password],
+    };
 
-    public static async SelectIDByAuth(authorization: IAuthorization): Promise<number | null> {
-        const query: QueryConfig = {
-            text: `
+    const result = await pool.query<ID>(query);
+
+    return result.rows[0].id;
+  }
+
+  public static async SelectIDByAuth(
+    authorization: IAuthorization,
+  ): Promise<number | null> {
+    const query: QueryConfig = {
+      text: `
                 SELECT
                     authorization_id AS id
                 FROM
@@ -43,24 +42,24 @@ class Authorizations {
                     login = $1 AND
                     password = $2
             `,
-            values: [
-                authorization.login,
-                authorization.password
-            ]
-        };
-        
-        const result = await pool.query<ID>(query);
-        
-        if (result.rowCount === 0) {
-            return null;
-        }
-        
-        return result.rows[0].id;
+      values: [authorization.login, authorization.password],
+    };
+
+    const result = await pool.query<ID>(query);
+
+    if (result.rowCount === 0) {
+      return null;
     }
-    
-    public static async Update(authorizationID: number, authorization: IAuthorization): Promise<void> {
-        const query: QueryConfig = {
-            text: `
+
+    return result.rows[0].id;
+  }
+
+  public static async Update(
+    authorizationID: number,
+    authorization: IAuthorization,
+  ): Promise<void> {
+    const query: QueryConfig = {
+      text: `
                 UPDATE
                     authorizations
                 SET
@@ -69,31 +68,25 @@ class Authorizations {
                 WHERE
                     authorization_id = $3
             `,
-            values: [
-                authorization.login,
-                authorization.password,
-                authorizationID
-            ]
-        };
-    
-        await pool.query(query);
-    }
+      values: [authorization.login, authorization.password, authorizationID],
+    };
 
-    public static async Delete(id: number): Promise<void> {
-        const query: QueryConfig = {
-            text: `
+    await pool.query(query);
+  }
+
+  public static async Delete(id: number): Promise<void> {
+    const query: QueryConfig = {
+      text: `
                 DELETE FROM
                     authorizations
                 WHERE
                     authorization_id = $1;
             `,
-            values: [
-                id
-            ]
-        };
-    
-        await pool.query(query);
-    }
+      values: [id],
+    };
+
+    await pool.query(query);
+  }
 }
 
 export default Authorizations;

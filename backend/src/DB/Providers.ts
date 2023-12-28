@@ -10,17 +10,17 @@ import ProvidersProducts from "./ProvidersProducts";
 import ICount from "../../../common/interfaces/ICount";
 
 class Providers {
-    public static get Bills(): typeof BillsProvider {
-        return BillsProvider;
-    }
+  public static get Bills(): typeof BillsProvider {
+    return BillsProvider;
+  }
 
-    public static get Products(): typeof ProvidersProducts {
-        return ProvidersProducts;
-    }
+  public static get Products(): typeof ProvidersProducts {
+    return ProvidersProducts;
+  }
 
-    public static async SelectAll(): Promise<IBaseProvider[]> {
-        const query: QueryConfig = {
-            text: `
+  public static async SelectAll(): Promise<IBaseProvider[]> {
+    const query: QueryConfig = {
+      text: `
                 SELECT
                     providers.provider_id AS id,
                     company_names.company_name AS name,
@@ -30,17 +30,17 @@ class Providers {
                     company_names
                 WHERE
                     providers.company_name_id = company_names.company_name_id
-            `
-        };
-    
-        const result = await pool.query<IBaseProvider>(query);
-    
-        return result.rows;
-    }
+            `,
+    };
 
-    public static async SelectNames(): Promise<IName[]> {
-        const query: QueryConfig = {
-            text: `
+    const result = await pool.query<IBaseProvider>(query);
+
+    return result.rows;
+  }
+
+  public static async SelectNames(): Promise<IName[]> {
+    const query: QueryConfig = {
+      text: `
                 SELECT
                     providers.provider_id AS id,
                     company_names.company_name AS name
@@ -49,17 +49,17 @@ class Providers {
                     company_names
                 WHERE
                     providers.company_name_id = company_names.company_name_id
-            `
-        };
-    
-        const result = await pool.query<IName>(query);
-    
-        return result.rows;
-    }
+            `,
+    };
 
-    public static async Select(id: number): Promise<IProvider> {
-        const query: QueryConfig = {
-            text: `
+    const result = await pool.query<IName>(query);
+
+    return result.rows;
+  }
+
+  public static async Select(id: number): Promise<IProvider> {
+    const query: QueryConfig = {
+      text: `
                 SELECT
                     providers.provider_id AS id,
                     company_names.company_name AS name,
@@ -73,36 +73,34 @@ class Providers {
                     providers.provider_id = $1 AND
                     providers.company_name_id = company_names.company_name_id
             `,
-            values: [
-                id
-            ]
-        };
-    
-        const result = await pool.query<IProvider>(query);
-    
-        return result.rows[0];
-    }
+      values: [id],
+    };
 
-    public static async SelectCount(): Promise<ICount> {
-        const query: QueryConfig = {
-            text: `
+    const result = await pool.query<IProvider>(query);
+
+    return result.rows[0];
+  }
+
+  public static async SelectCount(): Promise<ICount> {
+    const query: QueryConfig = {
+      text: `
                 SELECT
                     COUNT(*)
                 FROM
                     providers
-            `
-        };
-    
-        const result = await pool.query<ICount>(query);
-    
-        return result.rows[0];
-    }
+            `,
+    };
 
-    public static async Insert(provider: IProvider): Promise<ID> {
-        const companyNameID = await DB.CompanyNames.SelectIDByName(provider.name);
+    const result = await pool.query<ICount>(query);
 
-        const query: QueryConfig = {
-            text: `
+    return result.rows[0];
+  }
+
+  public static async Insert(provider: IProvider): Promise<ID> {
+    const companyNameID = await DB.CompanyNames.SelectIDByName(provider.name);
+
+    const query: QueryConfig = {
+      text: `
                 INSERT INTO
                     providers (
                         company_name_id,
@@ -115,23 +113,19 @@ class Providers {
                 RETURNING
                     provider_id AS id
             `,
-            values: [
-                companyNameID.id,
-                provider.phone,
-                provider.address
-            ]
-        };
-    
-        const result = await pool.query<ID>(query);
-    
-        return result.rows[0];
-    }
+      values: [companyNameID.id, provider.phone, provider.address],
+    };
 
-    public static async Update(provider: IProvider): Promise<void> {
-        const companyNameID = await DB.CompanyNames.SelectIDByName(provider.name);
+    const result = await pool.query<ID>(query);
 
-        const query: QueryConfig = {
-            text: `
+    return result.rows[0];
+  }
+
+  public static async Update(provider: IProvider): Promise<void> {
+    const companyNameID = await DB.CompanyNames.SelectIDByName(provider.name);
+
+    const query: QueryConfig = {
+      text: `
                 UPDATE
                     providers
                 SET
@@ -141,32 +135,25 @@ class Providers {
                 WHERE
                     provider_id = $4
             `,
-            values: [
-                companyNameID,
-                provider.phone,
-                provider.address,
-                provider.id
-            ]
-        };
-    
-        await pool.query(query);
-    }
+      values: [companyNameID, provider.phone, provider.address, provider.id],
+    };
 
-    public static async Delete(id: number): Promise<void> {
-        const query: QueryConfig = {
-            text: `
+    await pool.query(query);
+  }
+
+  public static async Delete(id: number): Promise<void> {
+    const query: QueryConfig = {
+      text: `
                 DELETE FROM
                     providers
                 WHERE
                     provider_id = $1
             `,
-            values: [
-                id
-            ]
-        };
-    
-        await pool.query(query);
-    }
+      values: [id],
+    };
+
+    await pool.query(query);
+  }
 }
 
 export default Providers;

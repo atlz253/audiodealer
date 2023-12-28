@@ -6,26 +6,39 @@ import createBufferDocument from "../../utils/createBufferDocument";
 
 const chequesRouter = express.Router();
 
-chequesRouter.get("/", expressAsyncHandler(async (req: RequestBody, res: Response) => {
+chequesRouter.get(
+  "/",
+  expressAsyncHandler(async (req: RequestBody, res: Response) => {
     const cheques = await DB.Cheques.Select({
-        chequeStatus: (typeof req.query.chequeStatus === "string") ? req.query.chequeStatus : undefined
+      chequeStatus:
+        typeof req.query.chequeStatus === "string"
+          ? req.query.chequeStatus
+          : undefined,
     });
 
     const rows: (string | number)[][] = [
-        ["Номер", "Тип", "Статус оплаты", "Дата доставки"]
+      ["Номер", "Тип", "Статус оплаты", "Дата доставки"],
     ];
 
-    cheques.forEach(cheque => rows.push([
+    cheques.forEach((cheque) =>
+      rows.push([
         cheque.id,
         cheque.type === "sell" ? "Продажа" : "Покупка",
         cheque.status === "paid" ? "Оплачен" : "Не оплачен",
-        cheque.deliveryDate
-    ]));
+        cheque.deliveryDate,
+      ]),
+    );
 
-    const buffer = createBufferDocument(rows)
+    const buffer = createBufferDocument(rows);
 
-    res.writeHead(200, [['Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet']]);
-    res.end(Buffer.from(buffer, 'base64'));
-}));
+    res.writeHead(200, [
+      [
+        "Content-Type",
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      ],
+    ]);
+    res.end(Buffer.from(buffer, "base64"));
+  }),
+);
 
 export default chequesRouter;

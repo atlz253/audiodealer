@@ -7,23 +7,27 @@ import DB from "./DB";
 import BillsDealers from "./BillsDealers";
 
 class Dealers {
-    public static get Bills(): typeof BillsDealers {
-        return BillsDealers;
+  public static get Bills(): typeof BillsDealers {
+    return BillsDealers;
+  }
+
+  public static async Insert(dealer: IDealer): Promise<number> {
+    const nameID = await DB.FirstNames.SelectIDByName(dealer.firstName);
+
+    if (dealer.login === undefined || dealer.password === undefined) {
+      throw new Error("Не были переданы данные для авторизации пользователя");
     }
 
-    public static async Insert(dealer: IDealer): Promise<number> {
-        const nameID = await DB.FirstNames.SelectIDByName(dealer.firstName);
+    const authorization: IAuthorization = {
+      login: dealer.login,
+      password: dealer.password,
+    };
 
-        if (dealer.login === undefined || dealer.password === undefined) {
-            throw new Error("Не были переданы данные для авторизации пользователя");
-        }
+    const authorizationID: number | null =
+      await DB.Autorizations.Insert(authorization);
 
-        const authorization: IAuthorization = {login: dealer.login, password: dealer.password};
-
-        const authorizationID: number | null = await DB.Autorizations.Insert(authorization);
-
-        const query: QueryConfig = {
-            text: `
+    const query: QueryConfig = {
+      text: `
                 INSERT INTO
                     dealers (
                         first_name_id,
@@ -33,21 +37,17 @@ class Dealers {
                 VALUES
                     ($1, $2, $3)
             `,
-            values: [
-                nameID,
-                authorizationID,
-                dealer.employmentDate
-            ]
-        };
-    
-        await pool.query(query);
-    
-        return authorizationID;
-    }
+      values: [nameID, authorizationID, dealer.employmentDate],
+    };
 
-    public static async Select(): Promise<IDealer[]> {
-        const query: QueryConfig = {
-            text: `
+    await pool.query(query);
+
+    return authorizationID;
+  }
+
+  public static async Select(): Promise<IDealer[]> {
+    const query: QueryConfig = {
+      text: `
             SELECT
                 authorizations.login,
                 dealers.authorization_id AS id,
@@ -60,17 +60,17 @@ class Dealers {
             WHERE
                 dealers.first_name_id = first_names.first_name_id AND 
                 dealers.authorization_id = authorizations.authorization_id
-            `
-        };
-    
-        const result = await pool.query<IDealer>(query);
-    
-        return result.rows;
-    }
+            `,
+    };
 
-    public static async SelectByAuthID(authID: number): Promise<IDealer | null> {
-        const query: QueryConfig = {
-            text: `
+    const result = await pool.query<IDealer>(query);
+
+    return result.rows;
+  }
+
+  public static async SelectByAuthID(authID: number): Promise<IDealer | null> {
+    const query: QueryConfig = {
+      text: `
                 SELECT
                     dealers.dealer_id AS id,
                     dealers.employment_date AS "employmentDate",
@@ -87,23 +87,21 @@ class Dealers {
                     dealers.authorization_id = authorizations.authorization_id AND
                     dealers.first_name_id = first_names.first_name_id
             `,
-            values: [
-                authID
-            ]
-        };
-    
-        const result = await pool.query<IDealer>(query);
-    
-        if (result.rowCount === 0) {
-            return null;
-        }
+      values: [authID],
+    };
 
-        return result.rows[0];
+    const result = await pool.query<IDealer>(query);
+
+    if (result.rowCount === 0) {
+      return null;
     }
 
-    public static async SelectIDByAuthID(authID: number): Promise<ID | null> {
-        const query: QueryConfig = {
-            text: `
+    return result.rows[0];
+  }
+
+  public static async SelectIDByAuthID(authID: number): Promise<ID | null> {
+    const query: QueryConfig = {
+      text: `
                 SELECT
                     dealer_id AS id
                 FROM
@@ -111,23 +109,21 @@ class Dealers {
                 WHERE
                     authorization_id = $1
             `,
-            values: [
-                authID
-            ]
-        };
-    
-        const result = await pool.query<ID>(query);
-    
-        if (result.rowCount === 0) {
-            return null;
-        }
+      values: [authID],
+    };
 
-        return result.rows[0];
+    const result = await pool.query<ID>(query);
+
+    if (result.rowCount === 0) {
+      return null;
     }
 
-    public static async SelectNameByAuthID(authID: number): Promise<string> {
-        const query: QueryConfig = {
-            text: `
+    return result.rows[0];
+  }
+
+  public static async SelectNameByAuthID(authID: number): Promise<string> {
+    const query: QueryConfig = {
+      text: `
                 SELECT
                     first_names.first_name AS "firstName"
                 FROM
@@ -137,27 +133,28 @@ class Dealers {
                     dealers.authorization_id = $1 AND
                     dealers.first_name_id = first_names.first_name_id
             `,
-            values: [
-                authID
-            ]
-        };
-    
-        const result = await pool.query<{firstName: string}>(query);
-    
-        return result.rows[0].firstName;
+      values: [authID],
+    };
+
+    const result = await pool.query<{ firstName: string }>(query);
+
+    return result.rows[0].firstName;
+  }
+
+  public static async Update(dealer: IDealer): Promise<void> {
+    const nameID = await DB.FirstNames.SelectIDByName(dealer.firstName);
+
+    if (dealer.login === undefined || dealer.password === undefined) {
+      throw new Error("Не были переданные данные авторизации пользователя");
     }
 
-    public static async Update(dealer: IDealer): Promise<void> {
-        const nameID = await DB.FirstNames.SelectIDByName(dealer.firstName);
-        
-        if (dealer.login === undefined || dealer.password === undefined) {
-            throw new Error("Не были переданные данные авторизации пользователя");
-        }
+    await DB.Autorizations.Update(dealer.id, {
+      login: dealer.login,
+      password: dealer.password,
+    });
 
-        await DB.Autorizations.Update(dealer.id, {login: dealer.login, password: dealer.password})
-
-        const query: QueryConfig = {
-            text: `
+    const query: QueryConfig = {
+      text: `
                 UPDATE
                     dealers
                 SET
@@ -167,31 +164,25 @@ class Dealers {
                     authorization_id = $3
             `,
 
-            values: [
-                dealer.employmentDate,
-                nameID,
-                dealer.id
-            ]
-        };
-    
-        await pool.query(query);
-    }
+      values: [dealer.employmentDate, nameID, dealer.id],
+    };
 
-    public static async Delete(id: number): Promise<void> {
-        const query: QueryConfig = {
-            text: `
+    await pool.query(query);
+  }
+
+  public static async Delete(id: number): Promise<void> {
+    const query: QueryConfig = {
+      text: `
                 DELETE FROM
                     dealers
                 WHERE
                     authorization_id = $1;
             `,
-            values: [
-                id
-            ]
-        };
-    
-        await pool.query(query);
-    }
+      values: [id],
+    };
+
+    await pool.query(query);
+  }
 }
 
 export default Dealers;

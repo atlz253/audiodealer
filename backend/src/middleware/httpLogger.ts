@@ -3,7 +3,8 @@ import Logger from "../logger";
 
 const stream = {
   // Use the http severity
-  write: (message: string) => Logger.http(message.substring(0,message.lastIndexOf('\n'))),
+  write: (message: string) =>
+    Logger.http(message.substring(0, message.lastIndexOf("\n"))),
 };
 
 const skip = () => {
@@ -19,7 +20,7 @@ const httpLogger = morgan(
   ":remote-addr :method :url :status :res[content-length] - :response-time ms",
   // Options: in this case, I overwrote the stream and the skip logic.
   // See the methods above.
-  { stream, skip }
+  { stream, skip },
 );
 
 export default httpLogger;

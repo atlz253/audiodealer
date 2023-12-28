@@ -9,9 +9,9 @@ import ICount from "../../../common/interfaces/ICount";
 import format from "pg-format";
 
 class Contracts {
-    public static async Select(): Promise<IBaseContract[]> {
-        const query: QueryConfig = {
-            text: `
+  public static async Select(): Promise<IBaseContract[]> {
+    const query: QueryConfig = {
+      text: `
                 SELECT
                     contracts.contract_id AS id,
                     contracts.status,
@@ -83,23 +83,23 @@ class Contracts {
                     contracts.created
                 FROM
                     contracts
-            `
-        };
-    
-        const result = await pool.query<IBaseContract>(query);
-    
-        for (let i = 0; i < result.rows.length; i++) {
-            const contract = result.rows[i];
-            
-            contract.price = DBMoneyConverter.ConvertMoneyToNumber(contract.price);
-        }
+            `,
+    };
 
-        return result.rows;
+    const result = await pool.query<IBaseContract>(query);
+
+    for (let i = 0; i < result.rows.length; i++) {
+      const contract = result.rows[i];
+
+      contract.price = DBMoneyConverter.ConvertMoneyToNumber(contract.price);
     }
 
-    public static async SelectByID(id: number): Promise<IContract> {
-        const query: QueryConfig = {
-            text: `
+    return result.rows;
+  }
+
+  public static async SelectByID(id: number): Promise<IContract> {
+    const query: QueryConfig = {
+      text: `
                 SELECT
                     contracts.contract_id AS id,
                     contracts.created,
@@ -260,46 +260,44 @@ class Contracts {
                 WHERE
                     contracts.contract_id = $1
             `,
-            values: [
-                id
-            ]
-        };
-    
-        const result = await pool.query<IContract>(query);
-    
-        const contract = result.rows[0];
+      values: [id],
+    };
 
-        contract.price = DBMoneyConverter.ConvertMoneyToNumber(contract.price);
+    const result = await pool.query<IContract>(query);
 
-        for (let i = 0; i < contract.products.length; i++) {
-            const product = contract.products[i];
-            
-            product.price = DBMoneyConverter.ConvertMoneyToNumber(product.price);
-        }
+    const contract = result.rows[0];
 
-        return result.rows[0];
+    contract.price = DBMoneyConverter.ConvertMoneyToNumber(contract.price);
+
+    for (let i = 0; i < contract.products.length; i++) {
+      const product = contract.products[i];
+
+      product.price = DBMoneyConverter.ConvertMoneyToNumber(product.price);
     }
 
-    public static async SelectCount(contractStatus?: string): Promise<ICount> {
-        const query = format(
-            `
+    return result.rows[0];
+  }
+
+  public static async SelectCount(contractStatus?: string): Promise<ICount> {
+    const query = format(
+      `
             SELECT
                 COUNT(*)
             FROM
                 contracts
                 %s
             `,
-            contractStatus ? format("WHERE status = %L", contractStatus) : ""
-        );
-    
-        const result = await pool.query<ICount>(query);
-    
-        return result.rows[0];
-    }
+      contractStatus ? format("WHERE status = %L", contractStatus) : "",
+    );
 
-    public static async Insert(contract: INewContract): Promise<ID> {
-        const query: QueryConfig = {
-            text: `
+    const result = await pool.query<ICount>(query);
+
+    return result.rows[0];
+  }
+
+  public static async Insert(contract: INewContract): Promise<ID> {
+    const query: QueryConfig = {
+      text: `
                 INSERT INTO
                     contracts (
                         created,
@@ -319,21 +317,20 @@ class Contracts {
                 RETURNING
                     contract_id AS id
             `,
-            values: [
-                contract.sellerBillID,
-                contract.buyerBillID,
-                contract.type
-            ]
-        };
-    
-        const result = await pool.query<ID>(query);
+      values: [contract.sellerBillID, contract.buyerBillID, contract.type],
+    };
 
-        return result.rows[0];
-    }
+    const result = await pool.query<ID>(query);
 
-    public static async UpdateStatus(contractID: number, status: string): Promise<void> {
-        const query: QueryConfig = {
-            text: `
+    return result.rows[0];
+  }
+
+  public static async UpdateStatus(
+    contractID: number,
+    status: string,
+  ): Promise<void> {
+    const query: QueryConfig = {
+      text: `
                 UPDATE
                     contracts
                 SET
@@ -341,14 +338,11 @@ class Contracts {
                 WHERE
                     contract_id = $2
             `,
-            values: [
-                status,
-                contractID
-            ]
-        };
-    
-        await pool.query(query);
-    }
+      values: [status, contractID],
+    };
+
+    await pool.query(query);
+  }
 }
 
 export default Contracts;

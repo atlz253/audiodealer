@@ -5,16 +5,23 @@ import IBaseProduct from "../../../common/interfaces/IBaseProduct";
 import DBMoneyConverter from "../utils/DBMoneyConverter";
 
 interface ISelectParams {
-    chequeStatus: string,
-    contractType: string
+  chequeStatus: string;
+  contractType: string;
 }
 
 class ChequesProducts {
-    public static async Insert(chequeID: number, products: IContractProduct[]): Promise<void> {
-        const values = products.map(product => [chequeID, product.id, product.quantity]);
+  public static async Insert(
+    chequeID: number,
+    products: IContractProduct[],
+  ): Promise<void> {
+    const values = products.map((product) => [
+      chequeID,
+      product.id,
+      product.quantity,
+    ]);
 
-        const query = format(
-            `
+    const query = format(
+      `
                 INSERT INTO 
                     cheques_products (
                         cheques_cheque_id,
@@ -24,27 +31,33 @@ class ChequesProducts {
                 VALUES
                     %L
             `,
-            values
-        );
+      values,
+    );
 
-        await pool.query(query);
-    }
+    await pool.query(query);
+  }
 
-    public static async SelectAll(params?: Partial<ISelectParams>): Promise<IBaseProduct[]> { // TODO: Хорошо бы переписать этот метод в параметры для Select в Products
-        const queryParams = params ? 
-            format(
-                `
+  public static async SelectAll(
+    params?: Partial<ISelectParams>,
+  ): Promise<IBaseProduct[]> {
+    // TODO: Хорошо бы переписать этот метод в параметры для Select в Products
+    const queryParams = params
+      ? format(
+          `
                     %s
                     %s
                 `,
-                params.chequeStatus ? format("AND cheques.status = %L", params.chequeStatus) : "",
-                params.contractType ? format("AND contracts.type = %L", params.contractType) : ""
-            )
-            :
-            "";
-        
-        const query = format(
-            `
+          params.chequeStatus
+            ? format("AND cheques.status = %L", params.chequeStatus)
+            : "",
+          params.contractType
+            ? format("AND contracts.type = %L", params.contractType)
+            : "",
+        )
+      : "";
+
+    const query = format(
+      `
                 SELECT 
                     products.product_id as id, 
                     products.name, 
@@ -64,19 +77,19 @@ class ChequesProducts {
                     cheques_products.products_product_id = products.product_id
                     %s
             `,
-            queryParams
-        );
+      queryParams,
+    );
 
-        const result = await pool.query<IBaseProduct>(query);
+    const result = await pool.query<IBaseProduct>(query);
 
-        for (let i = 0; i < result.rowCount; i++) {
-            const row = result.rows[i];
+    for (let i = 0; i < result.rowCount; i++) {
+      const row = result.rows[i];
 
-            row.price = DBMoneyConverter.ConvertMoneyToNumber(row.price);
-        }
-
-        return result.rows;
+      row.price = DBMoneyConverter.ConvertMoneyToNumber(row.price);
     }
+
+    return result.rows;
+  }
 }
 
 export default ChequesProducts;

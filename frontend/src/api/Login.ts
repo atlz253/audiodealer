@@ -5,11 +5,11 @@ import AbstractAPI from "./AbstractAPI";
 import IAuthorization from "../../../common/interfaces/IAuthorization";
 
 class Login extends AbstractAPI {
-    public static async Login(authorization: IAuthorization): Promise<IAuth> {
-        const auth = await axios.post<IAuth>(baseURL + "/login", authorization);
+  public static async Login(authorization: IAuthorization): Promise<IAuth> {
+    const auth = await axios.post<IAuth>(baseURL + "/login", authorization);
 
-        return auth.data;
-    }
+    return auth.data;
+  }
 }
 
 export default Login;

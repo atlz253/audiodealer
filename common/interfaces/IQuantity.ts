@@ -1,5 +1,5 @@
 interface IQuantity {
-    quantity: number
+  quantity: number;
 }
 
 export default IQuantity;

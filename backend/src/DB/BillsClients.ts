@@ -7,9 +7,12 @@ import Bills from "./Bills";
 import ID from "../../../common/interfaces/ID";
 
 class BillsClients extends Bills {
-    public static async SelectAll(billID: number, clientID: number): Promise<IBill> {
-        const query: QueryConfig = {
-            text: `
+  public static async SelectAll(
+    billID: number,
+    clientID: number,
+  ): Promise<IBill> {
+    const query: QueryConfig = {
+      text: `
                 SELECT
                     bills.bill_id AS id,
                     bills.bill_number AS "billNumber",
@@ -30,20 +33,17 @@ class BillsClients extends Bills {
                     bills.bank_id = banks.bank_id AND
                     clients.first_name_id = first_names.first_name_id
             `,
-            values: [
-                billID,
-                clientID
-            ]
-        };
-    
-        const result = await pool.query<IBill>(query);
+      values: [billID, clientID],
+    };
 
-        return result.rows[0];
-    }
+    const result = await pool.query<IBill>(query);
 
-    public static async Select(clientID: number): Promise<IBaseBill[]> {
-        const query: QueryConfig = {
-            text: `
+    return result.rows[0];
+  }
+
+  public static async Select(clientID: number): Promise<IBaseBill[]> {
+    const query: QueryConfig = {
+      text: `
                 SELECT
                     bills.bill_id AS id,
                     bills.bill_number AS "billNumber",
@@ -63,19 +63,19 @@ class BillsClients extends Bills {
                     bills_clients.bills_bill_id = bills.bill_id AND
                     clients.first_name_id = first_names.first_name_id
             `,
-            values: [
-                clientID
-            ]
-        };
-    
-        const result = await pool.query<IBaseBill>(query);
-    
-        return result.rows;
-    }
+      values: [clientID],
+    };
 
-    public static async SelectBillsNumbers(clientID: number): Promise<IBillNumber[]> {
-        const query: QueryConfig = {
-            text: `
+    const result = await pool.query<IBaseBill>(query);
+
+    return result.rows;
+  }
+
+  public static async SelectBillsNumbers(
+    clientID: number,
+  ): Promise<IBillNumber[]> {
+    const query: QueryConfig = {
+      text: `
                 SELECT
                     bills.bill_id AS id,
                     bills.bill_number AS "billNumber"
@@ -88,21 +88,19 @@ class BillsClients extends Bills {
                     bills_clients.clients_client_id = $1 AND
                     bills_clients.bills_bill_id = bills.bill_id
             `,
-            values: [
-                clientID
-            ]
-        };
-    
-        const result = await pool.query<IBillNumber>(query);
-    
-        return result.rows;
-    }
+      values: [clientID],
+    };
 
-    public static async Insert(bill: IBill, clientID?: number): Promise<ID> {
-        const billID = await super.Insert(bill);
-        
-        const query: QueryConfig = {
-            text: `
+    const result = await pool.query<IBillNumber>(query);
+
+    return result.rows;
+  }
+
+  public static async Insert(bill: IBill, clientID?: number): Promise<ID> {
+    const billID = await super.Insert(bill);
+
+    const query: QueryConfig = {
+      text: `
                 INSERT INTO
                     bills_clients (
                         bills_bill_id,
@@ -111,34 +109,29 @@ class BillsClients extends Bills {
                 VALUES
                     ($1, $2)
             `,
-            values: [
-                billID.id,
-                clientID
-            ]
-        };
-    
-        await pool.query(query);
+      values: [billID.id, clientID],
+    };
 
-        return billID;
-    }
+    await pool.query(query);
 
-    public static async Delete(billID: number): Promise<void> {
-        await super.Delete(billID);
+    return billID;
+  }
 
-        const query: QueryConfig = {
-            text: `
+  public static async Delete(billID: number): Promise<void> {
+    await super.Delete(billID);
+
+    const query: QueryConfig = {
+      text: `
                 DELETE FROM
                     bills_clients
                 WHERE
                     bills_bill_id = $1
             `,
-            values: [
-                billID
-            ]
-        };
-    
-        await pool.query(query);
-    }
+      values: [billID],
+    };
+
+    await pool.query(query);
+  }
 }
 
 export default BillsClients;

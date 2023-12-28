@@ -44,8 +44,8 @@ app.listen(port, async () => {
       firstName: "admin",
       login: "admin",
       password: "admin",
-      type: "admin"
-    }
+      type: "admin",
+    };
 
     await DB.Admins.Insert(firstAdmin);
 

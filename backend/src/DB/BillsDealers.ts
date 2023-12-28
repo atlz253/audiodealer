@@ -7,9 +7,9 @@ import Bills from "./Bills";
 import ID from "../../../common/interfaces/ID";
 
 class BillsDealers extends Bills {
-    public static async SelectAll(dealerID: number): Promise<IBaseBill[]> {
-        const query: QueryConfig = {
-            text: `
+  public static async SelectAll(dealerID: number): Promise<IBaseBill[]> {
+    const query: QueryConfig = {
+      text: `
                 SELECT
                     bills.bill_id AS id,
                     bills.bill_number AS "billNumber",
@@ -29,19 +29,19 @@ class BillsDealers extends Bills {
                     bills_dealers.bills_bill_id = bills.bill_id AND
                     dealers.first_name_id = first_names.first_name_id
             `,
-            values: [
-                dealerID
-            ]
-        };
-    
-        const result = await pool.query<IBaseBill>(query);
-    
-        return result.rows;
-    }
+      values: [dealerID],
+    };
 
-    public static async SelectBillsNumbers(dealerID: number): Promise<IBillNumber[]> {
-        const query: QueryConfig = {
-            text: `
+    const result = await pool.query<IBaseBill>(query);
+
+    return result.rows;
+  }
+
+  public static async SelectBillsNumbers(
+    dealerID: number,
+  ): Promise<IBillNumber[]> {
+    const query: QueryConfig = {
+      text: `
                 SELECT
                     bills.bill_id AS id,
                     bills.bill_number AS "billNumber"
@@ -54,19 +54,17 @@ class BillsDealers extends Bills {
                     bills_dealers.dealers_dealer_id = $1 AND
                     bills_dealers.bills_bill_id = bills.bill_id
             `,
-            values: [
-                dealerID
-            ]
-        };
-    
-        const result = await pool.query<IBillNumber>(query);
-    
-        return result.rows;
-    }
+      values: [dealerID],
+    };
 
-    public static async Select(billID: number, dealerID: number): Promise<IBill> {
-        const query: QueryConfig = {
-            text: `
+    const result = await pool.query<IBillNumber>(query);
+
+    return result.rows;
+  }
+
+  public static async Select(billID: number, dealerID: number): Promise<IBill> {
+    const query: QueryConfig = {
+      text: `
                 SELECT
                     bills.bill_id AS id,
                     bills.bill_number AS "billNumber",
@@ -87,22 +85,19 @@ class BillsDealers extends Bills {
                     bills.bank_id = banks.bank_id AND
                     dealers.first_name_id = first_names.first_name_id
             `,
-            values: [
-                billID,
-                dealerID
-            ]
-        };
-    
-        const result = await pool.query<IBill>(query);
-    
-        return result.rows[0];
-    }
+      values: [billID, dealerID],
+    };
 
-    public static async Insert(bill: IBill, dealerID?: number): Promise<ID> {
-        const billID = await super.Insert(bill);
-        
-        const query: QueryConfig = {
-            text: `
+    const result = await pool.query<IBill>(query);
+
+    return result.rows[0];
+  }
+
+  public static async Insert(bill: IBill, dealerID?: number): Promise<ID> {
+    const billID = await super.Insert(bill);
+
+    const query: QueryConfig = {
+      text: `
                 INSERT INTO
                     bills_dealers (
                         bills_bill_id,
@@ -111,34 +106,30 @@ class BillsDealers extends Bills {
                 VALUES
                     ($1, $2)
             `,
-            values: [
-                billID.id,
-                dealerID
-            ]
-        };
-    
-        await pool.query(query);
+      values: [billID.id, dealerID],
+    };
 
-        return billID;
-    }
+    await pool.query(query);
 
-    public static async Delete(billID: number): Promise<void> { // FIXME: в теории дилер может удалить счет другого дилера
-        await super.Delete(billID);
-        
-        const query: QueryConfig = {
-            text: `
+    return billID;
+  }
+
+  public static async Delete(billID: number): Promise<void> {
+    // FIXME: в теории дилер может удалить счет другого дилера
+    await super.Delete(billID);
+
+    const query: QueryConfig = {
+      text: `
                 DELETE FROM
                     bills_dealers
                 WHERE
                     bills_bill_id = $1
             `,
-            values: [
-                billID
-            ]
-        };
-    
-        await pool.query(query);
-    }
+      values: [billID],
+    };
+
+    await pool.query(query);
+  }
 }
 
 export default BillsDealers;

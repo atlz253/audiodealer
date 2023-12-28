@@ -4,22 +4,17 @@ import Header from "../components/Header";
 import { useState } from "react";
 
 const App = () => {
-    const [sideNavShow, setSideNavShow] = useState<boolean>(false);
+  const [sideNavShow, setSideNavShow] = useState<boolean>(false);
 
-    return (
-        <>
-            <Header 
-                onBurgerMenuClick={() => setSideNavShow(!sideNavShow)}
-            />
-            <div className="d-flex">
-                <SideNav
-                    isShow={sideNavShow}
-                    setIsShow={setSideNavShow}
-                />
-                <Outlet />
-            </div>
-        </>
-    );
-}
+  return (
+    <>
+      <Header onBurgerMenuClick={() => setSideNavShow(!sideNavShow)} />
+      <div className="d-flex">
+        <SideNav isShow={sideNavShow} setIsShow={setSideNavShow} />
+        <Outlet />
+      </div>
+    </>
+  );
+};
 
 export default App;

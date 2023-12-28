@@ -15,42 +15,66 @@ const productsRouter = express.Router();
 productsRouter.use(jwtCheck);
 productsRouter.use(dealerAuthCheck);
 
-productsRouter.get('/', expressAsyncHandler(async (req: RequestBody, res: Response<IBaseProduct[]>, next: NextFunction) => {
-    const products = await DB.Products.SelectAll();
+productsRouter.get(
+  "/",
+  expressAsyncHandler(
+    async (
+      req: RequestBody,
+      res: Response<IBaseProduct[]>,
+      next: NextFunction,
+    ) => {
+      const products = await DB.Products.SelectAll();
 
-    res.json(products);
-}));
+      res.json(products);
+    },
+  ),
+);
 
-productsRouter.get("/count", expressAsyncHandler(async (req: RequestBody, res: Response<ICount>) => {
+productsRouter.get(
+  "/count",
+  expressAsyncHandler(async (req: RequestBody, res: Response<ICount>) => {
     const count = await DB.Products.SelectCount();
 
     res.json(count);
-}));
+  }),
+);
 
-productsRouter.get('/:productID', expressAsyncHandler(async (req: RequestBody, res: Response<IProduct>) => {
+productsRouter.get(
+  "/:productID",
+  expressAsyncHandler(async (req: RequestBody, res: Response<IProduct>) => {
     const product = await DB.Products.SelectByID(Number(req.params.productID));
 
     res.json(product);
-}));
+  }),
+);
 
-productsRouter.post("/new", expressAsyncHandler(async (req: RequestBody<IProduct>, res: Response<ID>) => {
+productsRouter.post(
+  "/new",
+  expressAsyncHandler(async (req: RequestBody<IProduct>, res: Response<ID>) => {
     const id = await DB.Products.Insert(req.body);
 
     res.json(id);
-}));
+  }),
+);
 
-productsRouter.put("/:productID", expressAsyncHandler(async (req: RequestBody<IProduct>, res: Response) => {
+productsRouter.put(
+  "/:productID",
+  expressAsyncHandler(async (req: RequestBody<IProduct>, res: Response) => {
     await DB.Products.Update(req.body);
 
     res.sendStatus(200);
-}));
+  }),
+);
 
-productsRouter.delete("/:productID", expressAsyncHandler(async (req: RequestBody, res: Response) => {
+productsRouter.delete(
+  "/:productID",
+  expressAsyncHandler(async (req: RequestBody, res: Response) => {
     await DB.Products.Delete(Number(req.params.productID));
 
     Logger.info(`${req.jwt?.login} удалил товар с ID ${req.params.productID}`);
 
     res.sendStatus(200);
-}));
+  }),
+);
 
 export default productsRouter;

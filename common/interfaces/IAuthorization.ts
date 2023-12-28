@@ -1,7 +1,7 @@
 interface IAuthorization {
-    type?: string,
-    login: string,
-    password: string
+  type?: string;
+  login: string;
+  password: string;
 }
 
 export default IAuthorization;

@@ -1,7 +1,7 @@
 interface IAuth {
-    accessToken: string,
-    login: string,
-    type: string
+  accessToken: string;
+  login: string;
+  type: string;
 }
 
 export default IAuth;

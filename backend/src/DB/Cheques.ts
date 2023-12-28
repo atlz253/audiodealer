@@ -7,30 +7,35 @@ import format from "pg-format";
 import Logger from "../logger";
 
 interface IChequeSelectParams {
-    contractID: number,
-    chequeStatus: string
+  contractID: number;
+  chequeStatus: string;
 }
 
 class Cheques {
-    public static get Products(): typeof ChequesProducts {
-        return ChequesProducts;
-    }
+  public static get Products(): typeof ChequesProducts {
+    return ChequesProducts;
+  }
 
-    public static async Select(params?: Partial<IChequeSelectParams>): Promise<ICheque[]> {
-        const queryParams = params ?
-            format(
-                `
+  public static async Select(
+    params?: Partial<IChequeSelectParams>,
+  ): Promise<ICheque[]> {
+    const queryParams = params
+      ? format(
+          `
                     %s
                     %s
                 `,
-                params.contractID ? format("AND cheques.contract_id = %s", params.contractID) : "",
-                params.chequeStatus ? format("AND cheques.status = %L", params.chequeStatus) : ""
-            )
-            :
-            "";
-        
-        const query = format(
-            `
+          params.contractID
+            ? format("AND cheques.contract_id = %s", params.contractID)
+            : "",
+          params.chequeStatus
+            ? format("AND cheques.status = %L", params.chequeStatus)
+            : "",
+        )
+      : "";
+
+    const query = format(
+      `
                 SELECT
                     cheques.cheque_id AS id,
                     cheques.delivery_date AS "deliveryDate",
@@ -43,17 +48,20 @@ class Cheques {
                     cheques.contract_id = contracts.contract_id
                     %s
             `,
-            queryParams
-        ); 
+      queryParams,
+    );
 
-        const result = await pool.query<ICheque>(query);
+    const result = await pool.query<ICheque>(query);
 
-        return result.rows;
-    }
+    return result.rows;
+  }
 
-    public static async Insert(contractID: number, deliveryDate: string): Promise<ID> {
-        const query: QueryConfig = {
-            text: `
+  public static async Insert(
+    contractID: number,
+    deliveryDate: string,
+  ): Promise<ID> {
+    const query: QueryConfig = {
+      text: `
                 INSERT INTO
                     cheques (
                         delivery_date,
@@ -69,20 +77,17 @@ class Cheques {
                 RETURNING
                     cheque_id AS id
             `,
-            values: [
-                deliveryDate,
-                contractID
-            ]
-        };
-    
-        const result = await pool.query<ID>(query);
-    
-        return result.rows[0];
-    }
+      values: [deliveryDate, contractID],
+    };
 
-    public static async Update(cheque: ICheque): Promise<void> {
-        const query: QueryConfig = {
-            text: `
+    const result = await pool.query<ID>(query);
+
+    return result.rows[0];
+  }
+
+  public static async Update(cheque: ICheque): Promise<void> {
+    const query: QueryConfig = {
+      text: `
                 UPDATE
                     cheques
                 SET
@@ -90,14 +95,11 @@ class Cheques {
                 WHERE
                     cheque_id = $2
             `,
-            values: [
-                cheque.status,
-                cheque.id
-            ]
-        };
-    
-        await pool.query(query);
-    }
+      values: [cheque.status, cheque.id],
+    };
+
+    await pool.query(query);
+  }
 }
 
 export default Cheques;

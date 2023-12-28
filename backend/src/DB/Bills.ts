@@ -10,11 +10,11 @@ import BillsClients from "./BillsClients";
 import IBillNumber from "../../../common/interfaces/IBillNumber";
 
 class Bills {
-    protected static async Insert(bill: IBill): Promise<ID> {
-        const bankID = await DB.Banks.GetIDByName(bill.bankName);
+  protected static async Insert(bill: IBill): Promise<ID> {
+    const bankID = await DB.Banks.GetIDByName(bill.bankName);
 
-        const query: QueryConfig = {
-            text: `
+    const query: QueryConfig = {
+      text: `
                 INSERT INTO
                     bills (
                         bill_number,
@@ -29,26 +29,26 @@ class Bills {
                 RETURNING
                     bill_id AS id
             `,
-            values: [
-                bill.billNumber,
-                bankID,
-                bill.correspondentBill,
-                bill.BIC,
-                bill.INN,
-                bill.expireDate
-            ]
-        };
-    
-        const result = await pool.query<ID>(query);
-    
-        return result.rows[0];
-    }
+      values: [
+        bill.billNumber,
+        bankID,
+        bill.correspondentBill,
+        bill.BIC,
+        bill.INN,
+        bill.expireDate,
+      ],
+    };
 
-    public static async Update(bill: IBill): Promise<void> {
-        const bankID = await DB.Banks.GetIDByName(bill.bankName);
-        
-        const query: QueryConfig = {
-            text: `
+    const result = await pool.query<ID>(query);
+
+    return result.rows[0];
+  }
+
+  public static async Update(bill: IBill): Promise<void> {
+    const bankID = await DB.Banks.GetIDByName(bill.bankName);
+
+    const query: QueryConfig = {
+      text: `
                 UPDATE
                     bills
                 SET
@@ -61,35 +61,33 @@ class Bills {
                 WHERE
                     bill_id = $7
             `,
-            values: [
-                bill.billNumber,
-                bankID,
-                bill.correspondentBill,
-                bill.BIC,
-                bill.INN,
-                bill.expireDate,
-                bill.id
-            ]
-        };
-    
-        await pool.query(query);
-    }
+      values: [
+        bill.billNumber,
+        bankID,
+        bill.correspondentBill,
+        bill.BIC,
+        bill.INN,
+        bill.expireDate,
+        bill.id,
+      ],
+    };
 
-    protected static async Delete(billID: number): Promise<void> {
-        const query: QueryConfig = {
-            text: `
+    await pool.query(query);
+  }
+
+  protected static async Delete(billID: number): Promise<void> {
+    const query: QueryConfig = {
+      text: `
                 DELETE FROM
                     bills
                 WHERE
                     bill_id = $1
             `,
-            values: [
-                billID
-            ]
-        };
-    
-        await pool.query(query);
-    }
+      values: [billID],
+    };
+
+    await pool.query(query);
+  }
 }
 
 export default Bills;

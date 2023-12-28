@@ -6,29 +6,29 @@ import RequestBody from "../interfaces/RequestBody";
 import IJWT from "../interfaces/IJWT";
 
 const jwtCheck = (req: RequestBody, res: Response, next: NextFunction) => {
-    const token = req.headers.authorization;
+  const token = req.headers.authorization;
 
-    if (!token) {
-        Logger.error(`${req.ip} отправлен пустой токен авторизации`)
+  if (!token) {
+    Logger.error(`${req.ip} отправлен пустой токен авторизации`);
 
-        return res.sendStatus(401);
+    return res.sendStatus(401);
+  }
+
+  jwt.verify(token, accessTokenSecret, (err, user) => {
+    if (err) {
+      Logger.error(`${req.ip} ошибка проверки токена`);
+
+      return res.sendStatus(401);
     }
 
-    jwt.verify(token, accessTokenSecret, (err, user) => {
-        if (err) {
-            Logger.error(`${req.ip} ошибка проверки токена`)
+    const token = user as IJWT;
 
-            return res.sendStatus(401);
-        }
-        
-        const token = user as IJWT;
+    req.jwt = token;
 
-        req.jwt = token;
+    Logger.debug(`${req.ip} успешная проверка авторизации ${req.jwt.login}`);
 
-        Logger.debug(`${req.ip} успешная проверка авторизации ${req.jwt.login}`);
-
-        next();
-    });
-}
+    next();
+  });
+};
 
 export default jwtCheck;

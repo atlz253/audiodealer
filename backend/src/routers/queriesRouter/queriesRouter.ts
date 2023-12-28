@@ -20,8 +20,13 @@ queriesRouter.use("/cheques", chequesRouter);
 queriesRouter.use("/products", productsRouter);
 queriesRouter.use("/contracts", contractsRouter);
 
-queriesRouter.get("/", expressAsyncHandler(async (req: RequestBody, res: Response<IQueriesCategory[]>) => {
-    res.json(queriesList);
-}));
+queriesRouter.get(
+  "/",
+  expressAsyncHandler(
+    async (req: RequestBody, res: Response<IQueriesCategory[]>) => {
+      res.json(queriesList);
+    },
+  ),
+);
 
 export default queriesRouter;

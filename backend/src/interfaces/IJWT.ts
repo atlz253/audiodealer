@@ -1,7 +1,7 @@
 import IUserAuthInfo from "./IUserAuthInfo";
 
 interface IJWT extends IUserAuthInfo {
-    iat: number
+  iat: number;
 }
 
 export default IJWT;

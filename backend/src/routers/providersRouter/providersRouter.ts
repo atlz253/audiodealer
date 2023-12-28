@@ -20,52 +20,72 @@ providersRouter.use(dealerAuthCheck);
 providersRouter.use("/:providerID/bills", billsRouter);
 providersRouter.use("/:providerID/products", productsRouter);
 
-providersRouter.get("/", expressAsyncHandler(async (req: RequestBody, res: Response<IBaseProvider[] | IName[]>) => {
-    
-    if (req.query.onlyNames) {
+providersRouter.get(
+  "/",
+  expressAsyncHandler(
+    async (req: RequestBody, res: Response<IBaseProvider[] | IName[]>) => {
+      if (req.query.onlyNames) {
         const names = await DB.Providers.SelectNames();
-        
+
         res.json(names);
-    }
-    else {
+      } else {
         const providers = await DB.Providers.SelectAll();
 
         res.json(providers);
-    }
-}));
+      }
+    },
+  ),
+);
 
-providersRouter.get("/count", expressAsyncHandler(async (req: RequestBody, res: Response<ICount>) => {
+providersRouter.get(
+  "/count",
+  expressAsyncHandler(async (req: RequestBody, res: Response<ICount>) => {
     const count = await DB.Providers.SelectCount();
 
     res.json(count);
-}));
+  }),
+);
 
-providersRouter.get("/:providerID", expressAsyncHandler(async (req: RequestBody, res: Response<IProvider>) => {
+providersRouter.get(
+  "/:providerID",
+  expressAsyncHandler(async (req: RequestBody, res: Response<IProvider>) => {
     const providerID = Number(req.params.providerID);
-    
+
     const provider = await DB.Providers.Select(providerID);
 
     res.json(provider);
-}));
+  }),
+);
 
-providersRouter.post("/:providerID", expressAsyncHandler(async (req: RequestBody<IProvider>, res: Response<ID>) => {
-    const id = await DB.Providers.Insert(req.body);
+providersRouter.post(
+  "/:providerID",
+  expressAsyncHandler(
+    async (req: RequestBody<IProvider>, res: Response<ID>) => {
+      const id = await DB.Providers.Insert(req.body);
 
-    res.json(id);
-}));
+      res.json(id);
+    },
+  ),
+);
 
-providersRouter.put("/:providerID", expressAsyncHandler(async (req: RequestBody<IProvider>, res: Response) => {
+providersRouter.put(
+  "/:providerID",
+  expressAsyncHandler(async (req: RequestBody<IProvider>, res: Response) => {
     await DB.Providers.Update(req.body);
 
     res.sendStatus(200);
-}));
+  }),
+);
 
-providersRouter.delete("/:providerID", expressAsyncHandler(async (req: RequestBody, res: Response) => {
+providersRouter.delete(
+  "/:providerID",
+  expressAsyncHandler(async (req: RequestBody, res: Response) => {
     const providerID = Number(req.params.providerID);
-    
+
     await DB.Providers.Delete(providerID);
 
     res.sendStatus(200);
-}));
+  }),
+);
 
 export default providersRouter;

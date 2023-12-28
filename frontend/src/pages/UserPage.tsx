@@ -1,4 +1,9 @@
-import { faArrowLeft, faFloppyDisk, faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
+import {
+  faArrowLeft,
+  faFloppyDisk,
+  faPen,
+  faTrash,
+} from "@fortawesome/free-solid-svg-icons";
 import { FC, useState, useEffect, useRef } from "react";
 import ApproveModal from "../components/ApproveModal";
 import DeleteModal from "../components/DeleteModal";
@@ -12,127 +17,126 @@ import IUser from "../../../common/interfaces/IUser";
 import ItemPage from "../components/ItemPage";
 
 interface IUserProps {
-    newUser?: boolean
+  newUser?: boolean;
 }
 
 const UserPage: FC<IUserProps> = ({ newUser }) => {
-    const { userID } = useParams();
-    const [user, setUser] = useState<IUser | IDealer>({
-        id: 0,
-        firstName: "",
-        type: "dealer",
-        login: "",
-        password: ""
+  const { userID } = useParams();
+  const [user, setUser] = useState<IUser | IDealer>({
+    id: 0,
+    firstName: "",
+    type: "dealer",
+    login: "",
+    password: "",
+  });
+  const [isEditMode, setIsEditMode] = useState<boolean>(false);
+  const [deleteModalShow, setDeleteModalShow] = useState<boolean>(false);
+  const [cancelEditModalShow, setCancelEditModalShow] =
+    useState<boolean>(false);
+  const navigate = useNavigate();
+  const userBackup = useRef<IUser | IDealer | null>(null);
+
+  useEffect(() => {
+    if (newUser) {
+      setIsEditMode(true);
+
+      return;
+    }
+
+    if (userID === undefined) {
+      alert("Не удалось получить ID пользователя");
+
+      return;
+    }
+
+    tryServerRequest(async () => {
+      const user = await API.Users.GetByID(Number(userID));
+
+      setUser(user);
     });
-    const [isEditMode, setIsEditMode] = useState<boolean>(false);
-    const [deleteModalShow, setDeleteModalShow] = useState<boolean>(false);
-    const [cancelEditModalShow, setCancelEditModalShow] = useState<boolean>(false);
-    const navigate = useNavigate();
-    const userBackup = useRef<IUser | IDealer | null>(null);
+  }, []);
 
-    useEffect(() => {
-        if (newUser) {
-            setIsEditMode(true);
+  const abortEdit = () => {
+    if (newUser) {
+      navigate("/users");
 
-            return;
-        }
-
-        if (userID === undefined) {
-            alert("Не удалось получить ID пользователя");
-
-            return;
-        }
-
-        tryServerRequest(async () => {
-            const user = await API.Users.GetByID(Number(userID));
-
-            setUser(user);
-        });
-    }, []);
-
-    const abortEdit = () => {
-        if (newUser) {
-            navigate("/users");
-
-            return;
-        }
-
-        if (userBackup.current !== null) {
-            setUser(userBackup.current);
-        }
-        else {
-            console.error("Не удалось найти резервную копию данных пользователя");
-        }
-
-        setIsEditMode(false);
-        setCancelEditModalShow(false);
+      return;
     }
 
-    const editUser = () => {
-        userBackup.current = structuredClone(user);
-
-        setIsEditMode(true);
+    if (userBackup.current !== null) {
+      setUser(userBackup.current);
+    } else {
+      console.error("Не удалось найти резервную копию данных пользователя");
     }
 
-    const saveUser = () => {
-        userBackup.current = null;
+    setIsEditMode(false);
+    setCancelEditModalShow(false);
+  };
 
-        tryServerRequest(async () => {
-            if (newUser) {
-                const response = await API.Users.Create(user);
+  const editUser = () => {
+    userBackup.current = structuredClone(user);
 
-                setUser({ ...user, id: response.id });
-            }
-            else {
-                await API.Users.Save(user);
-            }
-        });
+    setIsEditMode(true);
+  };
 
-        setIsEditMode(false);
-    }
+  const saveUser = () => {
+    userBackup.current = null;
 
-    const deleteUser = () => {
-        tryServerRequest(async () => {
-            await API.Users.Delete(user.id);
-        });
+    tryServerRequest(async () => {
+      if (newUser) {
+        const response = await API.Users.Create(user);
 
-        navigate("/users");
-    }
+        setUser({ ...user, id: response.id });
+      } else {
+        await API.Users.Save(user);
+      }
+    });
 
-    return (
-        <ItemPage
-            deleteModalProps={{
-                isShow: deleteModalShow,
-                setIsShow: setDeleteModalShow,
-                title: "Удаление учётной записи",
-                body: `Вы действительно хотите удалить учётную запись пользователя ${user.firstName}?`,
-                onDelete: deleteUser
-            }}
-            cancelModalProps={{
-                isShow: cancelEditModalShow,
-                setIsShow: setCancelEditModalShow,
-                title: "Отмена изменений",
-                body: "Вы точно хотите отменить редактирование? Измененные данные не сохранятся.",
-                onApprove: abortEdit
-            }}
-            itemPageBarProps={{
-                isEditMode: isEditMode,
-                backClickAction: () => navigate("/users"),
-                cancelEditClickAction: () => setCancelEditModalShow(true),
-                saveClickAction: saveUser,
-                editClickAction: editUser,
-                deleteClickAction: () => setDeleteModalShow(true)
-            }}
-        >
-            <h1 className="text-center">{user.firstName}</h1>
-            <User
-                user={user}
-                setUser={setUser}
-                isEditMode={isEditMode}
-                isNewUser={newUser}
-            />
-        </ItemPage>
-    );
-}
+    setIsEditMode(false);
+  };
+
+  const deleteUser = () => {
+    tryServerRequest(async () => {
+      await API.Users.Delete(user.id);
+    });
+
+    navigate("/users");
+  };
+
+  return (
+    <ItemPage
+      deleteModalProps={{
+        isShow: deleteModalShow,
+        setIsShow: setDeleteModalShow,
+        title: "Удаление учётной записи",
+        body: `Вы действительно хотите удалить учётную запись пользователя ${user.firstName}?`,
+        onDelete: deleteUser,
+      }}
+      cancelModalProps={{
+        isShow: cancelEditModalShow,
+        setIsShow: setCancelEditModalShow,
+        title: "Отмена изменений",
+        body: "Вы точно хотите отменить редактирование? Измененные данные не сохранятся.",
+        onApprove: abortEdit,
+      }}
+      itemPageBarProps={{
+        isEditMode: isEditMode,
+        backClickAction: () => navigate("/users"),
+        cancelEditClickAction: () => setCancelEditModalShow(true),
+        saveClickAction: saveUser,
+        editClickAction: editUser,
+        deleteClickAction: () => setDeleteModalShow(true),
+      }}
+    >
+      <h1 className="text-center">{user.firstName}</h1>
+      <User
+        user={user}
+        setUser={setUser}
+        isEditMode={isEditMode}
+        isNewUser={newUser}
+      />
+    </ItemPage>
+  );
+};
 
 export default UserPage;

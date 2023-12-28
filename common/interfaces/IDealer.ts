@@ -1,7 +1,7 @@
 import IUser from "./IUser";
 
 interface IDealer extends IUser {
-    employmentDate: string,
+  employmentDate: string;
 }
 
 export default IDealer;

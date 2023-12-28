@@ -10,18 +10,20 @@ import ICount from "../../../common/interfaces/ICount";
 import Logger from "../logger";
 
 interface IProductsSelectAllParams {
-    onlyAvaibleInStock: boolean,
-    avaibleForOrder: boolean
+  onlyAvaibleInStock: boolean;
+  avaibleForOrder: boolean;
 }
 
 class Products {
-    public static async Insert(product: IProduct): Promise<ID> {
-        const categoryID = await DB.Categories.GetIDByName(product.category);
-        const manufacturerID = await DB.Manufacturers.GetIDByName(product.manufacturer);
-        const price = DBMoneyConverter.ConvertNumberToMoney(product.price);
+  public static async Insert(product: IProduct): Promise<ID> {
+    const categoryID = await DB.Categories.GetIDByName(product.category);
+    const manufacturerID = await DB.Manufacturers.GetIDByName(
+      product.manufacturer,
+    );
+    const price = DBMoneyConverter.ConvertNumberToMoney(product.price);
 
-        const query: QueryConfig = {
-            text: `
+    const query: QueryConfig = {
+      text: `
                 INSERT INTO 
                     products (
                         name, 
@@ -36,41 +38,50 @@ class Products {
                 RETURNING 
                     product_id as id
             `,
-            values: [product.name, price, product.quantity, product.description, categoryID, manufacturerID]
-        }
+      values: [
+        product.name,
+        price,
+        product.quantity,
+        product.description,
+        categoryID,
+        manufacturerID,
+      ],
+    };
 
-        const result = await pool.query<ID>(query);
+    const result = await pool.query<ID>(query);
 
-        return result.rows[0];
-    }
+    return result.rows[0];
+  }
 
-    public static async SelectAll(params?: Partial<IProductsSelectAllParams>): Promise<IBaseProduct[]> {
-        const queryParams = params ?
-            format(
-                `
+  public static async SelectAll(
+    params?: Partial<IProductsSelectAllParams>,
+  ): Promise<IBaseProduct[]> {
+    const queryParams = params
+      ? format(
+          `
                     %s
                     %s
                 `,
-                params.onlyAvaibleInStock ? "AND products.quantity > 0" : "",
-                params.avaibleForOrder ? "AND providers_products.products_product_id = products.product_id" : ""
-            )
-            :
-            "";
+          params.onlyAvaibleInStock ? "AND products.quantity > 0" : "",
+          params.avaibleForOrder
+            ? "AND providers_products.products_product_id = products.product_id"
+            : "",
+        )
+      : "";
 
-        const additionalTables = params ?
-            format(
-                `
+    const additionalTables = params
+      ? format(
+          `
                         %s
                     `,
-                params.avaibleForOrder ? ", providers_products" : ""
-            )
-            :
-            "";
+          params.avaibleForOrder ? ", providers_products" : "",
+        )
+      : "";
 
-        Logger.debug(queryParams)
+    Logger.debug(queryParams);
 
-        const query = format(
-            `
+    const query = format(
+      `
                 SELECT DISTINCT ON (products.product_id)
                     products.product_id AS id, 
                     products.name, 
@@ -85,24 +96,24 @@ class Products {
                     products.category_id = categories.category_id
                     %s 
             `,
-            additionalTables,
-            queryParams
-        )
+      additionalTables,
+      queryParams,
+    );
 
-        const result = await pool.query<IBaseProduct>(query);
+    const result = await pool.query<IBaseProduct>(query);
 
-        for (let i = 0; i < result.rowCount; i++) {
-            const row = result.rows[i];
+    for (let i = 0; i < result.rowCount; i++) {
+      const row = result.rows[i];
 
-            row.price = DBMoneyConverter.ConvertMoneyToNumber(row.price);
-        }
-
-        return result.rows;
+      row.price = DBMoneyConverter.ConvertMoneyToNumber(row.price);
     }
 
-    public static async SelectByID(id: number): Promise<IProduct> {
-        const query: QueryConfig = {
-            text: `
+    return result.rows;
+  }
+
+  public static async SelectByID(id: number): Promise<IProduct> {
+    const query: QueryConfig = {
+      text: `
                 SELECT 
                     products.product_id as id, 
                     products.name, 
@@ -120,44 +131,44 @@ class Products {
                     products.category_id = categories.category_id AND
                     products.manufacturer_id = manufacturers.manufacturer_id
             `,
-            values: [
-                id
-            ]
-        }
+      values: [id],
+    };
 
-        const result = await pool.query<IProduct>(query);
+    const result = await pool.query<IProduct>(query);
 
-        for (let i = 0; i < result.rowCount; i++) {
-            const row = result.rows[i];
+    for (let i = 0; i < result.rowCount; i++) {
+      const row = result.rows[i];
 
-            row.price = DBMoneyConverter.ConvertMoneyToNumber(row.price);
-        }
-
-        return result.rows[0];
+      row.price = DBMoneyConverter.ConvertMoneyToNumber(row.price);
     }
 
-    public static async SelectCount(): Promise<ICount> {
-        const query: QueryConfig = {
-            text: `
+    return result.rows[0];
+  }
+
+  public static async SelectCount(): Promise<ICount> {
+    const query: QueryConfig = {
+      text: `
                 SELECT
                     COUNT(*)
                 FROM
                     products
-            `
-        };
+            `,
+    };
 
-        const result = await pool.query<ICount>(query);
+    const result = await pool.query<ICount>(query);
 
-        return result.rows[0];
-    }
+    return result.rows[0];
+  }
 
-    public static async Update(product: IProduct): Promise<void> {
-        const categoryID = await DB.Categories.GetIDByName(product.category);
-        const manufacturerID = await DB.Manufacturers.GetIDByName(product.manufacturer);
-        const price = DBMoneyConverter.ConvertNumberToMoney(product.price);
+  public static async Update(product: IProduct): Promise<void> {
+    const categoryID = await DB.Categories.GetIDByName(product.category);
+    const manufacturerID = await DB.Manufacturers.GetIDByName(
+      product.manufacturer,
+    );
+    const price = DBMoneyConverter.ConvertNumberToMoney(product.price);
 
-        const query: QueryConfig = {
-            text: `
+    const query: QueryConfig = {
+      text: `
                 UPDATE 
                     products 
                 SET 
@@ -170,23 +181,26 @@ class Products {
                 WHERE 
                     product_id = $7
             `,
-            values: [
-                product.name,
-                price,
-                product.quantity,
-                product.description,
-                categoryID,
-                manufacturerID,
-                product.id
-            ]
-        }
+      values: [
+        product.name,
+        price,
+        product.quantity,
+        product.description,
+        categoryID,
+        manufacturerID,
+        product.id,
+      ],
+    };
 
-        await pool.query(query);
-    }
+    await pool.query(query);
+  }
 
-    public static async UpdateQuantityByChequeID(chequeID: number, operation: string): Promise<void> {
-        const query = format(
-            `
+  public static async UpdateQuantityByChequeID(
+    chequeID: number,
+    operation: string,
+  ): Promise<void> {
+    const query = format(
+      `
                 UPDATE
                     products
                 SET
@@ -199,26 +213,26 @@ class Products {
                     cheques_products.cheques_cheque_id = cheques.cheque_id AND
                     cheques_products.products_product_id = products.product_id
             `,
-            operation,
-            chequeID
-        );
+      operation,
+      chequeID,
+    );
 
-        await pool.query(query);
-    }
+    await pool.query(query);
+  }
 
-    public static async Delete(id: number): Promise<void> {
-        const query: QueryConfig = {
-            text: `
+  public static async Delete(id: number): Promise<void> {
+    const query: QueryConfig = {
+      text: `
                 DELETE FROM
                     products
                 WHERE
                     product_id = $1
             `,
-            values: [id]
-        }
+      values: [id],
+    };
 
-        await pool.query(query);
-    }
+    await pool.query(query);
+  }
 }
 
 export default Products;

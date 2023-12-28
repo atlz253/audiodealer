@@ -3,9 +3,9 @@ import { QueryConfig } from "pg";
 import pool from "./pool";
 
 class Manufacturers {
-    private static async InsertManufacturer(name: string): Promise<number> {
-        const query: QueryConfig = {
-            text: `
+  private static async InsertManufacturer(name: string): Promise<number> {
+    const query: QueryConfig = {
+      text: `
                 INSERT INTO manufacturers 
                     (name) 
                 VALUES 
@@ -13,17 +13,17 @@ class Manufacturers {
                 RETURNING 
                     manufacturer_id AS id
             `,
-            values: [name]
-        }
+      values: [name],
+    };
 
-        const result = await pool.query<ID>(query);
+    const result = await pool.query<ID>(query);
 
-        return result.rows[0].id;
-    }
+    return result.rows[0].id;
+  }
 
-    public static async GetIDByName(name: string): Promise<number> {
-        const query: QueryConfig = {
-            text: `
+  public static async GetIDByName(name: string): Promise<number> {
+    const query: QueryConfig = {
+      text: `
                 SELECT 
                     manufacturer_id as id 
                 FROM 
@@ -31,17 +31,17 @@ class Manufacturers {
                 WHERE 
                     name = $1
             `,
-            values: [name]
-        }
+      values: [name],
+    };
 
-        const result = await pool.query<ID>(query);
+    const result = await pool.query<ID>(query);
 
-        if (result.rowCount === 0) {
-            return await this.InsertManufacturer(name);
-        }
-
-        return result.rows[0].id;
+    if (result.rowCount === 0) {
+      return await this.InsertManufacturer(name);
     }
+
+    return result.rows[0].id;
+  }
 }
 
 export default Manufacturers;

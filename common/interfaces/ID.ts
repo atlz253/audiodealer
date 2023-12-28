@@ -1,5 +1,5 @@
 interface ID {
-    id: number;
+  id: number;
 }
 
 export default ID;

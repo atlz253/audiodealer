@@ -2,7 +2,7 @@ import ID from "./ID";
 import IDeliveryDays from "./IDeliveryDays";
 
 interface IContractProduct extends ID, IDeliveryDays {
-    quantity: number
+  quantity: number;
 }
 
 export default IContractProduct;

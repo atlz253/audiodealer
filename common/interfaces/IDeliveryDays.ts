@@ -1,5 +1,5 @@
 interface IDeliveryDays {
-    deliveryDays: number
+  deliveryDays: number;
 }
 
 export default IDeliveryDays;

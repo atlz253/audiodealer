@@ -1,5 +1,5 @@
 interface ICount {
-    count: number
+  count: number;
 }
 
 export default ICount;

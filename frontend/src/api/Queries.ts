@@ -4,15 +4,15 @@ import AbstractAPI from "./AbstractAPI";
 import IQueriesCategory from "../../../common/interfaces/IQueriesCategory";
 
 class Queries extends AbstractAPI {
-    public static async Get(): Promise<IQueriesCategory[]> {
-        const request = await axios.get<IQueriesCategory[]>(baseURL + "/queries", {
-            headers: {
-                authorization: this.authToken
-            }
-        });
+  public static async Get(): Promise<IQueriesCategory[]> {
+    const request = await axios.get<IQueriesCategory[]>(baseURL + "/queries", {
+      headers: {
+        authorization: this.authToken,
+      },
+    });
 
-        return request.data;
-    }
+    return request.data;
+  }
 }
 
 export default Queries;

@@ -3,9 +3,9 @@ import pool from "./pool";
 import ID from "../../../common/interfaces/ID";
 
 class Categories {
-    private static async InsertCategory(name: string): Promise<number> {
-        const query: QueryConfig = {
-            text: `
+  private static async InsertCategory(name: string): Promise<number> {
+    const query: QueryConfig = {
+      text: `
                 INSERT INTO categories 
                     (name) 
                 VALUES 
@@ -15,17 +15,17 @@ class Categories {
                 AS 
                     id
             `,
-            values: [name]
-        }
+      values: [name],
+    };
 
-        const result = await pool.query<ID>(query);
+    const result = await pool.query<ID>(query);
 
-        return result.rows[0].id;
-    }
+    return result.rows[0].id;
+  }
 
-    public static async GetIDByName(name: string): Promise<number> {
-        const query: QueryConfig = {
-            text: `
+  public static async GetIDByName(name: string): Promise<number> {
+    const query: QueryConfig = {
+      text: `
                 SELECT 
                     category_id as id 
                 FROM 
@@ -33,17 +33,17 @@ class Categories {
                 WHERE 
                     name = $1
             `,
-            values: [name]
-        }
+      values: [name],
+    };
 
-        const result = await pool.query<ID>(query);
+    const result = await pool.query<ID>(query);
 
-        if (result.rowCount === 0) {
-            return await this.InsertCategory(name);
-        }
-
-        return result.rows[0].id;
+    if (result.rowCount === 0) {
+      return await this.InsertCategory(name);
     }
+
+    return result.rows[0].id;
+  }
 }
 
 export default Categories;
