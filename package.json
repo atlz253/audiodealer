@@ -3,10 +3,9 @@
   "version": "1.0.0",
   "author": "Fedor Alekseev",
   "scripts": {
-    "front:start": "cd frontend && react-scripts start",
-    "front:build": "cd frontend && react-scripts build",
-    "front:test": "cd frontend && react-scripts test",
-    "front:eject": "cd frontend && react-scripts eject",
+    "front:start": "cd frontend && node scripts/start.js",
+    "front:build": "cd frontend && node scripts/build.js",
+    "front:test": "cd frontend && node scripts/test.js",
     "back:test": "cd backend && jest",
     "back:build": "cd backend && npx tsc",
     "back:start": "cd backend && node dist/index.js",
