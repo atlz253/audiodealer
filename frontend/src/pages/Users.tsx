@@ -19,8 +19,6 @@ const Users = () => {
     tryServerRequest(async () => {
       const users = await DataGateway.Users.Get();
 
-      console.log(users);
-
       setUsers(users);
     });
   }, []);
