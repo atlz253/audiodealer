@@ -2,7 +2,7 @@ import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import React, { FC, useContext, useEffect, useState } from "react";
 import IconButton from "../components/IconButton";
 import IBaseProduct from "../../../common/interfaces/IBaseProduct";
-import API from "../api/API";
+import DataGateway from "../api/DataGateway";
 import ProductsTable from "../components/ProductsTable";
 import { useNavigate } from "react-router-dom";
 import tryServerRequest from "../utils/tryServerRequest";
@@ -15,19 +15,19 @@ const ProductsPage: FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (API.AuthToken === "") {
+    if (DataGateway.AuthToken === "") {
       return;
     }
 
     tryServerRequest(async () => {
-      const response: IBaseProduct[] = await API.Products.Get();
+      const response: IBaseProduct[] = await DataGateway.Products.Get();
 
       setProducts(response);
     });
   }, []);
 
   const createProduct = async (product: IProduct): Promise<ID> => {
-    const response = await API.Products.Create(product);
+    const response = await DataGateway.Products.Create(product);
 
     setProducts([...products, product]);
 
@@ -35,7 +35,7 @@ const ProductsPage: FC = () => {
   };
 
   const deleteProduct = async (id: number): Promise<void> => {
-    await API.Products.Delete(id);
+    await DataGateway.Products.Delete(id);
 
     const newProducts = products.filter((product) => product.id !== id);
 
@@ -43,7 +43,7 @@ const ProductsPage: FC = () => {
   };
 
   const saveProduct = async (product: IProduct): Promise<void> => {
-    await API.Products.Save(product);
+    await DataGateway.Products.Save(product);
 
     const newProducts = products.map((p) => {
       if (p.id === product.id) {
@@ -60,7 +60,7 @@ const ProductsPage: FC = () => {
     <Products
       products={products}
       productModalProps={{
-        getProduct: (id: number) => API.Products.GetByID(id),
+        getProduct: (id: number) => DataGateway.Products.GetByID(id),
         createProduct: createProduct,
         saveProduct: saveProduct,
         deleteProduct: deleteProduct,

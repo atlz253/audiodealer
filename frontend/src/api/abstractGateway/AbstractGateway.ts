@@ -1,17 +1,14 @@
-import Products from "./Products";
-import Contracts from "./Contracts";
-import Login from "./Login";
-import AbstractAPI from "./AbstractAPI";
-import DealerBills from "./DealerBills";
+import AuthTokenKeeper from "./AuthTokenKeeper";
 import Clients from "./Clients";
-import Users from "./Users";
+import Contracts from "./Contracts";
+import DealerBills from "./DealerBills";
+import Login from "./Login";
+import Products from "./Products";
 import Providers from "./Providers";
 import Queries from "./Queries";
-import axios from "axios";
-import { baseURL } from "./APIconfig";
-import tryServerRequest from "../utils/tryServerRequest";
+import Users from "./Users";
 
-class API extends AbstractAPI {
+class AbstractGateway extends AuthTokenKeeper {
   public static SetAuthToken(token: string): void {
     super.SetAuthToken(token);
 
@@ -58,32 +55,8 @@ class API extends AbstractAPI {
   }
 
   public static DownloadFile(url: string, fileName: string): void {
-    axios({
-      url: baseURL + url,
-      method: "GET",
-      responseType: "blob",
-      headers: {
-        authorization: this.authToken,
-      },
-    })
-      .then((response) => {
-        const href = URL.createObjectURL(response.data);
-
-        const link = document.createElement("a");
-
-        link.href = href;
-
-        link.setAttribute("download", fileName);
-
-        document.body.appendChild(link);
-
-        link.click();
-
-        document.body.removeChild(link);
-        URL.revokeObjectURL(href);
-      })
-      .catch((reason) => alert("Не удалось получить файл"));
+    throw new Error('Not implemented');
   }
 }
 
-export default API;
+export default AbstractGateway;

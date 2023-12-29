@@ -2,7 +2,7 @@ import { FC, useState, useEffect } from "react";
 import IconButton from "../components/IconButton";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import IBaseBill from "../../../common/interfaces/IBaseBill";
-import API from "../api/API";
+import DataGateway from "../api/DataGateway";
 import tryServerRequest from "../utils/tryServerRequest";
 import { useNavigate } from "react-router-dom";
 import BillsTable from "../components/BillsTable";
@@ -14,12 +14,12 @@ const BillsPage: FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (API.AuthToken === "") {
+    if (DataGateway.AuthToken === "") {
       return;
     }
 
     tryServerRequest(async () => {
-      const bills = await API.DealerBills.Get();
+      const bills = await DataGateway.DealerBills.Get();
 
       setBills(bills as IBaseBill[]);
     });
@@ -29,10 +29,10 @@ const BillsPage: FC = () => {
     <Bills
       bills={bills}
       setBills={setBills}
-      getBill={(id: number) => API.DealerBills.GetByID(id)}
-      saveBill={(bill: IBill) => API.DealerBills.Save(bill)}
-      createBill={(bill: IBill) => API.DealerBills.Create(bill)}
-      deleteBill={(id: number) => API.DealerBills.Delete(id)}
+      getBill={(id: number) => DataGateway.DealerBills.GetByID(id)}
+      saveBill={(bill: IBill) => DataGateway.DealerBills.Save(bill)}
+      createBill={(bill: IBill) => DataGateway.DealerBills.Create(bill)}
+      deleteBill={(id: number) => DataGateway.DealerBills.Delete(id)}
       className="p-1"
     />
   );

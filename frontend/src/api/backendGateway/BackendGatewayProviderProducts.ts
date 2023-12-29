@@ -1,10 +1,10 @@
-import IBaseProduct from "../../../common/interfaces/IBaseProduct";
-import AbstractAPI from "./AbstractAPI";
 import axios from "axios";
-import { baseURL } from "./APIconfig";
-import IDeliveryDays from "../../../common/interfaces/IDeliveryDays";
+import IBaseProduct from "../../../../common/interfaces/IBaseProduct";
+import ProviderProducts from "../abstractGateway/ProviderProducts";
+import { baseURL } from "./BackendGatewayConfig";
+import IDeliveryDays from "../../../../common/interfaces/IDeliveryDays";
 
-class ProviderProducts extends AbstractAPI {
+class BackendGatewayProviderProducts extends ProviderProducts {
   public static async Get(providerID: number): Promise<IBaseProduct[]> {
     const request = await axios.get<IBaseProduct[]>(
       baseURL + "/providers/" + providerID + "/products",
@@ -49,4 +49,4 @@ class ProviderProducts extends AbstractAPI {
   }
 }
 
-export default ProviderProducts;
+export default BackendGatewayProviderProducts;

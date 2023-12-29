@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Table } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import tryServerRequest from "../utils/tryServerRequest";
-import API from "../api/API";
+import DataGateway from "../api/DataGateway";
 import IUser from "../../../common/interfaces/IUser";
 
 const Users = () => {
@@ -12,12 +12,12 @@ const Users = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (API.AuthToken === "") {
+    if (DataGateway.AuthToken === "") {
       return;
     }
 
     tryServerRequest(async () => {
-      const users = await API.Users.Get();
+      const users = await DataGateway.Users.Get();
 
       console.log(users);
 

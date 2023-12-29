@@ -1,22 +1,17 @@
-import IBaseContract from "../../../common/interfaces/IBaseContract";
-import IContract from "../../../common/interfaces/IContract";
 import axios from "axios";
-import { baseURL } from "./APIconfig";
-import AbstractAPI from "./AbstractAPI";
-import INewContract from "../../../common/interfaces/INewContract";
-import ID from "../../../common/interfaces/ID";
-import Cheques from "./Cheques";
-import ICount from "../../../common/interfaces/ICount";
+import IBaseContract from "../../../../common/interfaces/IBaseContract";
+import Contracts from "../abstractGateway/Contracts";
+import { baseURL } from "./BackendGatewayConfig";
+import IContract from "../../../../common/interfaces/IContract";
+import ICount from "../../../../common/interfaces/ICount";
+import INewContract from "../../../../common/interfaces/INewContract";
+import ID from "../../../../common/interfaces/ID";
+import BackendGatewayCheques from "./BackendGatewayCheques";
+import Cheques from "../abstractGateway/Cheques";
 
-class Contracts extends AbstractAPI {
-  public static SetAuthToken(token: string): void {
-    super.SetAuthToken(token);
-
-    Cheques.SetAuthToken(token);
-  }
-
+class BackendGatewayContracts extends Contracts {
   public static get Cheques(): typeof Cheques {
-    return Cheques;
+    return BackendGatewayCheques;
   }
 
   public static async Get(): Promise<IBaseContract[]> {
@@ -63,4 +58,4 @@ class Contracts extends AbstractAPI {
   }
 }
 
-export default Contracts;
+export default BackendGatewayContracts;

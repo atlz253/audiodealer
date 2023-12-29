@@ -102,6 +102,8 @@ module.exports = function (webpackEnv) {
   // Get environment variables to inject into our app.
   const env = getClientEnvironment(paths.publicUrlOrPath.slice(0, -1));
 
+  process.env.DEMO = process.argv.includes("--demo") ? "demo" : "";
+
   const shouldUseReactRefresh = env.raw.FAST_REFRESH;
 
   // common function to get style loaders

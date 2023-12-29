@@ -4,7 +4,7 @@ import { Table } from "react-bootstrap";
 import IconButton from "../components/IconButton";
 import { useNavigate } from "react-router-dom";
 import IBaseClient from "../../../common/interfaces/IBaseClient";
-import API from "../api/API";
+import DataGateway from "../api/DataGateway";
 import tryServerRequest from "../utils/tryServerRequest";
 
 const Clients: FC = () => {
@@ -12,12 +12,12 @@ const Clients: FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (API.AuthToken === "") {
+    if (DataGateway.AuthToken === "") {
       return;
     }
 
     tryServerRequest(async () => {
-      const clients = await API.Clients.Get();
+      const clients = await DataGateway.Clients.Get();
 
       setClients(clients as IBaseClient[]);
     });

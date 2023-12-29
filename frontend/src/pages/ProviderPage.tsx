@@ -3,7 +3,7 @@ import ItemPage from "../components/ItemPage";
 import IProvider from "../../../common/interfaces/IProvider";
 import Provider from "../components/Provider";
 import Categories from "../components/Categories/Categories";
-import API from "../api/API";
+import DataGateway from "../api/DataGateway";
 import tryServerRequest from "../utils/tryServerRequest";
 import { useNavigate, useParams } from "react-router-dom";
 import IBaseBill from "../../../common/interfaces/IBaseBill";
@@ -48,12 +48,12 @@ const ProviderPage: FC<IProviderPageProps> = ({ newProvider }) => {
       return;
     }
 
-    if (API.AuthToken === "") {
+    if (DataGateway.AuthToken === "") {
       return;
     }
 
     tryServerRequest(async () => {
-      const provider = await API.Providers.GetByID(Number(providerID));
+      const provider = await DataGateway.Providers.GetByID(Number(providerID));
 
       setProvider(provider);
     });
@@ -61,7 +61,7 @@ const ProviderPage: FC<IProviderPageProps> = ({ newProvider }) => {
 
   const saveProvider = () => {
     tryServerRequest(async () => {
-      const response = await API.Providers.Create(provider);
+      const response = await DataGateway.Providers.Create(provider);
 
       navigate("/providers/" + response.id);
 
@@ -85,7 +85,7 @@ const ProviderPage: FC<IProviderPageProps> = ({ newProvider }) => {
     }
 
     tryServerRequest(async () => {
-      const bills = await API.Providers.Bills.Get(Number(providerID));
+      const bills = await DataGateway.Providers.Bills.Get(Number(providerID));
 
       setBills(bills as IBaseBill[]);
     });
@@ -97,7 +97,7 @@ const ProviderPage: FC<IProviderPageProps> = ({ newProvider }) => {
     }
 
     tryServerRequest(async () => {
-      const providerProducts = await API.Providers.Products.Get(
+      const providerProducts = await DataGateway.Providers.Products.Get(
         Number(providerID),
       );
 
@@ -105,7 +105,7 @@ const ProviderPage: FC<IProviderPageProps> = ({ newProvider }) => {
     });
 
     tryServerRequest(async () => {
-      let products = await API.Products.Get();
+      let products = await DataGateway.Products.Get();
 
       products.forEach((product) => (product.deliveryDays = 0));
 
@@ -119,7 +119,7 @@ const ProviderPage: FC<IProviderPageProps> = ({ newProvider }) => {
         throw new Error("У товара отсутствует время доставки");
       }
 
-      await API.Providers.Products.Add(Number(providerID), product.id, {
+      await DataGateway.Providers.Products.Add(Number(providerID), product.id, {
         deliveryDays: product.deliveryDays,
       });
 
@@ -133,7 +133,7 @@ const ProviderPage: FC<IProviderPageProps> = ({ newProvider }) => {
 
   const removeProduct = (product: IBaseProduct) => {
     tryServerRequest(async () => {
-      await API.Providers.Products.Delete(Number(providerID), product.id);
+      await DataGateway.Providers.Products.Delete(Number(providerID), product.id);
 
       if (providerProducts === null) {
         return;
@@ -187,16 +187,16 @@ const ProviderPage: FC<IProviderPageProps> = ({ newProvider }) => {
                 bills={bills}
                 setBills={setBills}
                 getBill={(id: number) =>
-                  API.Providers.Bills.GetByID(Number(providerID), id)
+                  DataGateway.Providers.Bills.GetByID(Number(providerID), id)
                 }
                 createBill={(bill: IBill) =>
-                  API.Providers.Bills.Create(Number(providerID), bill)
+                  DataGateway.Providers.Bills.Create(Number(providerID), bill)
                 }
                 saveBill={(bill: IBill) =>
-                  API.Providers.Bills.Save(Number(providerID), bill)
+                  DataGateway.Providers.Bills.Save(Number(providerID), bill)
                 }
                 deleteBill={(id: number) =>
-                  API.Providers.Bills.Delete(Number(providerID), id)
+                  DataGateway.Providers.Bills.Delete(Number(providerID), id)
                 }
               />
             </Categories.Item>
@@ -215,7 +215,7 @@ const ProviderPage: FC<IProviderPageProps> = ({ newProvider }) => {
                     setProducts: setProducts,
                   }}
                   productModalProps={{
-                    getProduct: (id: number) => API.Products.GetByID(id),
+                    getProduct: (id: number) => DataGateway.Products.GetByID(id),
                   }}
                 />
               )}

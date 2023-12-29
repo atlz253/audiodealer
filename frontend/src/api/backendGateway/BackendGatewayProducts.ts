@@ -1,12 +1,13 @@
-import IBaseProduct from "../../../common/interfaces/IBaseProduct";
-import IProduct from "../../../common/interfaces/IProduct";
 import axios from "axios";
-import { baseURL } from "./APIconfig";
-import ID from "../../../common/interfaces/ID";
-import AbstractAPI from "./AbstractAPI";
-import ICount from "../../../common/interfaces/ICount";
+import IBaseProduct from "../../../../common/interfaces/IBaseProduct";
+import Products from "../abstractGateway/Products";
+import { baseURL } from "./BackendGatewayConfig";
+import IProduct from "../../../../common/interfaces/IProduct";
+import ICount from "../../../../common/interfaces/ICount";
+import ID from "../../../../common/interfaces/ID";
 
-class Products extends AbstractAPI {
+
+class BackendGatewayProducts extends Products {
   public static async Get(): Promise<IBaseProduct[]> {
     const request = await axios.get<IBaseProduct[]>(baseURL + "/products", {
       headers: {

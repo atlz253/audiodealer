@@ -1,9 +1,9 @@
 import axios from "axios";
-import { baseURL } from "./APIconfig";
-import AbstractAPI from "./AbstractAPI";
-import IQueriesCategory from "../../../common/interfaces/IQueriesCategory";
+import IQueriesCategory from "../../../../common/interfaces/IQueriesCategory";
+import Queries from "../abstractGateway/Queries";
+import { baseURL } from "./BackendGatewayConfig";
 
-class Queries extends AbstractAPI {
+class BackendGatewayQueries extends Queries {
   public static async Get(): Promise<IQueriesCategory[]> {
     const request = await axios.get<IQueriesCategory[]>(baseURL + "/queries", {
       headers: {
@@ -15,4 +15,4 @@ class Queries extends AbstractAPI {
   }
 }
 
-export default Queries;
+export default BackendGatewayQueries;

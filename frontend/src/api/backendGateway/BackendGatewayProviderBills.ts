@@ -1,12 +1,12 @@
-import IBaseBill from "../../../common/interfaces/IBaseBill";
-import IBill from "../../../common/interfaces/IBill";
-import IBillNumber from "../../../common/interfaces/IBillNumber";
-import ID from "../../../common/interfaces/ID";
 import axios from "axios";
-import { baseURL } from "./APIconfig";
-import AbstractAPI from "./AbstractAPI";
+import IBaseBill from "../../../../common/interfaces/IBaseBill";
+import IBillNumber from "../../../../common/interfaces/IBillNumber";
+import ProviderBills from "../abstractGateway/ProviderBills";
+import { baseURL } from "./BackendGatewayConfig";
+import IBill from "../../../../common/interfaces/IBill";
+import ID from "../../../../common/interfaces/ID";
 
-class ProviderBills extends AbstractAPI {
+class BackendGatewayProviderBills extends ProviderBills {
   public static async Get(
     providerID: number,
     onlyBillNumbers?: boolean,
@@ -83,4 +83,4 @@ class ProviderBills extends AbstractAPI {
   }
 }
 
-export default ProviderBills;
+export default BackendGatewayProviderBills;

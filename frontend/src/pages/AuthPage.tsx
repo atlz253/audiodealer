@@ -1,6 +1,6 @@
 import React, { ChangeEvent, useContext, useState, KeyboardEvent } from "react";
 import { Button, Form } from "react-bootstrap";
-import API from "../api/API";
+import DataGateway from "../api/DataGateway";
 import { AuthContext } from "../context";
 import IconButton from "../components/IconButton";
 import { faKey } from "@fortawesome/free-solid-svg-icons";
@@ -17,7 +17,7 @@ const AuthPage = () => {
 
   const auth = async () => {
     tryServerRequest(async () => {
-      const response = await API.Login.Login(loginData);
+      const response = await DataGateway.Login.Login(loginData);
 
       sessionStorage.setItem("auth", JSON.stringify(response));
 

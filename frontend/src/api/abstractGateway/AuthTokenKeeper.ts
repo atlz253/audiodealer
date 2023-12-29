@@ -1,4 +1,4 @@
-class AbstractAPI {
+class AuthTokenKeeper {
   protected static authToken: string = "";
 
   protected static SetAuthToken(token: string): void {
@@ -10,4 +10,4 @@ class AbstractAPI {
   }
 }
 
-export default AbstractAPI;
+export default AuthTokenKeeper;

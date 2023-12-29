@@ -1,22 +1,17 @@
-import IBaseClient from "../../../common/interfaces/IBaseClient";
-import AbstractAPI from "./AbstractAPI";
 import axios from "axios";
-import { baseURL } from "./APIconfig";
-import ID from "../../../common/interfaces/ID";
-import IClient from "../../../common/interfaces/IClient";
-import ClientBills from "./ClientBills";
-import IName from "../../../common/interfaces/IName";
-import ICount from "../../../common/interfaces/ICount";
+import IBaseClient from "../../../../common/interfaces/IBaseClient";
+import IName from "../../../../common/interfaces/IName";
+import Clients from "../abstractGateway/Clients";
+import { baseURL } from "./BackendGatewayConfig";
+import IClient from "../../../../common/interfaces/IClient";
+import ICount from "../../../../common/interfaces/ICount";
+import ID from "../../../../common/interfaces/ID";
+import BackendGatewayClientBills from "./BackendGatewayClientBills";
+import ClientBills from "../abstractGateway/ClientBills";
 
-class Clients extends AbstractAPI {
-  public static SetAuthToken(token: string): void {
-    super.SetAuthToken(token);
-
-    ClientBills.SetAuthToken(token);
-  }
-
+class BackendGatewayClients extends Clients {
   public static get Bills(): typeof ClientBills {
-    return ClientBills;
+    return BackendGatewayClientBills;
   }
 
   public static async Get(
@@ -84,4 +79,4 @@ class Clients extends AbstractAPI {
   }
 }
 
-export default Clients;
+export default BackendGatewayClients;

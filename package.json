@@ -4,7 +4,9 @@
   "author": "Fedor Alekseev",
   "scripts": {
     "front:start": "cd frontend && node scripts/start.js",
+    "front:demo:start": "cd frontend && node scripts/start.js --demo",
     "front:build": "cd frontend && node scripts/build.js",
+    "front:demo:build": "cd frontend && node scripts/build.js --demo",
     "front:test": "cd frontend && node scripts/test.js",
     "back:test": "cd backend && jest",
     "back:build": "cd backend && npx tsc",

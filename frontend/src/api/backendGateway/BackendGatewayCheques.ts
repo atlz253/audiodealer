@@ -1,9 +1,9 @@
 import axios from "axios";
-import { baseURL } from "./APIconfig";
-import AbstractAPI from "./AbstractAPI";
-import ICheque from "../../../common/interfaces/ICheque";
+import Cheques from "../abstractGateway/Cheques";
+import { baseURL } from "./BackendGatewayConfig";
+import ICheque from "../../../../common/interfaces/ICheque";
 
-class Cheques extends AbstractAPI {
+class BackendGatewayCheques extends Cheques {
   public static async Save(contractID: number, cheque: ICheque): Promise<void> {
     await axios.put(
       baseURL + "/contracts/" + contractID + "/cheques/" + cheque.id,
@@ -17,4 +17,4 @@ class Cheques extends AbstractAPI {
   }
 }
 
-export default Cheques;
+export default BackendGatewayCheques;

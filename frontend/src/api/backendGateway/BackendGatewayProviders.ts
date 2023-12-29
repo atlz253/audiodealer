@@ -1,28 +1,23 @@
-import IBaseProvider from "../../../common/interfaces/IBaseProvider";
-import AbstractAPI from "./AbstractAPI";
-import ProviderBills from "./ProviderBills";
-import ProviderProducts from "./ProviderProducts";
-import IName from "../../../common/interfaces/IName";
 import axios from "axios";
-import { baseURL } from "./APIconfig";
-import IProvider from "../../../common/interfaces/IProvider";
-import ID from "../../../common/interfaces/ID";
-import ICount from "../../../common/interfaces/ICount";
+import IBaseProvider from "../../../../common/interfaces/IBaseProvider";
+import IName from "../../../../common/interfaces/IName";
+import Providers from "../abstractGateway/Providers";
+import { baseURL } from "./BackendGatewayConfig";
+import IProvider from "../../../../common/interfaces/IProvider";
+import ICount from "../../../../common/interfaces/ICount";
+import ID from "../../../../common/interfaces/ID";
+import BackendGatewayProviderBills from "./BackendGatewayProviderBills";
+import ProviderBills from "../abstractGateway/ProviderBills";
+import BackendGatewayProviderProducts from "./BackendGatewayProviderProducts";
+import ProviderProducts from "../abstractGateway/ProviderProducts";
 
-class Providers extends AbstractAPI {
-  public static SetAuthToken(token: string): void {
-    super.SetAuthToken(token);
-
-    ProviderBills.SetAuthToken(token);
-    ProviderProducts.SetAuthToken(token);
-  }
-
+class BackendGatewayProviders extends Providers {
   public static get Bills(): typeof ProviderBills {
-    return ProviderBills;
+    return BackendGatewayProviderBills;
   }
 
   public static get Products(): typeof ProviderProducts {
-    return ProviderProducts;
+    return BackendGatewayProviderProducts;
   }
 
   public static async Get(
@@ -97,4 +92,4 @@ class Providers extends AbstractAPI {
   }
 }
 
-export default Providers;
+export default BackendGatewayProviders;

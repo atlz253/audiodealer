@@ -1,12 +1,12 @@
-import IBaseBill from "../../../common/interfaces/IBaseBill";
-import AbstractAPI from "./AbstractAPI";
 import axios from "axios";
-import { baseURL } from "./APIconfig";
-import IBill from "../../../common/interfaces/IBill";
-import ID from "../../../common/interfaces/ID";
-import IBillNumber from "../../../common/interfaces/IBillNumber";
+import IBaseBill from "../../../../common/interfaces/IBaseBill";
+import IBillNumber from "../../../../common/interfaces/IBillNumber";
+import DealerBills from "../abstractGateway/DealerBills";
+import { baseURL } from "./BackendGatewayConfig";
+import IBill from "../../../../common/interfaces/IBill";
+import ID from "../../../../common/interfaces/ID";
 
-class DealerBills extends AbstractAPI {
+class BackendGatewayDealerBills extends DealerBills {
   public static async Get(
     onlyBillNumbers?: boolean,
   ): Promise<IBaseBill[] | IBillNumber[]> {
@@ -59,4 +59,4 @@ class DealerBills extends AbstractAPI {
   }
 }
 
-export default DealerBills;
+export default BackendGatewayDealerBills;

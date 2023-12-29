@@ -1,7 +1,7 @@
 import { FC, useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import IContract from "../../../common/interfaces/IContract";
-import API from "../api/API";
+import DataGateway from "../api/DataGateway";
 import Bill from "../components/Bill";
 import IBill from "../../../common/interfaces/IBill";
 import { faArrowLeft, faTrash } from "@fortawesome/free-solid-svg-icons";
@@ -59,7 +59,7 @@ const ContractPage: FC<IContractPageProps> = ({ newContract }) => {
 
   const getContract = (id: number) => {
     tryServerRequest(async () => {
-      const contract = await API.Contracts.GetByID(id);
+      const contract = await DataGateway.Contracts.GetByID(id);
 
       setContract(contract);
     });
@@ -72,7 +72,7 @@ const ContractPage: FC<IContractPageProps> = ({ newContract }) => {
       return;
     }
 
-    if (API.AuthToken === "") {
+    if (DataGateway.AuthToken === "") {
       return;
     }
 
@@ -101,7 +101,7 @@ const ContractPage: FC<IContractPageProps> = ({ newContract }) => {
         }),
       };
 
-      const response = await API.Contracts.Create(newContract);
+      const response = await DataGateway.Contracts.Create(newContract);
 
       navigate("/contracts/" + response.id);
 

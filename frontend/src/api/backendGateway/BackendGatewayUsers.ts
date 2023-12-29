@@ -1,10 +1,10 @@
-import IUser from "../../../common/interfaces/IUser";
-import AbstractAPI from "./AbstractAPI";
 import axios from "axios";
-import { baseURL } from "./APIconfig";
-import ID from "../../../common/interfaces/ID";
+import IUser from "../../../../common/interfaces/IUser";
+import Users from "../abstractGateway/Users";
+import { baseURL } from "./BackendGatewayConfig";
+import ID from "../../../../common/interfaces/ID";
 
-class Users extends AbstractAPI {
+class BackendGatewayUsers extends Users {
   public static async Get(): Promise<IUser[]> {
     const response = await axios.get<IUser[]>(baseURL + "/users", {
       headers: {
@@ -52,4 +52,4 @@ class Users extends AbstractAPI {
   }
 }
 
-export default Users;
+export default BackendGatewayUsers;

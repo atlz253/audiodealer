@@ -4,7 +4,7 @@ import IClient from "../../../common/interfaces/IClient";
 import { useNavigate, useParams } from "react-router-dom";
 import Client from "../components/Client";
 import tryServerRequest from "../utils/tryServerRequest";
-import API from "../api/API";
+import DataGateway from "../api/DataGateway";
 import Categories from "../components/Categories/Categories";
 import IBaseBill from "../../../common/interfaces/IBaseBill";
 import IBill from "../../../common/interfaces/IBill";
@@ -41,12 +41,12 @@ const ClientPage: FC<ClientPageProps> = ({ newClient }) => {
       return;
     }
 
-    if (API.AuthToken === "") {
+    if (DataGateway.AuthToken === "") {
       return;
     }
 
     tryServerRequest(async () => {
-      const client = await API.Clients.GetByID(Number(clientID));
+      const client = await DataGateway.Clients.GetByID(Number(clientID));
 
       setClient(client);
     });
@@ -57,13 +57,13 @@ const ClientPage: FC<ClientPageProps> = ({ newClient }) => {
 
     tryServerRequest(async () => {
       if (newClient) {
-        const result = await API.Clients.Create(client);
+        const result = await DataGateway.Clients.Create(client);
 
         navigate("/clients/" + result.id);
 
         setClient({ ...client, id: result.id });
       } else {
-        await API.Clients.Save(client);
+        await DataGateway.Clients.Save(client);
       }
 
       setIsEditMode(false);
@@ -95,7 +95,7 @@ const ClientPage: FC<ClientPageProps> = ({ newClient }) => {
 
   const deleteClient = () => {
     tryServerRequest(async () => {
-      await API.Clients.Delete(client.id);
+      await DataGateway.Clients.Delete(client.id);
 
       navigate("/clients");
     });
@@ -107,7 +107,7 @@ const ClientPage: FC<ClientPageProps> = ({ newClient }) => {
     }
 
     tryServerRequest(async () => {
-      const bills = await API.Clients.Bills.Get(Number(clientID));
+      const bills = await DataGateway.Clients.Bills.Get(Number(clientID));
 
       setBills(bills as IBaseBill[]);
     });
@@ -157,16 +157,16 @@ const ClientPage: FC<ClientPageProps> = ({ newClient }) => {
               bills={bills}
               setBills={setBills}
               getBill={(id: number) =>
-                API.Clients.Bills.GetByID(Number(clientID), id)
+                DataGateway.Clients.Bills.GetByID(Number(clientID), id)
               }
               saveBill={(bill: IBill) =>
-                API.Clients.Bills.Save(Number(clientID), bill)
+                DataGateway.Clients.Bills.Save(Number(clientID), bill)
               }
               createBill={(bill: IBill) =>
-                API.Clients.Bills.Create(Number(clientID), bill)
+                DataGateway.Clients.Bills.Create(Number(clientID), bill)
               }
               deleteBill={(id: number) =>
-                API.Clients.Bills.Delete(Number(clientID), id)
+                DataGateway.Clients.Bills.Delete(Number(clientID), id)
               }
             />
           </Categories.Item>
