@@ -4,7 +4,7 @@ import IClient from "../../../common/interfaces/IClient";
 import { useNavigate, useParams } from "react-router-dom";
 import Client from "../components/Client";
 import tryServerRequest from "../utils/tryServerRequest";
-import DataGateway from "../api/DataGateway";
+import DataGateway from "../dataGateway/DataGateway";
 import Categories from "../components/Categories/Categories";
 import IBaseBill from "../../../common/interfaces/IBaseBill";
 import IBill from "../../../common/interfaces/IBill";

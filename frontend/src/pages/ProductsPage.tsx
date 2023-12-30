@@ -2,7 +2,7 @@ import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import React, { FC, useContext, useEffect, useState } from "react";
 import IconButton from "../components/IconButton";
 import IBaseProduct from "../../../common/interfaces/IBaseProduct";
-import DataGateway from "../api/DataGateway";
+import DataGateway from "../dataGateway/DataGateway";
 import ProductsTable from "../components/ProductsTable";
 import { useNavigate } from "react-router-dom";
 import tryServerRequest from "../utils/tryServerRequest";

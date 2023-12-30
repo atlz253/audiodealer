@@ -3,7 +3,7 @@ import { BrowserRouter } from "react-router-dom";
 import { AuthContext } from "../context";
 import IAuth from "../../../common/interfaces/IAuth";
 import { AppRouter } from "./AppRouter";
-import DataGateway from "../api/DataGateway";
+import DataGateway from "../dataGateway/DataGateway";
 
 const Root: FC = () => {
   const [auth, setAuth] = useState<IAuth | null>(null);

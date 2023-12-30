@@ -1,6 +1,6 @@
 import React, { ChangeEvent, useContext, useState, KeyboardEvent } from "react";
 import { Button, Form } from "react-bootstrap";
-import DataGateway from "../api/DataGateway";
+import DataGateway from "../dataGateway/DataGateway";
 import { AuthContext } from "../context";
 import IconButton from "../components/IconButton";
 import { faKey } from "@fortawesome/free-solid-svg-icons";

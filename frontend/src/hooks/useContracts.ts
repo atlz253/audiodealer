@@ -1,4 +1,4 @@
-import DataGateway from "../api/DataGateway";
+import DataGateway from "../dataGateway/DataGateway";
 import useFetchState from "./useFetchState";
 
 const useContracts = () => useFetchState(() => DataGateway.Contracts.Get(), []);

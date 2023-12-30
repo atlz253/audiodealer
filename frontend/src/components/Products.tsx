@@ -6,7 +6,7 @@ import ProductsTable, { ProductsIndexing } from "./ProductsTable";
 import IBaseProduct from "../../../common/interfaces/IBaseProduct";
 import IProduct from "../../../common/interfaces/IProduct";
 import tryServerRequest from "../utils/tryServerRequest";
-import DataGateway from "../api/DataGateway";
+import DataGateway from "../dataGateway/DataGateway";
 import ProductModal from "./ProductModal";
 import ID from "../../../common/interfaces/ID";
 

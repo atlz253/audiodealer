@@ -10,7 +10,7 @@ import DeleteModal from "../components/DeleteModal";
 import IconButton from "../components/IconButton";
 import { useNavigate, useParams } from "react-router-dom";
 import tryServerRequest from "../utils/tryServerRequest";
-import DataGateway from "../api/DataGateway";
+import DataGateway from "../dataGateway/DataGateway";
 import IDealer from "../../../common/interfaces/IDealer";
 import User from "../components/User";
 import IUser from "../../../common/interfaces/IUser";

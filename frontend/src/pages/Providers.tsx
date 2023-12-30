@@ -3,7 +3,7 @@ import IBaseProvider from "../../../common/interfaces/IBaseProvider";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import IconButton from "../components/IconButton";
 import { Table } from "react-bootstrap";
-import DataGateway from "../api/DataGateway";
+import DataGateway from "../dataGateway/DataGateway";
 import tryServerRequest from "../utils/tryServerRequest";
 import { useNavigate } from "react-router-dom";
 

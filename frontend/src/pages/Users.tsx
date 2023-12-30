@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Table } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import tryServerRequest from "../utils/tryServerRequest";
-import DataGateway from "../api/DataGateway";
+import DataGateway from "../dataGateway/DataGateway";
 import IUser from "../../../common/interfaces/IUser";
 
 const Users = () => {

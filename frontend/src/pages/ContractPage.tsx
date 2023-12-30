@@ -1,7 +1,7 @@
 import { FC, useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import IContract from "../../../common/interfaces/IContract";
-import DataGateway from "../api/DataGateway";
+import DataGateway from "../dataGateway/DataGateway";
 import Bill from "../components/Bill";
 import IBill from "../../../common/interfaces/IBill";
 import { faArrowLeft, faTrash } from "@fortawesome/free-solid-svg-icons";

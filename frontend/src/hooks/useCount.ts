@@ -1,4 +1,4 @@
-import DataGateway from "../api/DataGateway";
+import DataGateway from "../dataGateway/DataGateway";
 import useFetchData from "./useFetchData";
 
 export const useContractsCount = (contractStatus?: string) =>

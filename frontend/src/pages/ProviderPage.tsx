@@ -3,7 +3,7 @@ import ItemPage from "../components/ItemPage";
 import IProvider from "../../../common/interfaces/IProvider";
 import Provider from "../components/Provider";
 import Categories from "../components/Categories/Categories";
-import DataGateway from "../api/DataGateway";
+import DataGateway from "../dataGateway/DataGateway";
 import tryServerRequest from "../utils/tryServerRequest";
 import { useNavigate, useParams } from "react-router-dom";
 import IBaseBill from "../../../common/interfaces/IBaseBill";

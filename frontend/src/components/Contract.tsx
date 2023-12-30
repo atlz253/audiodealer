@@ -14,7 +14,7 @@ import {
 import Categories from "./Categories/Categories";
 import NamedSelect from "./NamedInputs/NamedSelect";
 import tryServerRequest from "../utils/tryServerRequest";
-import DataGateway from "../api/DataGateway";
+import DataGateway from "../dataGateway/DataGateway";
 import IName from "../../../common/interfaces/IName";
 import IBillNumber from "../../../common/interfaces/IBillNumber";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";

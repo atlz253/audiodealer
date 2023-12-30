@@ -2,7 +2,7 @@ import { FC, useState, useEffect } from "react";
 import IconButton from "../components/IconButton";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import IBaseBill from "../../../common/interfaces/IBaseBill";
-import DataGateway from "../api/DataGateway";
+import DataGateway from "../dataGateway/DataGateway";
 import tryServerRequest from "../utils/tryServerRequest";
 import { useNavigate } from "react-router-dom";
 import BillsTable from "../components/BillsTable";
