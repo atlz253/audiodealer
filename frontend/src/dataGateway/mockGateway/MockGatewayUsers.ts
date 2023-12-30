@@ -1,6 +1,7 @@
 import ID from "../../../../common/interfaces/ID";
 import IUser from "../../../../common/interfaces/IUser";
 import Users from "../abstractGateway/Users";
+import { getNextMockID } from "./mockID";
 import { users } from "./mocks/users";
 
 class MockGatewayUsers extends Users {
@@ -18,18 +19,10 @@ class MockGatewayUsers extends Users {
     throw new Error(`User with ID ${id} not found`);
   }
 
-  public static async Create(user: IUser): Promise<ID> {
-    user.id = this.GetNextUserID();
+  public static async Create(user: IUser): Promise<ID> { // TODO: make clones before users push
+    user.id = getNextMockID(users);
     users.push(user);
     return user;
-  }
-
-  private static GetNextUserID(): number {
-    const maxUserID = users.reduce(
-      (maxId, user) => (maxId > user.id ? maxId : user.id),
-      0,
-    );
-    return maxUserID + 1;
   }
 
   public static async Save(user: IUser): Promise<void> {

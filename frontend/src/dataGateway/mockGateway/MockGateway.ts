@@ -1,16 +1,24 @@
 import AbstractGateway from "../abstractGateway/AbstractGateway";
-import Login from "../abstractGateway/Login";
-import Users from "../abstractGateway/Users";
 import MockGatewayLogin from "./MockGatewayLogin";
+import MockGatewayProviders from "./MockGatewayProviders";
 import MockGatewayUsers from "./MockGatewayUsers";
+import MockGatewayProducts from "./MockGatewayProducts";
 
 class MockGateway extends AbstractGateway {
-  public static get Login(): typeof Login {
+  public static get Products() {
+    return MockGatewayProducts;
+  }
+
+  public static get Login() {
     return MockGatewayLogin;
   }
 
-  public static get Users(): typeof Users {
+  public static get Users() {
     return MockGatewayUsers;
+  }
+
+  public static get Providers() {
+    return MockGatewayProviders;
   }
 }
 
