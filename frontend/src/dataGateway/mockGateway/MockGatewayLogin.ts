@@ -13,7 +13,7 @@ class MockGatewayLogin extends Login {
 
     if (user) {
       return {
-        accessToken: "demo token",
+        accessToken: user.id.toString(),
         login: user.login || "",
         type: user.type,
       };

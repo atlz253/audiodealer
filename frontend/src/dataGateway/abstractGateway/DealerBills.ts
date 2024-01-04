@@ -1,7 +1,5 @@
 import IBaseBill from "../../../../common/interfaces/IBaseBill";
 import AuthTokenKeeper from "./AuthTokenKeeper";
-import axios from "axios";
-import { baseURL } from "../backendGateway/BackendGatewayConfig";
 import IBill from "../../../../common/interfaces/IBill";
 import ID from "../../../../common/interfaces/ID";
 import IBillNumber from "../../../../common/interfaces/IBillNumber";
