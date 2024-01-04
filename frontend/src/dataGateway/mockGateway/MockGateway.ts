@@ -4,6 +4,7 @@ import MockGatewayProviders from "./MockGatewayProviders";
 import MockGatewayUsers from "./MockGatewayUsers";
 import MockGatewayProducts from "./MockGatewayProducts";
 import MockGatewayDealerBills from "./MockGatewayDealerBills";
+import MockGatewayClients from "./MockGatewayClients";
 
 class MockGateway extends AbstractGateway {
   public static get Products() {
@@ -16,6 +17,10 @@ class MockGateway extends AbstractGateway {
 
   public static get DealerBills() {
     return MockGatewayDealerBills;
+  }
+
+  public static get Clients() {
+    return MockGatewayClients;
   }
 
   public static get Users() {

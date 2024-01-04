@@ -6,6 +6,12 @@ export interface IProviderProductMock extends ID {
 
 export const providerProductsID: IProviderProductMock[][] = [
   [
+    /* Admin haven't got products */
+  ],
+  [
+    /* User haven't got products */
+  ],
+  [
     {
       id: 0,
       deliveryDays: 10,

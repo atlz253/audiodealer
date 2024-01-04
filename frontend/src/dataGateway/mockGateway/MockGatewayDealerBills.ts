@@ -6,13 +6,13 @@ class MockGatewayDealerBills extends DealerBills {
   public static async Get(onlyBillNumbers?: boolean) {
     const currentUserID = this.GetCurrentUserID();
     const currentUserBills =
-      MockGatewayBills.TryGetBillsByUserID(currentUserID);
+      MockGatewayBills.GetBillsByUserID(currentUserID);
     return currentUserBills;
   }
 
   public static async GetByID(id: number) {
     const currentUserID = this.GetCurrentUserID();
-    const bill = MockGatewayBills.TryGetBillByUserIDAndBillID(
+    const bill = MockGatewayBills.TryGetBillCloneByUserIDAndBillID(
       currentUserID,
       id,
     );

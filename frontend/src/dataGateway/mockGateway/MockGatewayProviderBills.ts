@@ -1,15 +1,15 @@
 import ProviderBills from "../abstractGateway/ProviderBills";
 import IBill from "../../../../common/interfaces/IBill";
-import { bills } from "./mocks/bills";
 import MockGatewayBills from "./MockGatewayBills";
 
 class MockGatewayProviderBills extends ProviderBills {
   public static async Get(providerID: number, onlyBillNumbers?: boolean) {
-    return structuredClone(bills[providerID]) || [];
+    const bills = MockGatewayBills.GetBillsByUserID(providerID);
+    return bills;
   }
 
   public static async GetByID(providerID: number, billID: number) {
-    const bill = MockGatewayBills.TryGetBillByUserIDAndBillID(
+    const bill = MockGatewayBills.TryGetBillCloneByUserIDAndBillID(
       providerID,
       billID,
     );

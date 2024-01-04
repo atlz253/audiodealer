@@ -4,7 +4,16 @@ import { getMaxMockID } from "./mockID";
 import { bills } from "./mocks/bills";
 
 class MockGatewayBills {
-  public static TryGetBillByUserIDAndBillID(
+  public static TryGetBillCloneByUserIDAndBillID(
+    userID: number,
+    billID: number,
+  ): IBill {
+    const bill = this.TryGetBillByUserIDAndBillID(userID, billID);
+    const billClone = structuredClone(bill);
+    return billClone;
+  }
+
+  private static TryGetBillByUserIDAndBillID(
     userID: number,
     billID: number,
   ): IBill {
@@ -70,7 +79,17 @@ class MockGatewayBills {
     }
   }
 
-  public static TryGetBillsByUserID(userID: number): IBill[] {
+  public static GetBillsByUserID(userID: number): IBill[] {
+    try {
+      const userBills = this.TryGetBillsByUserID(userID);
+      const userBillsClone = structuredClone(userBills);
+      return userBillsClone;
+    } catch (e) {}
+
+    return [];
+  }
+
+  private static TryGetBillsByUserID(userID: number): IBill[] {
     const userBills = bills[userID];
 
     if (userBills) {
