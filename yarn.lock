@@ -4377,6 +4377,7 @@ __metadata:
     ts-jest: "npm:^29.1.0"
     typescript: "npm:^4.9.5"
     web-vitals: "npm:^2.1.4"
+    webpack-conditional-loader: "npm:^1.0.12"
     winston: "npm:^3.8.2"
     xlsx: "npm:^0.18.5"
   languageName: unknown
@@ -15025,6 +15026,13 @@ __metadata:
   version: 6.1.0
   resolution: "webidl-conversions@npm:6.1.0"
   checksum: 66ad3b9073cd1e0e173444d8c636673b016e25b5856694429072cc966229adb734a8d410188e031effadcfb837936d79bc9e87c48f4d5925a90d42dec97f6590
+  languageName: node
+  linkType: hard
+
+"webpack-conditional-loader@npm:^1.0.12":
+  version: 1.0.12
+  resolution: "webpack-conditional-loader@npm:1.0.12"
+  checksum: 0140cde59263c88699b217692bdede4da87bbe951289df95e8695a81283eaca83570f3a89ca2472a63b1988b57caf5cb610e44fe96afff1cad23b0ba603ff640
   languageName: node
   linkType: hard
 

@@ -3,10 +3,11 @@
   "version": "1.0.0",
   "author": "Fedor Alekseev",
   "scripts": {
-    "front:start": "cd frontend && react-scripts start",
-    "front:build": "cd frontend && react-scripts build",
-    "front:test": "cd frontend && react-scripts test",
-    "front:eject": "cd frontend && react-scripts eject",
+    "front:start": "cd frontend && node scripts/start.js",
+    "front:demo:start": "cd frontend && node scripts/start.js --demo",
+    "front:build": "cd frontend && node scripts/build.js",
+    "front:demo:build": "cd frontend && node scripts/build.js --demo",
+    "front:test": "cd frontend && node scripts/test.js",
     "back:test": "cd backend && jest",
     "back:build": "cd backend && npx tsc",
     "back:start": "cd backend && node dist/index.js",
@@ -56,6 +57,7 @@
     "ts-jest": "^29.1.0",
     "typescript": "^4.9.5",
     "web-vitals": "^2.1.4",
+    "webpack-conditional-loader": "^1.0.12",
     "winston": "^3.8.2",
     "xlsx": "^0.18.5"
   }

@@ -1,6 +1,6 @@
-import API from "../api/API";
+import DataGateway from "../dataGateway/DataGateway";
 import useFetchState from "./useFetchState";
 
-const useContracts = () => useFetchState(() => API.Contracts.Get(), []);
+const useContracts = () => useFetchState(() => DataGateway.Contracts.Get(), []);
 
 export default useContracts;
