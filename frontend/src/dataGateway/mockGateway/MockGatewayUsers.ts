@@ -1,7 +1,7 @@
 import ID from "../../../../common/interfaces/ID";
 import IUser from "../../../../common/interfaces/IUser";
 import Users from "../abstractGateway/Users";
-import { getNextMockID } from "./mockID";
+import { getNextBillUserID } from "./mockID";
 import { users } from "./mocks/users";
 
 class MockGatewayUsers extends Users {
@@ -19,9 +19,10 @@ class MockGatewayUsers extends Users {
     throw new Error(`User with ID ${id} not found`);
   }
 
-  public static async Create(user: IUser): Promise<ID> { // TODO: make clones before users push
-    user.id = getNextMockID(users);
-    users.push(user);
+  public static async Create(user: IUser): Promise<ID> {
+    user.id = getNextBillUserID();
+    const userClone = structuredClone(user);
+    users.push(userClone);
     return user;
   }
 

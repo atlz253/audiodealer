@@ -1,7 +1,7 @@
 import IClient from "../../../../common/interfaces/IClient";
 import Clients from "../abstractGateway/Clients";
 import MockGatewayClientsBills from "./MockGatewayClientsBills";
-import { getNextMockID } from "./mockID";
+import { getNextBillUserID } from "./mockID";
 import { clients } from "./mocks/clients";
 
 class MockGatewayClients extends Clients {
@@ -28,7 +28,7 @@ class MockGatewayClients extends Clients {
   }
 
   public static async Create(client: IClient) {
-    client.id = getNextMockID(clients);
+    client.id = getNextBillUserID();
     const clientClone = structuredClone(client);
     clients.push(clientClone);
     return client;

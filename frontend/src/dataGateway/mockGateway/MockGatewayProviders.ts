@@ -2,7 +2,7 @@ import IProvider from "../../../../common/interfaces/IProvider";
 import Providers from "../abstractGateway/Providers";
 import MockGatewayProviderBills from "./MockGatewayProviderBills";
 import MockGatewayProviderProducts from "./MockGatewayProviderProducts";
-import { getNextMockID } from "./mockID";
+import { getNextBillUserID } from "./mockID";
 import { providers } from "./mocks/providers";
 
 class MockGatewayProviders extends Providers {
@@ -34,7 +34,7 @@ class MockGatewayProviders extends Providers {
 
   public static async Create(provider: IProvider) {
     // TODO: input data check
-    provider.id = getNextMockID(providers);
+    provider.id = getNextBillUserID();
     const providerClone = structuredClone(provider);
     providers.push(providerClone);
     return provider;

@@ -1,6 +1,15 @@
 import ID from "../../../../common/interfaces/ID";
+import { clients } from "./mocks/clients";
+import { providers } from "./mocks/providers";
+import { users } from "./mocks/users";
 
-// TODO: getNextUserID
+export function getNextBillUserID() {
+  const usersNextID = getNextMockID(users);
+  const providersNextID = getNextMockID(providers);
+  const clientsNextID = getNextMockID(clients);
+  const maxNextID = Math.max(usersNextID, providersNextID, clientsNextID);
+  return maxNextID;
+}
 
 export function getNextMockID(objects: ID[]) {
   const maxID = getMaxMockID(objects);
