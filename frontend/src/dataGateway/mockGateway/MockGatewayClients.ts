@@ -10,14 +10,14 @@ class MockGatewayClients extends Clients {
   }
 
   public static async Get(onlyNames?: boolean) {
-    return clients;
+    return structuredClone(clients);
   }
 
   public static async GetByID(id: number) {
     const client = clients.find((client) => client.id === id);
 
     if (client) {
-      return client;
+      return structuredClone(client);
     } else {
       throw new Error(`Client with ID ${id} not found`);
     }
