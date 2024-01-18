@@ -14,7 +14,7 @@ class Users extends AbstractUsers {
     const user = MockDb.Users.find((user) => user.id === id);
 
     if (user) {
-      return user;
+      return structuredClone(user);
     }
 
     throw new Error(`User with ID ${id} not found`);
@@ -34,7 +34,8 @@ class Users extends AbstractUsers {
       throw new Error(`User with ID ${user.id} not found in users array`);
     }
 
-    MockDb.Users[userIndex] = user;
+    const userClone = structuredClone(user);
+    MockDb.Users[userIndex] = userClone;
   }
 
   public static async Delete(id: number): Promise<void> {
