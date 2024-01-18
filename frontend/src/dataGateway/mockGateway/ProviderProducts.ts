@@ -1,12 +1,11 @@
 import IDeliveryDays from "../../../../common/interfaces/IDeliveryDays";
 import IProduct from "../../../../common/interfaces/IProduct";
-import ProviderProducts from "../abstractGateway/ProviderProducts";
+import { default as AbstractProviderProducts } from "../abstractGateway/ProviderProducts";
 import MockDb from "./MockDb/MockDb";
 import MockGateway from "./MockGateway";
 import { IProviderProductMockDb } from "./MockDb/mockDbData";
 
-
-class MockGatewayProviderProducts extends ProviderProducts {
+class ProviderProducts extends AbstractProviderProducts {
   public static async Get(providerID: number) {
     const products = await this.GetProviderProductsByProviderID(providerID);
     const productsClone = structuredClone(products);
@@ -71,4 +70,4 @@ class MockGatewayProviderProducts extends ProviderProducts {
   }
 }
 
-export default MockGatewayProviderProducts;
+export default ProviderProducts;

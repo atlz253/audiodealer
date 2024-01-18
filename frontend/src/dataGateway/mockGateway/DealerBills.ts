@@ -1,18 +1,18 @@
 import IBill from "../../../../common/interfaces/IBill";
-import DealerBills from "../abstractGateway/DealerBills";
-import MockGatewayBills from "./MockGatewayBills";
+import {default as AbstractDealerBills} from "../abstractGateway/DealerBills";
+import Bills from "./Bills";
 
-class MockGatewayDealerBills extends DealerBills {
+class DealerBills extends AbstractDealerBills {
   public static async Get(onlyBillNumbers?: boolean) {
     const currentUserID = this.GetCurrentUserID();
     const currentUserBills =
-      MockGatewayBills.GetBillsByUserID(currentUserID);
+      Bills.GetBillsByUserID(currentUserID);
     return currentUserBills;
   }
 
   public static async GetByID(id: number) {
     const currentUserID = this.GetCurrentUserID();
-    const bill = MockGatewayBills.TryGetBillCloneByUserIDAndBillID(
+    const bill = Bills.TryGetBillCloneByUserIDAndBillID(
       currentUserID,
       id,
     );
@@ -21,18 +21,18 @@ class MockGatewayDealerBills extends DealerBills {
 
   public static async Create(bill: IBill) {
     const currentUserID = this.GetCurrentUserID();
-    const id = MockGatewayBills.Create(currentUserID, bill);
+    const id = Bills.Create(currentUserID, bill);
     return id;
   }
 
   public static async Save(bill: IBill) {
     const currentUserID = this.GetCurrentUserID();
-    MockGatewayBills.Save(currentUserID, bill);
+    Bills.Save(currentUserID, bill);
   }
 
   public static async Delete(id: number) {
     const currentUserID = this.GetCurrentUserID();
-    MockGatewayBills.Delete(currentUserID, id);
+    Bills.Delete(currentUserID, id);
   }
 
   private static GetCurrentUserID(): number {
@@ -41,4 +41,4 @@ class MockGatewayDealerBills extends DealerBills {
   }
 }
 
-export default MockGatewayDealerBills;
+export default DealerBills;

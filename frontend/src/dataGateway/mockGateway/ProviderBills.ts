@@ -1,15 +1,15 @@
-import ProviderBills from "../abstractGateway/ProviderBills";
+import {default as AbstractProviderBills} from "../abstractGateway/ProviderBills";
 import IBill from "../../../../common/interfaces/IBill";
-import MockGatewayBills from "./MockGatewayBills";
+import Bills from "./Bills";
 
-class MockGatewayProviderBills extends ProviderBills {
+class ProviderBills extends AbstractProviderBills {
   public static async Get(providerID: number, onlyBillNumbers?: boolean) {
-    const bills = MockGatewayBills.GetBillsByUserID(providerID);
+    const bills = Bills.GetBillsByUserID(providerID);
     return bills;
   }
 
   public static async GetByID(providerID: number, billID: number) {
-    const bill = MockGatewayBills.TryGetBillCloneByUserIDAndBillID(
+    const bill = Bills.TryGetBillCloneByUserIDAndBillID(
       providerID,
       billID,
     );
@@ -17,17 +17,17 @@ class MockGatewayProviderBills extends ProviderBills {
   }
 
   public static async Create(providerID: number, bill: IBill) {
-    const id = MockGatewayBills.Create(providerID, bill);
+    const id = Bills.Create(providerID, bill);
     return id;
   }
 
   public static async Delete(providerID: number, billID: number) {
-    MockGatewayBills.Delete(providerID, billID);
+    Bills.Delete(providerID, billID);
   }
 
   public static async Save(providerID: number, bill: IBill) {
-    MockGatewayBills.Save(providerID, bill);
+    Bills.Save(providerID, bill);
   }
 }
 
-export default MockGatewayProviderBills;
+export default ProviderBills;

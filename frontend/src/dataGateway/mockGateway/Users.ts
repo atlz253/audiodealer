@@ -1,10 +1,10 @@
 import ID from "../../../../common/interfaces/ID";
 import IUser from "../../../../common/interfaces/IUser";
-import Users from "../abstractGateway/Users";
+import {default as AbstractUsers} from "../abstractGateway/Users";
 import MockDb from "./MockDb/MockDb";
 import { getNextBillUserID } from "./mockID";
 
-class MockGatewayUsers extends Users {
+class Users extends AbstractUsers {
   public static async Get(): Promise<IUser[]> {
     const usersClone = structuredClone(MockDb.Users);
     return usersClone;
@@ -52,4 +52,4 @@ class MockGatewayUsers extends Users {
   }
 }
 
-export default MockGatewayUsers;
+export default Users;

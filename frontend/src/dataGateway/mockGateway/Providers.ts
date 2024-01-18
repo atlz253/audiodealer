@@ -1,17 +1,17 @@
 import IProvider from "../../../../common/interfaces/IProvider";
-import Providers from "../abstractGateway/Providers";
+import {default as AbstractProviders} from "../abstractGateway/Providers";
 import MockDb from "./MockDb/MockDb";
-import MockGatewayProviderBills from "./MockGatewayProviderBills";
-import MockGatewayProviderProducts from "./MockGatewayProviderProducts";
+import ProviderBills from "./ProviderBills";
+import ProviderProducts from "./ProviderProducts";
 import { getNextBillUserID } from "./mockID";
 
-class MockGatewayProviders extends Providers {
+class Providers extends AbstractProviders {
   public static get Bills() {
-    return MockGatewayProviderBills;
+    return ProviderBills;
   }
 
   public static get Products() {
-    return MockGatewayProviderProducts;
+    return ProviderProducts;
   }
 
   public static async Get(onlyNames?: boolean) {
@@ -61,4 +61,4 @@ class MockGatewayProviders extends Providers {
   }
 }
 
-export default MockGatewayProviders;
+export default Providers;

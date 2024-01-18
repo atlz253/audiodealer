@@ -18,7 +18,7 @@ import Providers from "../abstractGateway/Providers";
 import BackendGatewayQueries from "./BackendGatewayQueries";
 import Queries from "../abstractGateway/Queries";
 
-class BackendGateway extends AbstractGateway {
+class BackendGateway extends AbstractGateway { // TODO: remove BackendGateway prefix
   public static get Products(): typeof Products {
     return BackendGatewayProducts;
   }

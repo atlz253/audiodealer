@@ -3,7 +3,7 @@ import ID from "../../../../common/interfaces/ID";
 import MockDb from "./MockDb/MockDb";
 import { getMaxMockID } from "./mockID";
 
-class MockGatewayBills {
+class Bills {
   public static TryGetBillCloneByUserIDAndBillID(
     userID: number,
     billID: number,
@@ -100,4 +100,4 @@ class MockGatewayBills {
   }
 }
 
-export default MockGatewayBills;
+export default Bills;

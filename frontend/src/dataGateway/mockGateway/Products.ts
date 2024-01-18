@@ -1,9 +1,9 @@
 import IProduct from "../../../../common/interfaces/IProduct";
-import Products from "../abstractGateway/Products";
+import { default as AbstractProducts } from "../abstractGateway/Products";
 import MockDb from "./MockDb/MockDb";
 import { getNextMockID } from "./mockID";
 
-class MockGatewayProducts extends Products {
+class Products extends AbstractProducts {
   public static async Get() {
     return structuredClone(MockDb.Products);
   }
@@ -50,4 +50,4 @@ class MockGatewayProducts extends Products {
   }
 }
 
-export default MockGatewayProducts;
+export default Products;

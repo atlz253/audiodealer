@@ -1,34 +1,34 @@
 import AbstractGateway from "../abstractGateway/AbstractGateway";
-import MockGatewayLogin from "./MockGatewayLogin";
-import MockGatewayProviders from "./MockGatewayProviders";
-import MockGatewayUsers from "./MockGatewayUsers";
-import MockGatewayProducts from "./MockGatewayProducts";
-import MockGatewayDealerBills from "./MockGatewayDealerBills";
-import MockGatewayClients from "./MockGatewayClients";
+import Login from "./Login";
+import Providers from "./Providers";
+import Users from "./Users";
+import Products from "./Products";
+import DealerBills from "./DealerBills";
+import Clients from "./Clients";
 
 class MockGateway extends AbstractGateway {
   public static get Products() {
-    return MockGatewayProducts;
+    return Products;
   }
 
   public static get Login() {
-    return MockGatewayLogin;
+    return Login;
   }
 
   public static get DealerBills() {
-    return MockGatewayDealerBills;
+    return DealerBills;
   }
 
   public static get Clients() {
-    return MockGatewayClients;
+    return Clients;
   }
 
   public static get Users() {
-    return MockGatewayUsers;
+    return Users;
   }
 
   public static get Providers() {
-    return MockGatewayProviders;
+    return Providers;
   }
 }
 

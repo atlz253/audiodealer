@@ -1,9 +1,9 @@
 import IAuth from "../../../../common/interfaces/IAuth";
 import IAuthorization from "../../../../common/interfaces/IAuthorization";
-import Login from "../abstractGateway/Login";
+import {default as AbstractLogin} from "../abstractGateway/Login";
 import MockDb from "./MockDb/MockDb";
 
-class MockGatewayLogin extends Login {
+class Login extends AbstractLogin {
   public static async Login(authorization: IAuthorization): Promise<IAuth> {
     const user = MockDb.Users.find(
       (user) =>
@@ -23,4 +23,4 @@ class MockGatewayLogin extends Login {
   }
 }
 
-export default MockGatewayLogin;
+export default Login;

@@ -1,12 +1,12 @@
 import IClient from "../../../../common/interfaces/IClient";
-import Clients from "../abstractGateway/Clients";
+import { default as AbstractClients } from "../abstractGateway/Clients";
 import MockDb from "./MockDb/MockDb";
-import MockGatewayClientsBills from "./MockGatewayClientsBills";
+import ClientsBills from "./ClientsBills";
 import { getNextBillUserID } from "./mockID";
 
-class MockGatewayClients extends Clients {
+class Clients extends AbstractClients {
   public static get Bills() {
-    return MockGatewayClientsBills;
+    return ClientsBills;
   }
 
   public static async Get(onlyNames?: boolean) {
@@ -47,7 +47,9 @@ class MockGatewayClients extends Clients {
   }
 
   private static TryFindClientIndexByID(clientID: number): number {
-    const clientIndex = MockDb.Clients.findIndex((client) => client.id === clientID);
+    const clientIndex = MockDb.Clients.findIndex(
+      (client) => client.id === clientID,
+    );
 
     if (clientIndex === -1) {
       throw new Error(`Client with ID ${clientID} not found`);
@@ -57,4 +59,4 @@ class MockGatewayClients extends Clients {
   }
 }
 
-export default MockGatewayClients;
+export default Clients;
