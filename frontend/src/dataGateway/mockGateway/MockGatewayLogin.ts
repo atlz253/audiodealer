@@ -1,11 +1,11 @@
 import IAuth from "../../../../common/interfaces/IAuth";
 import IAuthorization from "../../../../common/interfaces/IAuthorization";
 import Login from "../abstractGateway/Login";
-import { users } from "./mocks/users";
+import MockDb from "./MockDb/MockDb";
 
 class MockGatewayLogin extends Login {
   public static async Login(authorization: IAuthorization): Promise<IAuth> {
-    const user = users.find(
+    const user = MockDb.Users.find(
       (user) =>
         user.login === authorization.login &&
         user.password === authorization.password,

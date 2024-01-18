@@ -1,7 +1,7 @@
 import IBill from "../../../../common/interfaces/IBill";
 import ID from "../../../../common/interfaces/ID";
+import MockDb from "./MockDb/MockDb";
 import { getMaxMockID } from "./mockID";
-import { bills } from "./mocks/bills";
 
 class MockGatewayBills {
   public static TryGetBillCloneByUserIDAndBillID(
@@ -36,7 +36,7 @@ class MockGatewayBills {
   }
 
   private static GetNextBillID(): number {
-    const maxID = bills.reduce((maxID, bills) => {
+    const maxID = MockDb.Bills.reduce((maxID, bills) => {
       const maxProviderBillsID = getMaxMockID(bills);
       return maxProviderBillsID > maxID ? maxProviderBillsID : maxID;
     }, 0);
@@ -49,7 +49,7 @@ class MockGatewayBills {
     } catch (e) {}
 
     const userBills: IBill[] = [];
-    bills[userID] = userBills;
+    MockDb.Bills[userID] = userBills;
     return userBills;
   }
 
@@ -90,7 +90,7 @@ class MockGatewayBills {
   }
 
   private static TryGetBillsByUserID(userID: number): IBill[] {
-    const userBills = bills[userID];
+    const userBills = MockDb.Bills[userID];
 
     if (userBills) {
       return userBills;

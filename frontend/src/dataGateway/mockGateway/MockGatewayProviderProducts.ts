@@ -1,11 +1,10 @@
 import IDeliveryDays from "../../../../common/interfaces/IDeliveryDays";
 import IProduct from "../../../../common/interfaces/IProduct";
 import ProviderProducts from "../abstractGateway/ProviderProducts";
+import MockDb from "./MockDb/MockDb";
 import MockGateway from "./MockGateway";
-import {
-  IProviderProductMock,
-  providerProductsID,
-} from "./mocks/providerProducts";
+import { IProviderProductMockDb } from "./MockDb/mockDbData";
+
 
 class MockGatewayProviderProducts extends ProviderProducts {
   public static async Get(providerID: number) {
@@ -22,7 +21,7 @@ class MockGatewayProviderProducts extends ProviderProducts {
   }
 
   private static async GetProductsByProviderProductsMocks(
-    providerProductsMock: IProviderProductMock[],
+    providerProductsMock: IProviderProductMockDb[],
   ): Promise<IProduct[]> {
     const providerProducts = [];
     for (const productMock of providerProductsMock) {
@@ -61,8 +60,8 @@ class MockGatewayProviderProducts extends ProviderProducts {
 
   private static GetProviderProductMocksByProviderID(
     providerID: number,
-  ): IProviderProductMock[] {
-    const products = providerProductsID[providerID];
+  ): IProviderProductMockDb[] {
+    const products = MockDb.ProviderProducts[providerID];
 
     if (products) {
       return products;

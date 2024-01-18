@@ -1,16 +1,17 @@
 import ID from "../../../../common/interfaces/ID";
 import IUser from "../../../../common/interfaces/IUser";
 import Users from "../abstractGateway/Users";
+import MockDb from "./MockDb/MockDb";
 import { getNextBillUserID } from "./mockID";
-import { users } from "./mocks/users";
 
 class MockGatewayUsers extends Users {
   public static async Get(): Promise<IUser[]> {
-    return users;
+    const usersClone = structuredClone(MockDb.Users);
+    return usersClone;
   }
 
   public static async GetByID(id: number): Promise<IUser> {
-    const user = users.find((user) => user.id === id);
+    const user = MockDb.Users.find((user) => user.id === id);
 
     if (user) {
       return user;
@@ -22,18 +23,18 @@ class MockGatewayUsers extends Users {
   public static async Create(user: IUser): Promise<ID> {
     user.id = getNextBillUserID();
     const userClone = structuredClone(user);
-    users.push(userClone);
+    MockDb.Users.push(userClone);
     return user;
   }
 
   public static async Save(user: IUser): Promise<void> {
-    const userIndex = users.findIndex((u) => u.id === user.id);
+    const userIndex = MockDb.Users.findIndex((u) => u.id === user.id);
 
     if (userIndex === -1) {
       throw new Error(`User with ID ${user.id} not found in users array`);
     }
 
-    users[userIndex] = user;
+    MockDb.Users[userIndex] = user;
   }
 
   public static async Delete(id: number): Promise<void> {
@@ -41,13 +42,13 @@ class MockGatewayUsers extends Users {
       throw new Error("It's not allowed to delete the first admin");
     }
 
-    const userIndex = users.findIndex((u) => u.id === id);
+    const userIndex = MockDb.Users.findIndex((u) => u.id === id);
 
     if (userIndex === -1) {
       throw new Error(`User with ID ${id} not found in users array`);
     }
 
-    users.splice(userIndex, 1);
+    MockDb.Users.splice(userIndex, 1);
   }
 }
 

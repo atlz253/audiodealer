@@ -1,8 +1,8 @@
 import IClient from "../../../../common/interfaces/IClient";
 import Clients from "../abstractGateway/Clients";
+import MockDb from "./MockDb/MockDb";
 import MockGatewayClientsBills from "./MockGatewayClientsBills";
 import { getNextBillUserID } from "./mockID";
-import { clients } from "./mocks/clients";
 
 class MockGatewayClients extends Clients {
   public static get Bills() {
@@ -10,11 +10,11 @@ class MockGatewayClients extends Clients {
   }
 
   public static async Get(onlyNames?: boolean) {
-    return structuredClone(clients);
+    return structuredClone(MockDb.Clients);
   }
 
   public static async GetByID(id: number) {
-    const client = clients.find((client) => client.id === id);
+    const client = MockDb.Clients.find((client) => client.id === id);
 
     if (client) {
       return structuredClone(client);
@@ -24,13 +24,13 @@ class MockGatewayClients extends Clients {
   }
 
   public static async GetCount() {
-    return clients.length;
+    return MockDb.Clients.length;
   }
 
   public static async Create(client: IClient) {
     client.id = getNextBillUserID();
     const clientClone = structuredClone(client);
-    clients.push(clientClone);
+    MockDb.Clients.push(clientClone);
     return client;
   }
 
@@ -38,16 +38,16 @@ class MockGatewayClients extends Clients {
     // TODO: save added time
     const clientIndex = this.TryFindClientIndexByID(client.id);
     const clientClone = structuredClone(client);
-    clients[clientIndex] = clientClone;
+    MockDb.Clients[clientIndex] = clientClone;
   }
 
   public static async Delete(id: number): Promise<void> {
     const clientIndex = this.TryFindClientIndexByID(id);
-    clients.splice(clientIndex, 1);
+    MockDb.Clients.splice(clientIndex, 1);
   }
 
   private static TryFindClientIndexByID(clientID: number): number {
-    const clientIndex = clients.findIndex((client) => client.id === clientID);
+    const clientIndex = MockDb.Clients.findIndex((client) => client.id === clientID);
 
     if (clientIndex === -1) {
       throw new Error(`Client with ID ${clientID} not found`);
