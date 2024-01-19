@@ -9,16 +9,16 @@ describe("Mock data gateway users", () => {
     const mockDb = cloneAndSetMockDbData(adminAndDealerMock);
     MockDb.SetMockDbData(mockDb);
     const users = await Users.Get();
-    expect(mockDb.users).toEqual(users);
-    expect(mockDb.users).not.toBe(users);
+    expect(users).toEqual(mockDb.users);
+    expect(users).not.toBe(mockDb.users);
   });
 
   test("GetByID should return user copy with the given ID", async () => {
     const mockDb = cloneAndSetMockDbData(adminAndDealerMock);
     const expectedUser = mockDb.users[1];
     const user = await Users.GetByID(expectedUser.id);
-    expect(expectedUser).toEqual(user);
-    expect(expectedUser).not.toBe(user);
+    expect(user).toEqual(expectedUser);
+    expect(user).not.toBe(expectedUser);
   });
 
   test("Create should push user clone to users array", async () => {
@@ -31,8 +31,8 @@ describe("Mock data gateway users", () => {
     const { id: newUserID } = await Users.Create(newUser);
     newUser.id = newUserID;
     const mockDbUser = mockDb.users.find((user) => user.id === newUserID);
-    expect(newUser).not.toBe(mockDbUser);
-    expect(newUser).toEqual(mockDbUser);
+    expect(mockDbUser).not.toBe(newUser);
+    expect(mockDbUser).toEqual(newUser);
   });
 
   test("Save should save new user data", async () => {
@@ -42,8 +42,8 @@ describe("Mock data gateway users", () => {
     dealerUser.firstName = "New dealer name";
     await Users.Save(dealerUser);
     const savedUser = mockDb.users.find((user) => user.id === dealerUserID);
-    expect(dealerUser).not.toBe(savedUser);
-    expect(dealerUser).toEqual(savedUser);
+    expect(savedUser).not.toBe(dealerUser);
+    expect(savedUser).toEqual(dealerUser);
   });
 
   test("First admin delete should throw error", async () => {

@@ -7,22 +7,22 @@ describe("Mock gateway providers", () => {
   test("Get should return providers array copy", async () => {
     const mock = cloneAndSetMockDbData(providersMock);
     const providers = await Providers.Get();
-    expect(mock.providers).not.toBe(providers);
-    expect(mock.providers).toEqual(providers);
+    expect(providers).not.toBe(mock.providers);
+    expect(providers).toEqual(mock.providers);
   });
 
   test("GetByID should return provider copy with given ID", async () => {
     const mock = cloneAndSetMockDbData(providersMock);
     const provider = mock.providers[0];
     const providerClone = await Providers.GetByID(provider.id);
-    expect(provider).not.toBe(providerClone);
-    expect(provider).toEqual(providerClone);
+    expect(providerClone).not.toBe(provider);
+    expect(providerClone).toEqual(provider);
   });
 
   test("Count should return actual providers count", async () => {
     const mock = cloneAndSetMockDbData(providersMock);
     const providersCountBeforeChange = await Providers.GetCount();
-    expect(mock.providers.length).toBe(providersCountBeforeChange);
+    expect(providersCountBeforeChange).toBe(mock.providers.length);
     const newProvider: IProvider = {
       id: 0,
       name: "New provider",
@@ -32,10 +32,10 @@ describe("Mock gateway providers", () => {
     };
     const { id: newProviderID } = await Providers.Create(newProvider);
     const providersCountAfterCreate = await Providers.GetCount();
-    expect(mock.providers.length).toBe(providersCountAfterCreate);
+    expect(providersCountAfterCreate).toBe(mock.providers.length);
     await Providers.Delete(newProviderID);
     const providersCountAfterDelete = await Providers.GetCount();
-    expect(mock.providers.length).toBe(providersCountAfterDelete);
+    expect(providersCountAfterDelete).toBe(mock.providers.length);
   });
 
   test("Create should push provider clone to providers array and return provider ID", async () => {
@@ -52,8 +52,8 @@ describe("Mock gateway providers", () => {
     const providerFromDb = mock.providers.find(
       (provider) => provider.id === newProviderID,
     );
-    expect(newProvider).not.toBe(providerFromDb);
-    expect(newProvider).toEqual(providerFromDb);
+    expect(providerFromDb).not.toBe(newProvider);
+    expect(providerFromDb).toEqual(newProvider);
   });
 
   test("Save should save provider clone to providers array", async () => {
@@ -62,8 +62,8 @@ describe("Mock gateway providers", () => {
     provider.name = "New provider name";
     await Providers.Save(provider);
     const providerFromDb = mock.providers.find((p) => p.id === provider.id);
-    expect(provider).not.toBe(providerFromDb);
-    expect(provider).toEqual(providerFromDb);
+    expect(providerFromDb).not.toBe(provider);
+    expect(providerFromDb).toEqual(provider);
   });
 
   test("Delete should delete provider from providers array", async () => {

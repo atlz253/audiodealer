@@ -3,7 +3,7 @@ import IProduct from "../../../../common/interfaces/IProduct";
 import { default as AbstractProviderProducts } from "../abstractGateway/ProviderProducts";
 import MockDb from "./MockDb/MockDb";
 import MockGateway from "./MockGateway";
-import { IProviderProductMockDb } from "./MockDb/mockDbData";
+import { ProviderProductMockDb } from "./MockDb/mockDbData";
 
 class ProviderProducts extends AbstractProviderProducts {
   public static async Get(providerID: number) {
@@ -20,14 +20,22 @@ class ProviderProducts extends AbstractProviderProducts {
   }
 
   private static async GetProductsByProviderProductsMocks(
-    providerProductsMock: IProviderProductMockDb[],
+    providerProductsMock: ProviderProductMockDb[],
   ): Promise<IProduct[]> {
     const providerProducts = [];
     for (const productMock of providerProductsMock) {
-      const product = await MockGateway.Products.GetByID(productMock.id);
+      const product = await this.GetProductByProviderProductMock(productMock);
       providerProducts.push(product);
     }
     return providerProducts;
+  }
+
+  private static async GetProductByProviderProductMock(
+    providerProductMock: ProviderProductMockDb,
+  ): Promise<IProduct> {
+    const product = await MockGateway.Products.GetByID(providerProductMock.id);
+    product.deliveryDays = providerProductMock.deliveryDays;
+    return product;
   }
 
   public static async Add(
@@ -35,7 +43,14 @@ class ProviderProducts extends AbstractProviderProducts {
     productID: number,
     deliveryDays: IDeliveryDays,
   ) {
+    await MockGateway.Products.GetByID(productID);
     const productMocks = this.GetProviderProductMocksByProviderID(providerID);
+    const isProductAdded = productMocks.some(product => product.id === productID);
+
+    if (isProductAdded) {
+      throw new Error(`Product with ID ${productID} already been added for provider with ID ${providerID}`);
+    }
+
     productMocks.push({
       id: productID,
       deliveryDays: deliveryDays.deliveryDays,
@@ -59,7 +74,7 @@ class ProviderProducts extends AbstractProviderProducts {
 
   private static GetProviderProductMocksByProviderID(
     providerID: number,
-  ): IProviderProductMockDb[] {
+  ): ProviderProductMockDb[] {
     const products = MockDb.ProviderProducts[providerID];
 
     if (products) {

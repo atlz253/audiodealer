@@ -5,14 +5,14 @@ import IProduct from "../../../../../common/interfaces/IProduct";
 import IProvider from "../../../../../common/interfaces/IProvider";
 import IUser from "../../../../../common/interfaces/IUser";
 
-export interface IProviderProductMockDb extends ID {
+export interface ProviderProductMockDb extends ID {
   deliveryDays: number;
 }
 
 export interface MockDbData {
   users: IUser[],
   providers: IProvider[],
-  providerProducts: IProviderProductMockDb[][],
+  providerProducts: ProviderProductMockDb[][],
   products: IProduct[],
   clients: IClient[],
   bills: IBill[][]
