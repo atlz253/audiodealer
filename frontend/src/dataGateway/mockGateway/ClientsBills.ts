@@ -4,12 +4,12 @@ import Bills from "./Bills";
 
 class ClientsBills extends AbstractClientBills {
   public static async Get(clientID: number, onlyBillNumbers?: boolean) {
-    const bills = Bills.GetBillsByUserID(clientID);
+    const bills = Bills.GetBillsCloneByUserID(clientID);
     return bills;
   }
 
   public static async GetByID(clientID: number, billID: number) {
-    const bill = Bills.TryGetBillCloneByUserIDAndBillID(clientID, billID);
+    const bill = Bills.GetBillCloneByUserIDAndBillID(clientID, billID);
     return bill;
   }
 

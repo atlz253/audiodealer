@@ -1,7 +1,7 @@
 import IProvider from "../../../../common/interfaces/IProvider";
 import Providers from "../../../src/dataGateway/mockGateway/Providers";
 import { cloneAndSetMockDbData } from "./cloneAndSetMockDbData";
-import { providersMock } from "./mocks/providersMock";
+import { getProvider, providersMock } from "./mocks/providersMocks";
 
 describe("Mock gateway providers", () => {
   test("Get should return providers array copy", async () => {
@@ -23,13 +23,7 @@ describe("Mock gateway providers", () => {
     const mock = cloneAndSetMockDbData(providersMock);
     const providersCountBeforeChange = await Providers.GetCount();
     expect(providersCountBeforeChange).toBe(mock.providers.length);
-    const newProvider: IProvider = {
-      id: 0,
-      name: "New provider",
-      phone: "+1098765432",
-      address: "165 Niko Flats, Purdytown, Vermont 67085, United States",
-      added: "2023-04-11T13:00:00.000Z",
-    };
+    const newProvider: IProvider = getProvider();
     const { id: newProviderID } = await Providers.Create(newProvider);
     const providersCountAfterCreate = await Providers.GetCount();
     expect(providersCountAfterCreate).toBe(mock.providers.length);
@@ -40,13 +34,7 @@ describe("Mock gateway providers", () => {
 
   test("Create should push provider clone to providers array and return provider ID", async () => {
     const mock = cloneAndSetMockDbData(providersMock);
-    const newProvider: IProvider = {
-      id: 0,
-      name: "New provider",
-      phone: "+1098765444",
-      address: "34804 Bosco Plain, Sabinaton, New York 69432, United States",
-      added: "2022-04-11T13:00:00.000Z",
-    };
+    const newProvider: IProvider = getProvider();
     const { id: newProviderID } = await Providers.Create(newProvider);
     newProvider.id = newProviderID;
     const providerFromDb = mock.providers.find(

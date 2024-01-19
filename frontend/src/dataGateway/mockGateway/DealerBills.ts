@@ -6,13 +6,13 @@ class DealerBills extends AbstractDealerBills {
   public static async Get(onlyBillNumbers?: boolean) {
     const currentUserID = this.GetCurrentUserID();
     const currentUserBills =
-      Bills.GetBillsByUserID(currentUserID);
+      Bills.GetBillsCloneByUserID(currentUserID);
     return currentUserBills;
   }
 
   public static async GetByID(id: number) {
     const currentUserID = this.GetCurrentUserID();
-    const bill = Bills.TryGetBillCloneByUserIDAndBillID(
+    const bill = Bills.GetBillCloneByUserIDAndBillID(
       currentUserID,
       id,
     );

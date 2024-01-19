@@ -1,3 +1,4 @@
+import IProvider from "../../../../../common/interfaces/IProvider";
 import { MockDbData } from "../../../../src/dataGateway/mockGateway/MockDb/mockDbData";
 
 export const providersMock: MockDbData = {
@@ -32,3 +33,13 @@ export const providersMock: MockDbData = {
   clients: [],
   bills: [],
 };
+
+export function getProvider(): IProvider {
+  return {
+    id: 0,
+    name: "New provider",
+    phone: "+1098765444",
+    address: "34804 Bosco Plain, Sabinaton, New York 69432, United States",
+    added: "2022-04-11T13:00:00.000Z",
+  };
+}
