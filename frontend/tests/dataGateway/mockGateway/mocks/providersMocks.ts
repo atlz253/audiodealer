@@ -1,7 +1,7 @@
 import IProvider from "../../../../../common/interfaces/IProvider";
 import { MockDbData } from "../../../../src/dataGateway/mockGateway/MockDb/mockDbData";
 
-export const providersMock: MockDbData = {
+export const providersMock: MockDbData = { // TODO: getProvidersMock
   users: [],
   providers: [
     {

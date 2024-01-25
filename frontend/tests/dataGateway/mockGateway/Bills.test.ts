@@ -3,7 +3,7 @@ import Bills from "../../../src/dataGateway/mockGateway/Bills";
 import { cloneAndSetMockDbData } from "./cloneAndSetMockDbData";
 import { billsMock, getBill } from "./mocks/billsMocks";
 
-describe("Mock data gateway bills", () => {
+describe("Mock data gateway bills", () => { // TODO: toBeClone
   test("GetBillCloneByUserIDAndBillID should return bill clone with given userID and billID", async () => {
     const mock = cloneAndSetMockDbData(billsMock);
     const userID = 0;

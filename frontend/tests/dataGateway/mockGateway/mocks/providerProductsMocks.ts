@@ -1,7 +1,7 @@
 import IProduct from "../../../../../common/interfaces/IProduct";
 import { MockDbData } from "../../../../src/dataGateway/mockGateway/MockDb/mockDbData";
 
-export const providerProductsMock: MockDbData = {
+export const providerProductsMock: MockDbData = { // TODO: getProviderProductsMock
   users: [],
   providers: [
     {

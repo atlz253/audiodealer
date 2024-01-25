@@ -1,6 +1,6 @@
 import { MockDbData } from "../../../../src/dataGateway/mockGateway/MockDb/mockDbData";
 
-export const adminAndDealerMock: MockDbData = {
+export const adminAndDealerMock: MockDbData = { // TODO: getAdminAndDealerMock
   users: [
     {
       id: 0,
