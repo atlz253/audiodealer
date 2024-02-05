@@ -1,3 +1,15 @@
+declare global {
+  namespace jest {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    interface Matchers<R, T> {
+      /**
+       * Used when you want to check that two objects are clones
+       */
+      toBeClone(expected: any): T;
+    }
+  }
+}
+
 export function clonesMatcher(received: any, expected: any) {
   if (typeof received !== "object" || received === null) {
     return {
