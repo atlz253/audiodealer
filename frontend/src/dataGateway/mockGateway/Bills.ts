@@ -1,7 +1,7 @@
 import IBill from "../../../../common/interfaces/IBill";
 import ID from "../../../../common/interfaces/ID";
 import MockDb from "./MockDb/MockDb";
-import { getMaxMockID } from "./mockID";
+import { findMaxMockObjectID } from "./mockObjectID";
 
 class Bills {
   public static async GetBillCloneByUserIDAndBillID(
@@ -37,7 +37,7 @@ class Bills {
 
   private static GetNextBillID(): number {
     const maxID = MockDb.Bills.reduce((maxID, bills) => {
-      const maxProviderBillsID = getMaxMockID(bills);
+      const maxProviderBillsID = findMaxMockObjectID(bills);
       return maxProviderBillsID > maxID ? maxProviderBillsID : maxID;
     }, 0);
     return maxID + 1;

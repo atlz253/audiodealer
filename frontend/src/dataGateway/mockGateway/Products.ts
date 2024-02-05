@@ -1,7 +1,7 @@
 import IProduct from "../../../../common/interfaces/IProduct";
 import { default as AbstractProducts } from "../abstractGateway/Products";
 import MockDb from "./MockDb/MockDb";
-import { getNextMockID } from "./mockID";
+import { getNewMockObjectID } from "./mockObjectID";
 
 class Products extends AbstractProducts {
   public static async Get() {
@@ -23,7 +23,7 @@ class Products extends AbstractProducts {
   }
 
   public static async Create(product: IProduct) {
-    product.id = getNextMockID(MockDb.Products);
+    product.id = getNewMockObjectID(MockDb.Products);
     const productClone = structuredClone(product);
     MockDb.Products.push(productClone);
     return product;

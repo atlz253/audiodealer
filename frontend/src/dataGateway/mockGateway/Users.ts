@@ -2,7 +2,7 @@ import ID from "../../../../common/interfaces/ID";
 import IUser from "../../../../common/interfaces/IUser";
 import {default as AbstractUsers} from "../abstractGateway/Users";
 import MockDb from "./MockDb/MockDb";
-import { getNextBillUserID } from "./mockID";
+import { getNewMockBillUserID } from "./mockObjectID";
 
 class Users extends AbstractUsers {
   public static async Get(): Promise<IUser[]> {
@@ -21,7 +21,7 @@ class Users extends AbstractUsers {
   }
 
   public static async Create(user: IUser): Promise<ID> {
-    user.id = getNextBillUserID();
+    user.id = getNewMockBillUserID();
     const userClone = structuredClone(user);
     MockDb.Users.push(userClone);
     return user;

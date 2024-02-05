@@ -2,7 +2,7 @@ import IClient from "../../../../common/interfaces/IClient";
 import { default as AbstractClients } from "../abstractGateway/Clients";
 import MockDb from "./MockDb/MockDb";
 import ClientsBills from "./ClientsBills";
-import { getNextBillUserID } from "./mockID";
+import { getNewMockBillUserID } from "./mockObjectID";
 
 class Clients extends AbstractClients {
   public static get Bills() {
@@ -28,7 +28,7 @@ class Clients extends AbstractClients {
   }
 
   public static async Create(client: IClient) {
-    client.id = getNextBillUserID();
+    client.id = getNewMockBillUserID();
     const clientClone = structuredClone(client);
     MockDb.Clients.push(clientClone);
     return client;

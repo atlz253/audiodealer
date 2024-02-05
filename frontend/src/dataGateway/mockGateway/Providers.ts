@@ -3,7 +3,7 @@ import {default as AbstractProviders} from "../abstractGateway/Providers";
 import MockDb from "./MockDb/MockDb";
 import ProviderBills from "./ProviderBills";
 import ProviderProducts from "./ProviderProducts";
-import { getNextBillUserID } from "./mockID";
+import { getNewMockBillUserID } from "./mockObjectID";
 
 class Providers extends AbstractProviders {
   public static get Bills() {
@@ -34,7 +34,7 @@ class Providers extends AbstractProviders {
 
   public static async Create(provider: IProvider) {
     // TODO: input data check
-    provider.id = getNextBillUserID();
+    provider.id = getNewMockBillUserID();
     const providerClone = structuredClone(provider);
     MockDb.Providers.push(providerClone);
     return provider;
