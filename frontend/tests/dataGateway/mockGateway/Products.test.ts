@@ -1,15 +1,11 @@
 import MockDb from "../../../src/dataGateway/mockGateway/MockDb/MockDb";
 import Products from "../../../src/dataGateway/mockGateway/Products";
-import {
-  existProductID,
-  getProductMock,
-  getProductsMockDbData,
-  notExistProductID,
-} from "./mocks/productsMocks";
+import { default as mocks } from "./mocks/productsMocks";
+import { default as errorMessages } from "../../../src/dataGateway/errors/ProductsErrorsMessages";
 
 describe("Mock data gateway products", () => {
   beforeEach(() => {
-    const mockDbData = getProductsMockDbData();
+    const mockDbData = mocks.getProductsMockDbData();
     MockDb.SetMockDbData(mockDbData);
   });
 
@@ -19,14 +15,18 @@ describe("Mock data gateway products", () => {
   });
 
   test("GetByID should return product clone with given productID", async () => {
+    const { existProductID } = mocks;
     const product = await Products.GetByID(existProductID);
     const productFromDb = MockDb.FindProductByID(existProductID);
     expect(product).toBeClone(productFromDb);
   });
 
   test("GetByID should throw error if product not exists", async () => {
+    const { notExistProductID } = mocks;
+    const errorMessage =
+      errorMessages.getProductWithGivenIDNotFoundMessage(notExistProductID);
     await expect(Products.GetByID(notExistProductID)).rejects.toThrow(
-      `Product with ID ${notExistProductID} not found`,
+      errorMessage,
     );
   });
 
@@ -36,7 +36,7 @@ describe("Mock data gateway products", () => {
   });
 
   test("Create should save product clone to products array", async () => {
-    const newProduct = getProductMock();
+    const newProduct = mocks.getProductMock();
     const { id: newProductID } = await Products.Create(newProduct);
     newProduct.id = newProductID;
     const productFromDb = MockDb.FindProductByID(newProductID);
@@ -44,6 +44,7 @@ describe("Mock data gateway products", () => {
   });
 
   test("Save should save product clone to products array", async () => {
+    const { existProductID } = mocks;
     const productForSave = await Products.GetByID(existProductID);
     productForSave.name = "New product name";
     await Products.Save(productForSave);
@@ -51,11 +52,29 @@ describe("Mock data gateway products", () => {
     expect(productFromDb).toBeClone(productForSave);
   });
 
+  test("Save should throw error if product not exists in products array", async () => {
+    const product = mocks.getProductMock();
+    const errorMessage = errorMessages.getProductWithGivenIDNotFoundMessage(
+      product.id,
+    );
+    await expect(Products.Save(product)).rejects.toThrow(errorMessage);
+  });
+
   test("Delete should delete product from products array", async () => {
+    const { existProductID } = mocks;
     const product = MockDb.FindProductByID(existProductID);
     expect(product).not.toBeUndefined();
     await Products.Delete(existProductID);
     const productSearchResult = MockDb.FindProductByID(existProductID);
     expect(productSearchResult).toBeUndefined();
+  });
+
+  test("Delete should throw error if product not exists in products array", async () => {
+    const { notExistProductID } = mocks;
+    const errorMessage =
+      errorMessages.getProductWithGivenIDNotFoundMessage(notExistProductID);
+    await expect(Products.Delete(notExistProductID)).rejects.toThrow(
+      errorMessage,
+    );
   });
 });

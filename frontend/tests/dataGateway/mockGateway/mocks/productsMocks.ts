@@ -1,15 +1,17 @@
 import IProduct from "../../../../../common/interfaces/IProduct";
 import { MockDbData } from "../../../../src/dataGateway/mockGateway/MockDb/mockDbData";
 
-// TODO: export default object instead of individual exports
-export function getProductsMockDbData(): MockDbData {
+const existProductID = 0;
+const notExistProductID = 999;
+
+function getProductsMockDbData(): MockDbData {
   return {
     users: [],
     providers: [],
     providerProducts: [],
     products: [
       {
-        id: 0,
+        id: existProductID,
         name: "Demo product",
         description: "This is demo product",
         manufacturer: "Manufacturer",
@@ -23,12 +25,9 @@ export function getProductsMockDbData(): MockDbData {
   };
 }
 
-export const existProductID = 0;
-export const notExistProductID = 999;
-
 export function getProductMock(): IProduct {
   return {
-    id: 0,
+    id: notExistProductID,
     name: "Product demo",
     description: "Demo product from getProduct",
     manufacturer: "getProduct",
@@ -37,3 +36,10 @@ export function getProductMock(): IProduct {
     quantity: 3,
   };
 }
+
+export default {
+  getProductMock,
+  getProductsMockDbData,
+  existProductID,
+  notExistProductID,
+} as const;

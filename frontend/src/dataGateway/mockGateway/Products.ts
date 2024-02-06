@@ -2,6 +2,8 @@ import IProduct from "../../../../common/interfaces/IProduct";
 import { default as AbstractProducts } from "../abstractGateway/Products";
 import MockDb from "./MockDb/MockDb";
 import { getNewMockObjectID } from "./mockObjectID";
+import { default as errorMessages } from "../errors/ProductsErrorsMessages";
+import DataGatewayError from "../errors/DataGatewayError";
 
 class Products extends AbstractProducts {
   public static async Get() {
@@ -15,7 +17,9 @@ class Products extends AbstractProducts {
       return structuredClone(product);
     }
 
-    throw new Error(`Product with ID ${id} not found`);
+    throw new DataGatewayError(
+      errorMessages.getProductWithGivenIDNotFoundMessage(id),
+    );
   }
 
   public static async GetCount() {
@@ -43,7 +47,9 @@ class Products extends AbstractProducts {
     const productIndex = MockDb.Products.findIndex((p) => p.id === productID);
 
     if (productIndex === -1) {
-      throw new Error(`Product with ID ${productID} not found`);
+      throw new DataGatewayError(
+        errorMessages.getProductWithGivenIDNotFoundMessage(productID),
+      );
     } else {
       return productIndex;
     }
