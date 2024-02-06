@@ -2,7 +2,7 @@ import IBill from "../../../../common/interfaces/IBill";
 import Bills from "../../../src/dataGateway/mockGateway/Bills";
 import MockDb from "../../../src/dataGateway/mockGateway/MockDb/MockDb";
 import { default as mocks } from "./mocks/billsMocks";
-import { default as errorMessages } from "../../../src/dataGateway/errors/DataGatewayBillsErrorsMessages";
+import { default as errorMessages } from "../../../src/dataGateway/errors/BillsErrorsMessages";
 
 describe("Mock data gateway bills", () => {
   beforeEach(() => {

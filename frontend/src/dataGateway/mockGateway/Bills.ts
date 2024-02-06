@@ -3,7 +3,7 @@ import ID from "../../../../common/interfaces/ID";
 import DataGatewayError from "../errors/DataGatewayError";
 import MockDb from "./MockDb/MockDb";
 import { findMaxMockObjectID } from "./mockObjectID";
-import { default as errorMessages } from "../errors/DataGatewayBillsErrorsMessages";
+import { default as errorMessages } from "../errors/BillsErrorsMessages";
 
 class Bills {
   public static async GetBillCloneByUserIDAndBillID(
