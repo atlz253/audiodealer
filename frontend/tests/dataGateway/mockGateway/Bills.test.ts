@@ -1,153 +1,154 @@
 import IBill from "../../../../common/interfaces/IBill";
 import Bills from "../../../src/dataGateway/mockGateway/Bills";
-import { cloneAndSetMockDbData } from "./cloneAndSetMockDbData";
-import { billsMock, getBill } from "./mocks/billsMocks";
+import MockDb from "../../../src/dataGateway/mockGateway/MockDb/MockDb";
+import { default as mocks } from "./mocks/billsMocks";
+import { default as errorMessages } from "../../../src/dataGateway/errors/DataGatewayBillsErrorsMessages";
 
 describe("Mock data gateway bills", () => {
-  // TODO: toBeClone
+  beforeEach(() => {
+    const { getBillsMock } = mocks;
+    const mockDbData = getBillsMock();
+    MockDb.SetMockDbData(mockDbData);
+  });
+
   test("GetBillCloneByUserIDAndBillID should return bill clone with given userID and billID", async () => {
-    const mock = cloneAndSetMockDbData(billsMock);
-    const userID = 0;
-    const billID = 0;
+    const { userID, billID } = mocks.existBillMockInfo;
     const bill = await Bills.GetBillCloneByUserIDAndBillID(userID, billID);
-    const billFromDb = mock.bills[userID].find((bill) => bill.id === billID);
-    expect(bill).not.toBe(billFromDb);
-    expect(bill).toEqual(billFromDb);
+    const billFromDb = MockDb.FindBillByOwnerIDAndBillID(userID, billID);
+    expect(bill).toBeClone(billFromDb);
   });
 
   test("GetBillCloneByUserIDAndBillID should throw error if user not exists", async () => {
-    cloneAndSetMockDbData(billsMock);
-    const notExistsUserID = 999;
-    const billID = 0;
+    const { userID, billID } = mocks.notExistUserBillMockInfo;
+    const errorMessage =
+      errorMessages.getBillsForUserWithGivenIDNotFoundMessage(userID);
     await expect(
-      Bills.GetBillCloneByUserIDAndBillID(notExistsUserID, billID),
-    ).rejects.toThrow(`Bills for user with ID ${notExistsUserID} not found`);
+      Bills.GetBillCloneByUserIDAndBillID(userID, billID),
+    ).rejects.toThrow(errorMessage);
   });
 
   test("GetBillCloneByUserIDAndBillID should throw error if bill not exists", async () => {
-    cloneAndSetMockDbData(billsMock);
-    const userID = 0;
-    const notExistsBillID = 999;
+    const { userID, billID } = mocks.notExistBillMockInfo;
+    const errorMessage =
+      errorMessages.getBillWithGivenIDNotFoundErrorMessage(billID);
     await expect(
-      Bills.GetBillCloneByUserIDAndBillID(userID, notExistsBillID),
-    ).rejects.toThrow(`Bill with ID ${notExistsBillID} not found`);
+      Bills.GetBillCloneByUserIDAndBillID(userID, billID),
+    ).rejects.toThrow(errorMessage);
   });
 
   test("Create should add bill clone to user bills array with given userID and billID", async () => {
-    const userID = 0;
+    const { existUserID, getBill } = mocks;
     const newBill = getBill();
-    const mock = cloneAndSetMockDbData(billsMock);
-    const { id: newBillID } = await Bills.Create(userID, newBill);
+    const { id: newBillID } = await Bills.Create(existUserID, newBill);
     newBill.id = newBillID;
-    const billFromDb = mock.bills[userID].find((bill) => bill.id === newBillID);
-    expect(billFromDb).not.toBe(newBill);
-    expect(billFromDb).toEqual(newBill);
+    const billFromDb = MockDb.FindBillByOwnerIDAndBillID(
+      existUserID,
+      newBillID,
+    );
+    expect(billFromDb).toBeClone(newBill);
   });
 
   test("Create should throw error if user not exists", async () => {
-    const notExistsUserID = 999;
-    const newBill: IBill = getBill();
-    cloneAndSetMockDbData(billsMock);
-    await expect(Bills.Create(notExistsUserID, newBill)).rejects.toThrow(
-      `Bills for user with ID ${notExistsUserID} not found`,
-    );
+    const { userID } = mocks.notExistUserBillMockInfo;
+    const newBill: IBill = mocks.getBill();
+    const errorMessage =
+      errorMessages.getBillsForUserWithGivenIDNotFoundMessage(userID);
+    await expect(Bills.Create(userID, newBill)).rejects.toThrow(errorMessage);
   });
 
   test("CreateBillStorage should create bill storage for user with given ID", async () => {
-    const notExistsUserID = 999;
-    cloneAndSetMockDbData(billsMock);
-    await expect(Bills.GetBillsCloneByUserID(notExistsUserID)).rejects.toThrow(
-      `Bills for user with ID ${notExistsUserID} not found`,
+    const { userID } = mocks.notExistUserBillMockInfo;
+    const errorMessage =
+      errorMessages.getBillsForUserWithGivenIDNotFoundMessage(userID);
+    await expect(Bills.GetBillsCloneByUserID(userID)).rejects.toThrow(
+      errorMessage,
     );
-    Bills.CreateBillStorageForUserWithID(notExistsUserID);
-    await expect(Bills.GetBillsCloneByUserID(notExistsUserID)).resolves.toEqual(
-      [],
-    );
+    Bills.CreateBillStorageForUserWithID(userID);
+    await expect(Bills.GetBillsCloneByUserID(userID)).resolves.toEqual([]);
   });
 
   test("CreateBillStorage should throw error if bill storage already exists for user with given ID", () => {
-    const userID = 0;
-    cloneAndSetMockDbData(billsMock);
+    const { userID } = mocks.existBillMockInfo;
+    const errorMessage =
+      errorMessages.getBillStorageForUserWithGivenIDAlreadyCreatedMessage(
+        userID,
+      );
     expect(() => Bills.CreateBillStorageForUserWithID(userID)).toThrow(
-      `Bill storage for user with ID ${userID} already created`,
+      errorMessage,
     );
   });
 
   test("Save should save bill clone to user bills array with given userID and billID", async () => {
-    const userID = 0;
-    const billID = 0;
-    const mock = cloneAndSetMockDbData(billsMock);
+    const {
+      existBillMockInfo: { userID, billID },
+      uniqueBillNumber,
+    } = mocks;
     const bill = await Bills.GetBillCloneByUserIDAndBillID(userID, billID);
-    bill.billNumber = "50779872200000009999";
+    bill.billNumber = uniqueBillNumber;
     await Bills.Save(userID, bill);
-    const savedBillFromDb = mock.bills[userID].find(
-      (bill) => bill.id === billID,
-    );
-    expect(savedBillFromDb).not.toBe(bill);
-    expect(savedBillFromDb).toEqual(bill);
+    const savedBillFromDb = MockDb.FindBillByOwnerIDAndBillID(userID, billID);
+    expect(savedBillFromDb).toBeClone(bill);
   });
 
   test("Save should throw error if user not exists", async () => {
-    cloneAndSetMockDbData(billsMock);
-    const notExistsUserID = 999;
-    const bill = getBill();
-    await expect(Bills.Save(notExistsUserID, bill)).rejects.toThrow(
-      `Bills for user with ID ${notExistsUserID} not found`,
-    );
+    const { userID } = mocks.notExistUserBillMockInfo;
+    const bill = mocks.getBill();
+    const errorMessage =
+      errorMessages.getBillsForUserWithGivenIDNotFoundMessage(userID);
+    await expect(Bills.Save(userID, bill)).rejects.toThrow(errorMessage);
   });
 
   test("Save should throw error if bill not exists for user with given userID", async () => {
-    cloneAndSetMockDbData(billsMock);
-    const userID = 0;
-    const bill = getBill();
-    bill.id = 999;
-    await expect(Bills.Save(userID, bill)).rejects.toThrow(
-      `Bill with ID ${bill.id} not found for user with ID ${userID}`,
-    );
+    const { userID, billID } = mocks.notExistBillMockInfo;
+    const bill = mocks.getBill();
+    bill.id = billID;
+    const errorMessage =
+      errorMessages.getBillWithGivenIDNotFoundForUserWithGivenIDMessage(
+        bill.id,
+        userID,
+      );
+    await expect(Bills.Save(userID, bill)).rejects.toThrow(errorMessage);
   });
 
   test("Delete should delete bill from user bills array with given userID", async () => {
-    const userID = 0;
-    const billID = 0;
-    const mock = cloneAndSetMockDbData(billsMock);
-    const bill = await Bills.GetBillCloneByUserIDAndBillID(userID, billID);
+    const { userID, billID } = mocks.existBillMockInfo;
+    const bill = MockDb.FindBillByOwnerIDAndBillID(userID, billID);
+    expect(bill).not.toBeUndefined();
     await Bills.Delete(userID, billID);
-    const findResult = mock.bills[userID].find((b) => b.id === bill.id);
+    const findResult = MockDb.FindBillByOwnerIDAndBillID(userID, billID);
     expect(findResult).toBeUndefined();
   });
 
   test("Delete should throw error if user not exists", async () => {
-    const notExistsUserID = 999;
-    const billID = 0;
-    cloneAndSetMockDbData(billsMock);
-    await expect(Bills.Delete(notExistsUserID, billID)).rejects.toThrow(
-      `Bills for user with ID ${notExistsUserID} not found`,
-    );
+    const { userID, billID } = mocks.notExistUserBillMockInfo;
+    const errorMessage =
+      errorMessages.getBillsForUserWithGivenIDNotFoundMessage(userID);
+    await expect(Bills.Delete(userID, billID)).rejects.toThrow(errorMessage);
   });
 
   test("Delete should throw error if bill not exists", async () => {
-    const userID = 0;
-    const notExistsBillID = 999;
-    cloneAndSetMockDbData(billsMock);
-    await expect(Bills.Delete(userID, notExistsBillID)).rejects.toThrow(
-      `Bill with ID ${notExistsBillID} not found for user with ID ${userID}`,
-    );
+    const { userID, billID } = mocks.notExistBillMockInfo;
+    const errorMessage =
+      errorMessages.getBillWithGivenIDNotFoundForUserWithGivenIDMessage(
+        billID,
+        userID,
+      );
+    await expect(Bills.Delete(userID, billID)).rejects.toThrow(errorMessage);
   });
 
   test("GetBillsByUserID should return user bills array clone", async () => {
-    const userID = 0;
-    const mock = cloneAndSetMockDbData(billsMock);
+    const { userID } = mocks.existBillMockInfo;
     const bills = await Bills.GetBillsCloneByUserID(userID);
-    const billsFromDb = mock.bills[userID];
-    expect(bills).not.toBe(billsFromDb);
-    expect(bills).toEqual(billsFromDb);
+    const billsFromDb = MockDb.Bills[userID];
+    expect(bills).toBeClone(billsFromDb);
   });
 
   test("GetBillsByUserID should throw error if user not exists", async () => {
-    const notExistsUserID = 999;
-    cloneAndSetMockDbData(billsMock);
-    await expect(Bills.GetBillsCloneByUserID(notExistsUserID)).rejects.toThrow(
-      `Bills for user with ID ${notExistsUserID} not found`,
+    const { userID } = mocks.notExistUserBillMockInfo;
+    const errorMessage =
+      errorMessages.getBillsForUserWithGivenIDNotFoundMessage(userID);
+    await expect(Bills.GetBillsCloneByUserID(userID)).rejects.toThrow(
+      errorMessage,
     );
   });
 });

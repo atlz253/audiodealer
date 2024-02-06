@@ -1,7 +1,9 @@
 import IBill from "../../../../common/interfaces/IBill";
 import ID from "../../../../common/interfaces/ID";
+import DataGatewayError from "../errors/DataGatewayError";
 import MockDb from "./MockDb/MockDb";
 import { findMaxMockObjectID } from "./mockObjectID";
+import { default as errorMessages } from "../errors/DataGatewayBillsErrorsMessages";
 
 class Bills {
   public static async GetBillCloneByUserIDAndBillID(
@@ -22,7 +24,9 @@ class Bills {
     if (bill) {
       return bill;
     } else {
-      throw new Error(`Bill with ID ${billID} not found`);
+      throw new DataGatewayError(
+        errorMessages.getBillWithGivenIDNotFoundErrorMessage(billID),
+      );
     }
   }
 
@@ -37,7 +41,9 @@ class Bills {
 
   public static CreateBillStorageForUserWithID(id: number) {
     if (this.IsUserHaveBillStorage(id)) {
-      throw new Error(`Bill storage for user with ID ${id} already created`);
+      throw new DataGatewayError(
+        errorMessages.getBillStorageForUserWithGivenIDAlreadyCreatedMessage(id),
+      );
     }
 
     MockDb.Bills[id] = [];
@@ -76,8 +82,11 @@ class Bills {
     const billIndex = userBills.findIndex((b) => b.id === billID);
 
     if (billIndex === -1) {
-      throw new Error(
-        `Bill with ID ${billID} not found for user with ID ${userID}`,
+      throw new DataGatewayError(
+        errorMessages.getBillWithGivenIDNotFoundForUserWithGivenIDMessage(
+          billID,
+          userID,
+        ),
       );
     } else {
       return billIndex;
@@ -95,7 +104,9 @@ class Bills {
     if (userBills) {
       return userBills;
     } else {
-      throw new Error(`Bills for user with ID ${userID} not found`);
+      throw new DataGatewayError(
+        errorMessages.getBillsForUserWithGivenIDNotFoundMessage(userID),
+      );
     }
   }
 }
