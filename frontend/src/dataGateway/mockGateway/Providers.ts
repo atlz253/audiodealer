@@ -1,5 +1,6 @@
 import IProvider from "../../../../common/interfaces/IProvider";
 import {default as AbstractProviders} from "../abstractGateway/Providers";
+import Bills from "./Bills";
 import MockDb from "./MockDb/MockDb";
 import ProviderBills from "./ProviderBills";
 import ProviderProducts from "./ProviderProducts";
@@ -37,6 +38,7 @@ class Providers extends AbstractProviders {
     provider.id = getNewMockBillUserID();
     const providerClone = structuredClone(provider);
     MockDb.Providers.push(providerClone);
+    Bills.CreateBillStorageForUserWithID(provider.id);
     return provider;
   }
 

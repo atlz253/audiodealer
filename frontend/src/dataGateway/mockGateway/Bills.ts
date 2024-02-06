@@ -35,6 +35,18 @@ class Bills {
     return { id };
   }
 
+  public static CreateBillStorageForUserWithID(id: number) {
+    if (this.IsUserHaveBillStorage(id)) {
+      throw new Error(`Bill storage for user with ID ${id} already created`);
+    }
+
+    MockDb.Bills[id] = [];
+  }
+
+  public static IsUserHaveBillStorage(userID: number) {
+    return MockDb.Bills[userID] !== undefined;
+  }
+
   private static GetNextBillID(): number {
     const maxID = MockDb.Bills.reduce((maxID, bills) => {
       const maxProviderBillsID = findMaxMockObjectID(bills);
@@ -56,7 +68,10 @@ class Bills {
     userBills.splice(billIndex, 1);
   }
 
-  private static async GetBillIndex(userID: number, billID: number): Promise<number> {
+  private static async GetBillIndex(
+    userID: number,
+    billID: number,
+  ): Promise<number> {
     const userBills = await this.GetBillsByUserID(userID);
     const billIndex = userBills.findIndex((b) => b.id === billID);
 

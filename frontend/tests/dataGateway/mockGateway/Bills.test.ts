@@ -3,7 +3,8 @@ import Bills from "../../../src/dataGateway/mockGateway/Bills";
 import { cloneAndSetMockDbData } from "./cloneAndSetMockDbData";
 import { billsMock, getBill } from "./mocks/billsMocks";
 
-describe("Mock data gateway bills", () => { // TODO: toBeClone
+describe("Mock data gateway bills", () => {
+  // TODO: toBeClone
   test("GetBillCloneByUserIDAndBillID should return bill clone with given userID and billID", async () => {
     const mock = cloneAndSetMockDbData(billsMock);
     const userID = 0;
@@ -49,6 +50,26 @@ describe("Mock data gateway bills", () => { // TODO: toBeClone
     cloneAndSetMockDbData(billsMock);
     await expect(Bills.Create(notExistsUserID, newBill)).rejects.toThrow(
       `Bills for user with ID ${notExistsUserID} not found`,
+    );
+  });
+
+  test("CreateBillStorage should create bill storage for user with given ID", async () => {
+    const notExistsUserID = 999;
+    cloneAndSetMockDbData(billsMock);
+    await expect(Bills.GetBillsCloneByUserID(notExistsUserID)).rejects.toThrow(
+      `Bills for user with ID ${notExistsUserID} not found`,
+    );
+    Bills.CreateBillStorageForUserWithID(notExistsUserID);
+    await expect(Bills.GetBillsCloneByUserID(notExistsUserID)).resolves.toEqual(
+      [],
+    );
+  });
+
+  test("CreateBillStorage should throw error if bill storage already exists for user with given ID", () => {
+    const userID = 0;
+    cloneAndSetMockDbData(billsMock);
+    expect(() => Bills.CreateBillStorageForUserWithID(userID)).toThrow(
+      `Bill storage for user with ID ${userID} already created`,
     );
   });
 

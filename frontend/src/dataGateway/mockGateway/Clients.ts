@@ -3,6 +3,7 @@ import { default as AbstractClients } from "../abstractGateway/Clients";
 import MockDb from "./MockDb/MockDb";
 import ClientsBills from "./ClientsBills";
 import { getNewMockBillUserID } from "./mockObjectID";
+import Bills from "./Bills";
 
 class Clients extends AbstractClients {
   public static get Bills() {
@@ -31,6 +32,7 @@ class Clients extends AbstractClients {
     client.id = getNewMockBillUserID();
     const clientClone = structuredClone(client);
     MockDb.Clients.push(clientClone);
+    Bills.CreateBillStorageForUserWithID(client.id);
     return client;
   }
 
