@@ -50,6 +50,7 @@
     "pg": "^8.10.0",
     "pg-format": "^1.0.4",
     "prettier": "^3.1.1",
+    "prettier-2": "npm:prettier@^2",
     "react": "^18.2.0",
     "react-bootstrap": "^2.7.3",
     "react-dom": "^18.2.0",

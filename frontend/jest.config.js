@@ -5,4 +5,5 @@ module.exports = {
     "^.+\\.(js|jsx)$": "babel-jest",
   },
   setupFilesAfterEnv: ["./tests/jest.setup.ts"],
+  prettierPath: require.resolve("prettier-2"),
 };
