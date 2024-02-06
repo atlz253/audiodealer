@@ -1,6 +1,7 @@
 import Login from "../../../src/dataGateway/mockGateway/Login";
 import MockDb from "../../../src/dataGateway/mockGateway/MockDb/MockDb";
 import { default as mocks } from "./mocks/usersMocks";
+import { default as errorMessages } from "../../../src/dataGateway/errors/LoginErrorsMessages";
 
 describe("Mock data gateway login", () => {
   beforeEach(() => {
@@ -14,14 +15,16 @@ describe("Mock data gateway login", () => {
   });
 
   test("Login should throw error if user not exists", async () => {
+    const errorMessage = errorMessages.getLoginFailedMessage();
     await expect(Login.Login(mocks.notExistUserCredentials)).rejects.toThrow(
-      "Login failed",
+      errorMessage,
     );
   });
 
   test("Login should throw error if user password wrong", async () => {
+    const errorMessage = errorMessages.getLoginFailedMessage();
     await expect(
       Login.Login(mocks.dealerCredentialsWithWrongPassword),
-    ).rejects.toThrow("Login failed");
+    ).rejects.toThrow(errorMessage);
   });
 });

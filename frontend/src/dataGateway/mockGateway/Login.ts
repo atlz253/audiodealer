@@ -1,7 +1,9 @@
+import MockDb from "./MockDb/MockDb";
 import IAuth from "../../../../common/interfaces/IAuth";
 import IAuthorization from "../../../../common/interfaces/IAuthorization";
-import {default as AbstractLogin} from "../abstractGateway/Login";
-import MockDb from "./MockDb/MockDb";
+import { default as AbstractLogin } from "../abstractGateway/Login";
+import { default as errorMessages } from "../errors/LoginErrorsMessages";
+import DataGatewayError from "../errors/DataGatewayError";
 
 class Login extends AbstractLogin {
   public static async Login(authorization: IAuthorization): Promise<IAuth> {
@@ -19,7 +21,7 @@ class Login extends AbstractLogin {
       };
     }
 
-    throw new Error("Login failed");
+    throw new DataGatewayError(errorMessages.getLoginFailedMessage());
   }
 }
 
