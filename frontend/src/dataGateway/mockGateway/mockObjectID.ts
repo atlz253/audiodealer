@@ -10,7 +10,6 @@ export function getNewMockBillUserID() {
 
 export function getNewMockObjectID(objects: ID[]) {
   const maxID = findMaxMockObjectID(objects);
-  console.log("")
   return maxID + 1;
 }
 

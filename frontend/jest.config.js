@@ -6,4 +6,5 @@ module.exports = {
   },
   setupFilesAfterEnv: ["./tests/jest.setup.ts"],
   prettierPath: require.resolve("prettier-2"),
+  modulePathIgnorePatterns: ["scripts"],
 };
