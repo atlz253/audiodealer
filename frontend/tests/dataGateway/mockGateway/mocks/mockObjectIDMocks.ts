@@ -1,5 +1,6 @@
 import ID from "../../../../../common/interfaces/ID";
 
+// TODO: export default object instead of individual exports
 export function getIDArrayMock(): ID[] {
   return [
     {

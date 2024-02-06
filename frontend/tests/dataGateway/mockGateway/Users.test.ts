@@ -2,10 +2,13 @@ import IUser from "../../../../common/interfaces/IUser";
 import MockDb from "../../../src/dataGateway/mockGateway/MockDb/MockDb";
 import Users from "../../../src/dataGateway/mockGateway/Users";
 import { cloneAndSetMockDbData } from "./cloneAndSetMockDbData";
-import { adminAndDealerMock } from "./mocks/adminAndDealerMock";
+import { default as mocks } from "./mocks/usersMocks";
 
-describe("Mock data gateway users", () => { // TODO: toBeClone
+describe("Mock data gateway users", () => {
+  // TODO: toBeClone
+  // FIXME: remove password and login from User object?
   test("Get should return users array copy", async () => {
+    const adminAndDealerMock = mocks.getAdminAndDealerMock();
     const mockDb = cloneAndSetMockDbData(adminAndDealerMock);
     MockDb.SetMockDbData(mockDb);
     const users = await Users.Get();
@@ -14,6 +17,7 @@ describe("Mock data gateway users", () => { // TODO: toBeClone
   });
 
   test("GetByID should return user copy with the given ID", async () => {
+    const adminAndDealerMock = mocks.getAdminAndDealerMock();
     const mockDb = cloneAndSetMockDbData(adminAndDealerMock);
     const expectedUser = mockDb.users[1];
     const user = await Users.GetByID(expectedUser.id);
@@ -22,6 +26,7 @@ describe("Mock data gateway users", () => { // TODO: toBeClone
   });
 
   test("Create should push user clone to users array", async () => {
+    const adminAndDealerMock = mocks.getAdminAndDealerMock();
     const mockDb = cloneAndSetMockDbData(adminAndDealerMock);
     const newUser: IUser = {
       id: 0,
@@ -36,6 +41,7 @@ describe("Mock data gateway users", () => { // TODO: toBeClone
   });
 
   test("Save should save new user data", async () => {
+    const adminAndDealerMock = mocks.getAdminAndDealerMock();
     const mockDb = cloneAndSetMockDbData(adminAndDealerMock);
     const dealerUserID = 1;
     const dealerUser = await Users.GetByID(dealerUserID);
@@ -60,6 +66,7 @@ describe("Mock data gateway users", () => { // TODO: toBeClone
   });
 
   test("Delete should delete if user exists", async () => {
+    const adminAndDealerMock = mocks.getAdminAndDealerMock();
     const mockDb = cloneAndSetMockDbData(adminAndDealerMock);
     const dealerUserID = 1;
     await Users.Delete(dealerUserID);

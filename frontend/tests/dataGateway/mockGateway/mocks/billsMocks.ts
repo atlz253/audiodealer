@@ -1,6 +1,7 @@
 import IBill from "../../../../../common/interfaces/IBill";
 import { MockDbData } from "../../../../src/dataGateway/mockGateway/MockDb/mockDbData";
 
+// TODO: export default object instead of individual exports
 export const billsMock: MockDbData = { // TODO: getBillsMock
   users: [],
   providers: [],
