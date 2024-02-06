@@ -4,6 +4,8 @@ import MockDb from "./MockDb/MockDb";
 import ClientsBills from "./ClientsBills";
 import { getNewMockBillUserID } from "./mockObjectID";
 import Bills from "./Bills";
+import { default as errorMessages } from "../errors/ClientsErrorsMessages";
+import DataGatewayError from "../errors/DataGatewayError";
 
 class Clients extends AbstractClients {
   public static get Bills() {
@@ -20,7 +22,9 @@ class Clients extends AbstractClients {
     if (client) {
       return structuredClone(client);
     } else {
-      throw new Error(`Client with ID ${id} not found`);
+      throw new DataGatewayError(
+        errorMessages.getClientWithGivenIDNotFoundMessage(id),
+      );
     }
   }
 
@@ -54,7 +58,9 @@ class Clients extends AbstractClients {
     );
 
     if (clientIndex === -1) {
-      throw new Error(`Client with ID ${clientID} not found`);
+      throw new DataGatewayError(
+        errorMessages.getClientWithGivenIDNotFoundMessage(clientID),
+      );
     } else {
       return clientIndex;
     }
