@@ -1,13 +1,13 @@
 import ProviderProducts from "../../../src/dataGateway/mockGateway/ProviderProducts";
-import { cloneAndSetMockDbData } from "./cloneAndSetMockDbData";
 import { default as mocks } from "./mocks/providerProductsMocks";
 import { default as errorMessages } from "../../../src/dataGateway/errors/ProviderProductsErrorsMessages";
 import { default as productsErrorMessages } from "../../../src/dataGateway/errors/ProductsErrorsMessages";
+import MockDb from "../../../src/dataGateway/mockGateway/MockDb/MockDb";
 
 describe("Mock gateway provider products", () => {
   beforeEach(() => {
     const mockDbData = mocks.getProviderProductsMockDb();
-    cloneAndSetMockDbData(mockDbData);
+    MockDb.SetMockDbData(mockDbData);
   });
 
   test("Get should return provider products array", async () => {
