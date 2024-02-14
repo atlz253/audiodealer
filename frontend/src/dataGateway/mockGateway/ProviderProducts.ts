@@ -4,6 +4,8 @@ import { default as AbstractProviderProducts } from "../abstractGateway/Provider
 import MockDb from "./MockDb/MockDb";
 import MockGateway from "./MockGateway";
 import { ProviderProductMockDb } from "./MockDb/mockDbData";
+import { default as errorMessages } from "../errors/ProviderProductsErrorsMessages";
+import DataGatewayError from "../errors/DataGatewayError";
 
 class ProviderProducts extends AbstractProviderProducts {
   public static async Get(providerID: number) {
@@ -13,7 +15,7 @@ class ProviderProducts extends AbstractProviderProducts {
   }
 
   private static async GetProviderProductsByProviderID(providerID: number) {
-    const productsID = this.GetProviderProductMocksByProviderID(providerID);
+    const productsID = this.TryGetProviderProductMocksByProviderID(providerID);
     const providerProducts =
       await this.GetProductsByProviderProductsMocks(productsID);
     return providerProducts;
@@ -44,11 +46,18 @@ class ProviderProducts extends AbstractProviderProducts {
     deliveryDays: IDeliveryDays,
   ) {
     await MockGateway.Products.GetByID(productID);
-    const productMocks = this.GetProviderProductMocksByProviderID(providerID);
-    const isProductAdded = productMocks.some(product => product.id === productID);
+    const productMocks = this.TryGetProviderProductMocksByProviderID(providerID);
+    const isProductAdded = productMocks.some(
+      (product) => product.id === productID,
+    );
 
     if (isProductAdded) {
-      throw new Error(`Product with ID ${productID} already been added for provider with ID ${providerID}`);
+      throw new DataGatewayError(
+        errorMessages.getProductWithGivenIDAlreadyBeenAddedForProviderWithGivenIDMessage(
+          productID,
+          providerID,
+        ),
+      );
     }
 
     productMocks.push({
@@ -58,21 +67,24 @@ class ProviderProducts extends AbstractProviderProducts {
   }
 
   public static async Delete(providerID: number, productID: number) {
-    const productMocks = this.GetProviderProductMocksByProviderID(providerID);
+    const productMocks = this.TryGetProviderProductMocksByProviderID(providerID);
     const productMockIndex = productMocks.findIndex(
       (mock) => mock.id === productID,
     );
 
     if (productMockIndex === -1) {
-      throw new Error(
-        `Product with ID ${productID} not found for provider with ID ${providerID}`,
+      throw new DataGatewayError(
+        errorMessages.getProductWithGivenIDNotFoundForProviderWithGivenIDMessage(
+          productID,
+          providerID,
+        ),
       );
     } else {
       productMocks.splice(productMockIndex, 1);
     }
   }
 
-  private static GetProviderProductMocksByProviderID(
+  private static TryGetProviderProductMocksByProviderID(
     providerID: number,
   ): ProviderProductMockDb[] {
     const products = MockDb.ProviderProducts[providerID];
@@ -81,7 +93,9 @@ class ProviderProducts extends AbstractProviderProducts {
       return products;
     }
 
-    throw new Error(`Products not found for provider with ID ${providerID}`);
+    throw new DataGatewayError(
+      errorMessages.getProductsNotFoundForProviderWithGivenID(providerID),
+    );
   }
 }
 
