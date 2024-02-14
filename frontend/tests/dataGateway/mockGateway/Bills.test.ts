@@ -36,7 +36,7 @@ describe("Mock data gateway bills", () => {
     ).rejects.toThrow(errorMessage);
   });
 
-  test("Create should add bill clone to user bills array with given userID and billID", async () => {
+  test("Create should add bill clone to user bills array with given IDs and return bill ID", async () => {
     const { existUserID, getBill } = mocks;
     const newBill = getBill();
     const { id: newBillID } = await Bills.Create(existUserID, newBill);

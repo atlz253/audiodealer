@@ -35,7 +35,7 @@ describe("Mock data gateway clients", () => {
     expect(clientsCount).toEqual(MockDb.Clients.length);
   });
 
-  test("Create should push client clone to clients array", async () => {
+  test("Create should push client clone to clients array and return client ID", async () => {
     const newClient = mocks.getClientMock();
     const { id: newClientID } = await Clients.Create(newClient);
     newClient.id = newClientID;

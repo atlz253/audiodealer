@@ -35,7 +35,7 @@ describe("Mock data gateway products", () => {
     expect(productsCount).toEqual(MockDb.Products.length);
   });
 
-  test("Create should save product clone to products array", async () => {
+  test("Create should save product clone to products array and return product ID", async () => {
     const newProduct = mocks.getProductMock();
     const { id: newProductID } = await Products.Create(newProduct);
     newProduct.id = newProductID;

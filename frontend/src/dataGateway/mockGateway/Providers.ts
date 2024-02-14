@@ -1,10 +1,12 @@
 import IProvider from "../../../../common/interfaces/IProvider";
-import {default as AbstractProviders} from "../abstractGateway/Providers";
+import { default as AbstractProviders } from "../abstractGateway/Providers";
 import Bills from "./Bills";
 import MockDb from "./MockDb/MockDb";
 import ProviderBills from "./ProviderBills";
 import ProviderProducts from "./ProviderProducts";
 import { getNewMockBillUserID } from "./mockObjectID";
+import { default as errorMessages } from "../errors/ProvidersErrorsMessages";
+import DataGatewayError from "../errors/DataGatewayError";
 
 class Providers extends AbstractProviders {
   public static get Bills() {
@@ -20,13 +22,17 @@ class Providers extends AbstractProviders {
   }
 
   public static async GetByID(providerID: number) {
-    const provider = MockDb.Providers.find((provider) => provider.id === providerID);
+    const provider = MockDb.Providers.find(
+      (provider) => provider.id === providerID,
+    );
 
     if (provider) {
       return structuredClone(provider);
     }
 
-    throw new Error(`Provider with ID ${providerID} not found`);
+    throw new DataGatewayError(
+      errorMessages.getProviderWithGivenIDNotFoundMessage(providerID),
+    );
   }
 
   public static async GetCount() {
@@ -53,10 +59,14 @@ class Providers extends AbstractProviders {
   }
 
   private static TryFindProviderIndexByID(id: number) {
-    const providerIndex = MockDb.Providers.findIndex((provider) => provider.id === id);
+    const providerIndex = MockDb.Providers.findIndex(
+      (provider) => provider.id === id,
+    );
 
     if (providerIndex === -1) {
-      throw new Error(`Provider with ID ${id} not found`);
+      throw new DataGatewayError(
+        errorMessages.getProviderWithGivenIDNotFoundMessage(id),
+      );
     } else {
       return providerIndex;
     }

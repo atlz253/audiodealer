@@ -1,66 +1,81 @@
 import IProvider from "../../../../common/interfaces/IProvider";
+import MockDb from "../../../src/dataGateway/mockGateway/MockDb/MockDb";
 import Providers from "../../../src/dataGateway/mockGateway/Providers";
-import { cloneAndSetMockDbData } from "./cloneAndSetMockDbData";
-import { getProvider, providersMock } from "./mocks/providersMocks";
+import { default as mocks } from "./mocks/providersMocks";
+import { default as errorMessages } from "../../../src/dataGateway/errors/ProvidersErrorsMessages";
 
 describe("Mock gateway providers", () => {
-  test("Get should return providers array copy", async () => { // TODO: toBeClone
-    const mock = cloneAndSetMockDbData(providersMock);
+  beforeEach(() => {
+    const mockDb = mocks.getProvidersMockDb();
+    MockDb.SetMockDbData(mockDb);
+  });
+
+  test("Get should return providers array copy", async () => {
     const providers = await Providers.Get();
-    expect(providers).not.toBe(mock.providers);
-    expect(providers).toEqual(mock.providers);
+    expect(providers).toBeClone(MockDb.Providers);
   });
 
   test("GetByID should return provider copy with given ID", async () => {
-    const mock = cloneAndSetMockDbData(providersMock);
-    const provider = mock.providers[0];
-    const providerClone = await Providers.GetByID(provider.id);
-    expect(providerClone).not.toBe(provider);
-    expect(providerClone).toEqual(provider);
+    const { existProviderID } = mocks;
+    const provider = await Providers.GetByID(existProviderID);
+    const providerFromDb = MockDb.FindProviderByID(existProviderID);
+    expect(provider).toBeClone(providerFromDb);
   });
 
-  test("Count should return actual providers count", async () => {
-    const mock = cloneAndSetMockDbData(providersMock);
-    const providersCountBeforeChange = await Providers.GetCount();
-    expect(providersCountBeforeChange).toBe(mock.providers.length);
-    const newProvider: IProvider = getProvider();
-    const { id: newProviderID } = await Providers.Create(newProvider);
-    const providersCountAfterCreate = await Providers.GetCount();
-    expect(providersCountAfterCreate).toBe(mock.providers.length);
-    await Providers.Delete(newProviderID);
-    const providersCountAfterDelete = await Providers.GetCount();
-    expect(providersCountAfterDelete).toBe(mock.providers.length);
+  test("GetByID should throw error if provider not exists", async () => {
+    const { notExistProviderID } = mocks;
+    const errorMessage =
+      errorMessages.getProviderWithGivenIDNotFoundMessage(notExistProviderID);
+    await expect(Providers.GetByID(notExistProviderID)).rejects.toThrow(
+      errorMessage,
+    );
+  });
+
+  test("Count should return providers array count", async () => {
+    const providersCount = await Providers.GetCount();
+    expect(providersCount).toBe(MockDb.Providers.length);
   });
 
   test("Create should push provider clone to providers array and return provider ID", async () => {
-    const mock = cloneAndSetMockDbData(providersMock);
+    const { getProvider } = mocks;
     const newProvider: IProvider = getProvider();
     const { id: newProviderID } = await Providers.Create(newProvider);
     newProvider.id = newProviderID;
-    const providerFromDb = mock.providers.find(
-      (provider) => provider.id === newProviderID,
-    );
-    expect(providerFromDb).not.toBe(newProvider);
-    expect(providerFromDb).toEqual(newProvider);
+    const providerFromDb = MockDb.FindProviderByID(newProviderID);
+    expect(providerFromDb).toBeClone(newProvider);
   });
 
   test("Save should save provider clone to providers array", async () => {
-    const mock = cloneAndSetMockDbData(providersMock);
-    const provider = await Providers.GetByID(0);
-    provider.name = "New provider name";
-    await Providers.Save(provider);
-    const providerFromDb = mock.providers.find((p) => p.id === provider.id);
-    expect(providerFromDb).not.toBe(provider);
-    expect(providerFromDb).toEqual(provider);
+    const { existProviderID } = mocks;
+    const providerForSave = await Providers.GetByID(existProviderID);
+    providerForSave.name = "New provider name";
+    await Providers.Save(providerForSave);
+    const providerFromDb = MockDb.FindProviderByID(existProviderID);
+    expect(providerFromDb).toBeClone(providerForSave);
+  });
+
+  test("Save should throw error if provider not exists", async () => {
+    const { getProvider } = mocks;
+    const providerForSave = getProvider();
+    const errorMessage = errorMessages.getProviderWithGivenIDNotFoundMessage(
+      providerForSave.id,
+    );
+    await expect(Providers.Save(providerForSave)).rejects.toThrow(errorMessage);
   });
 
   test("Delete should delete provider from providers array", async () => {
-    const mock = cloneAndSetMockDbData(providersMock);
-    const deleteProviderID = 0;
-    await Providers.Delete(deleteProviderID);
-    const providerFindResult = mock.providers.find(
-      (provider) => provider.id === deleteProviderID,
-    );
+    const { existProviderID } = mocks;
+    await Providers.Delete(existProviderID);
+    const providerFindResult = MockDb.FindProviderByID(existProviderID);
     expect(providerFindResult).toBeUndefined();
+  });
+
+  test("Delete should throw error if provider not exists", async () => {
+    const { notExistProviderID } = mocks;
+    const errorMessage =
+      errorMessages.getProviderWithGivenIDNotFoundMessage(notExistProviderID);
+    await expect(Providers.Delete(notExistProviderID)).rejects.toThrow(
+      errorMessage,
+    );
   });
 });
