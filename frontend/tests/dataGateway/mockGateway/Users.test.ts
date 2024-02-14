@@ -3,6 +3,7 @@ import MockDb from "../../../src/dataGateway/mockGateway/MockDb/MockDb";
 import Users from "../../../src/dataGateway/mockGateway/Users";
 import { default as mocks } from "./mocks/usersMocks";
 import { default as errorMessages } from "../../../src/dataGateway/errors/UsersErrorsMessages";
+import objectToArray from "../../../src/utils/objectToArray";
 
 // FIXME: remove password and login from User object?
 describe("Mock data gateway users", () => {
@@ -13,13 +14,13 @@ describe("Mock data gateway users", () => {
 
   test("Get should return users array copy", async () => {
     const users = await Users.Get();
-    expect(users).toBeClone(MockDb.Users);
+    expect(users).toBeClone(objectToArray(MockDb.Users));
   });
 
   test("GetByID should return user copy with the given ID", async () => {
     const { existDealerID } = mocks;
     const user = await Users.GetByID(existDealerID);
-    const userFromDb = MockDb.FindUserByID(existDealerID);
+    const userFromDb = MockDb.Users[existDealerID];
     expect(user).toBeClone(userFromDb);
   });
 
@@ -35,7 +36,7 @@ describe("Mock data gateway users", () => {
     const newUser: IUser = getUser();
     const { id: newUserID } = await Users.Create(newUser);
     newUser.id = newUserID;
-    const userFromDb = MockDb.FindUserByID(newUserID);
+    const userFromDb = MockDb.Users[newUserID];
     expect(newUser).toBeClone(userFromDb);
   });
 
@@ -44,7 +45,7 @@ describe("Mock data gateway users", () => {
     const dealerUser = await Users.GetByID(existDealerID);
     dealerUser.firstName = "New dealer name";
     await Users.Save(dealerUser);
-    const userFromDb = MockDb.FindUserByID(existDealerID);
+    const userFromDb = MockDb.Users[existDealerID];
     expect(dealerUser).toBeClone(userFromDb);
   });
 
@@ -60,7 +61,7 @@ describe("Mock data gateway users", () => {
   test("Delete should delete user from users array", async () => {
     const { existDealerID } = mocks;
     await Users.Delete(existDealerID);
-    const userFindResult = MockDb.FindUserByID(existDealerID);
+    const userFindResult = MockDb.Users[existDealerID];
     expect(userFindResult).toBeUndefined();
   });
 

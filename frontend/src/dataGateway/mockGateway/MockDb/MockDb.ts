@@ -14,10 +14,6 @@ class MockDb {
     this.mockDb = mockDbData;
   }
 
-  public static FindUserByID(id: number) {
-    return this.Users.find((user) => user.id === id);
-  }
-
   public static get Users() {
     return this.mockDb.users;
   }

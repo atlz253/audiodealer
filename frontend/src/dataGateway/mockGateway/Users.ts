@@ -6,38 +6,39 @@ import Bills from "./Bills";
 import MockDb from "./MockDb/MockDb";
 import { getNewMockBillUserID } from "./mockObjectID";
 import { default as errorMessages } from "../errors/UsersErrorsMessages";
+import objectToArray from "../../utils/objectToArray";
 
 class Users extends AbstractUsers {
   public static async Get(): Promise<IUser[]> {
-    const usersClone = structuredClone(MockDb.Users);
-    return usersClone;
+    return structuredClone(objectToArray(MockDb.Users));
   }
 
   public static async GetByID(id: number): Promise<IUser> {
-    const user = MockDb.Users.find((user) => user.id === id);
-
-    if (user) {
-      return structuredClone(user);
+    if (MockDb.Users[id] === undefined) {
+      throw new DataGatewayError(
+        errorMessages.getUserWithGivenIDNotFoundMessage(id),
+      );
+    } else {
+      return structuredClone(MockDb.Users[id]);
     }
-
-    throw new DataGatewayError(
-      errorMessages.getUserWithGivenIDNotFoundMessage(id),
-    );
   }
 
   public static async Create(user: IUser): Promise<ID> {
     user.id = getNewMockBillUserID();
     const userClone = structuredClone(user);
-    MockDb.Users.push(userClone);
+    MockDb.Users[user.id] = userClone;
     Bills.CreateBillStorageForUserWithID(user.id);
     return user;
   }
 
   public static async Save(user: IUser): Promise<void> {
-    const userIndex = this.TryGetUserIndexByID(user.id);
-
-    const userClone = structuredClone(user);
-    MockDb.Users[userIndex] = userClone;
+    if (this.IsUserExist(user.id)) {
+      MockDb.Users[user.id] = structuredClone(user);
+    } else {
+      throw new DataGatewayError(
+        errorMessages.getUserWithGivenIDNotFoundMessage(user.id),
+      );
+    }
   }
 
   public static async Delete(id: number): Promise<void> {
@@ -45,23 +46,17 @@ class Users extends AbstractUsers {
       throw new DataGatewayError(
         errorMessages.getFirstAdminDeleteNotAllowedMessage(),
       );
-    }
-
-    const userIndex = this.TryGetUserIndexByID(id);
-
-    MockDb.Users.splice(userIndex, 1);
-  }
-
-  private static TryGetUserIndexByID(id: number) { // TODO: move to MockDb?
-    const userIndex = MockDb.Users.findIndex((u) => u.id === id);
-
-    if (userIndex === -1) {
+    } else if (this.IsUserExist(id)) {
+      delete MockDb.Users[id];
+    } else {
       throw new DataGatewayError(
         errorMessages.getUserWithGivenIDNotFoundMessage(id),
       );
     }
+  }
 
-    return userIndex;
+  private static IsUserExist(id: number) {
+    return MockDb.Users[id] !== undefined;
   }
 }
 

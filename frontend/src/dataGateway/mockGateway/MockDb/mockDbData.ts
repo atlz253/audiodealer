@@ -10,10 +10,10 @@ export interface ProviderProductMockDb extends ID {
 }
 
 export interface MockDbData {
-  users: IUser[],
-  providers: IProvider[],
-  providerProducts: ProviderProductMockDb[][],
-  products: IProduct[],
-  clients: IClient[],
-  bills: IBill[][]
+  users: { [key: number]: IUser };
+  providers: IProvider[];
+  providerProducts: ProviderProductMockDb[][];
+  products: IProduct[];
+  clients: IClient[];
+  bills: IBill[][];
 }
