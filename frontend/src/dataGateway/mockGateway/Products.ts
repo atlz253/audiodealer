@@ -11,15 +11,13 @@ class Products extends AbstractProducts {
   }
 
   public static async GetByID(id: number) {
-    const product = MockDb.Products.find((product) => product.id === id);
-
-    if (product) {
-      return structuredClone(product);
+    if (this.IsProductWithIDExist(id)) {
+      return structuredClone(MockDb.Products[id]);
+    } else {
+      throw new DataGatewayError(
+        errorMessages.getProductWithGivenIDNotFoundMessage(id),
+      );
     }
-
-    throw new DataGatewayError(
-      errorMessages.getProductWithGivenIDNotFoundMessage(id),
-    );
   }
 
   public static async GetCount() {
@@ -34,25 +32,27 @@ class Products extends AbstractProducts {
   }
 
   public static async Save(product: IProduct) {
-    const productIndex = this.TryGetProductIndexByID(product.id);
-    MockDb.Products[productIndex] = structuredClone(product);
+    if (this.IsProductWithIDExist(product.id)) {
+      MockDb.Products[product.id] = structuredClone(product);
+    } else {
+      throw new DataGatewayError(
+        errorMessages.getProductWithGivenIDNotFoundMessage(product.id),
+      );
+    }
   }
 
   public static async Delete(id: number) {
-    const productIndex = this.TryGetProductIndexByID(id);
-    MockDb.Products.splice(productIndex, 1);
+    if (this.IsProductWithIDExist(id)) {
+      delete MockDb.Products[id];
+    } else {
+      throw new DataGatewayError(
+        errorMessages.getProductWithGivenIDNotFoundMessage(id),
+      );
+    }
   }
 
-  private static TryGetProductIndexByID(productID: number): number {
-    const productIndex = MockDb.Products.findIndex((p) => p.id === productID);
-
-    if (productIndex === -1) {
-      throw new DataGatewayError(
-        errorMessages.getProductWithGivenIDNotFoundMessage(productID),
-      );
-    } else {
-      return productIndex;
-    }
+  private static IsProductWithIDExist(id: number) {
+    return MockDb.Products[id] !== undefined;
   }
 }
 

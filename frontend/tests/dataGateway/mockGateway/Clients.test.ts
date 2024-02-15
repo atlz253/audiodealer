@@ -17,7 +17,7 @@ describe("Mock data gateway clients", () => {
   test("GetByID should return client", async () => {
     const { existClientID } = mocks;
     const client = await Clients.GetByID(existClientID);
-    const clientFromDb = MockDb.FindClientByID(existClientID);
+    const clientFromDb = MockDb.Clients[existClientID];
     expect(client).toBeClone(clientFromDb);
   });
 
@@ -39,7 +39,7 @@ describe("Mock data gateway clients", () => {
     const newClient = mocks.getClientMock();
     const { id: newClientID } = await Clients.Create(newClient);
     newClient.id = newClientID;
-    const clientFromDb = MockDb.FindClientByID(newClientID);
+    const clientFromDb = MockDb.Clients[newClientID];
     expect(clientFromDb).toBeClone(newClient);
   });
 
@@ -47,7 +47,7 @@ describe("Mock data gateway clients", () => {
     const client = await Clients.GetByID(mocks.existClientID);
     client.name = "NewClientName";
     await Clients.Save(client);
-    const clientFromDb = MockDb.FindClientByID(client.id);
+    const clientFromDb = MockDb.Clients[client.id];
     expect(clientFromDb).toBeClone(client);
   });
 
@@ -61,10 +61,10 @@ describe("Mock data gateway clients", () => {
 
   test("Delete should delete client from clients array", async () => {
     const { existClientID } = mocks;
-    const clientFromDb = MockDb.FindClientByID(existClientID);
+    const clientFromDb = MockDb.Clients[existClientID];
     expect(clientFromDb).not.toBeUndefined();
     await Clients.Delete(existClientID);
-    const clientSearchResult = MockDb.FindClientByID(existClientID);
+    const clientSearchResult = MockDb.Clients[existClientID];
     expect(clientSearchResult).toBeUndefined();
   });
 

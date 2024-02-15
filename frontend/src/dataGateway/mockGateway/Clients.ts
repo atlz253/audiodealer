@@ -17,10 +17,8 @@ class Clients extends AbstractClients {
   }
 
   public static async GetByID(id: number) {
-    const client = MockDb.Clients.find((client) => client.id === id);
-
-    if (client) {
-      return structuredClone(client);
+    if (this.IsClientWithIDExist(id)) {
+      return structuredClone(MockDb.Clients[id]);
     } else {
       throw new DataGatewayError(
         errorMessages.getClientWithGivenIDNotFoundMessage(id),
@@ -41,29 +39,27 @@ class Clients extends AbstractClients {
   }
 
   public static async Save(client: IClient) {
-    // TODO: save added time
-    const clientIndex = this.TryFindClientIndexByID(client.id);
-    const clientClone = structuredClone(client);
-    MockDb.Clients[clientIndex] = clientClone;
+    if (this.IsClientWithIDExist(client.id)) {
+      MockDb.Clients[client.id] = structuredClone(client);
+    } else {
+      throw new DataGatewayError(
+        errorMessages.getClientWithGivenIDNotFoundMessage(client.id),
+      );
+    }
   }
 
   public static async Delete(id: number): Promise<void> {
-    const clientIndex = this.TryFindClientIndexByID(id);
-    MockDb.Clients.splice(clientIndex, 1);
+    if (this.IsClientWithIDExist(id)) {
+      delete MockDb.Clients[id];
+    } else {
+      throw new DataGatewayError(
+        errorMessages.getClientWithGivenIDNotFoundMessage(id),
+      );
+    }
   }
 
-  private static TryFindClientIndexByID(clientID: number): number {
-    const clientIndex = MockDb.Clients.findIndex(
-      (client) => client.id === clientID,
-    );
-
-    if (clientIndex === -1) {
-      throw new DataGatewayError(
-        errorMessages.getClientWithGivenIDNotFoundMessage(clientID),
-      );
-    } else {
-      return clientIndex;
-    }
+  private static IsClientWithIDExist(id: number) {
+    return MockDb.Clients[id] !== undefined;
   }
 }
 

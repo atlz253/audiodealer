@@ -18,7 +18,7 @@ describe("Mock gateway providers", () => {
   test("GetByID should return provider copy with given ID", async () => {
     const { existProviderID } = mocks;
     const provider = await Providers.GetByID(existProviderID);
-    const providerFromDb = MockDb.FindProviderByID(existProviderID);
+    const providerFromDb = MockDb.Providers[existProviderID];
     expect(provider).toBeClone(providerFromDb);
   });
 
@@ -41,7 +41,7 @@ describe("Mock gateway providers", () => {
     const newProvider: IProvider = getProvider();
     const { id: newProviderID } = await Providers.Create(newProvider);
     newProvider.id = newProviderID;
-    const providerFromDb = MockDb.FindProviderByID(newProviderID);
+    const providerFromDb = MockDb.Providers[newProviderID];
     expect(providerFromDb).toBeClone(newProvider);
   });
 
@@ -50,7 +50,7 @@ describe("Mock gateway providers", () => {
     const providerForSave = await Providers.GetByID(existProviderID);
     providerForSave.name = "New provider name";
     await Providers.Save(providerForSave);
-    const providerFromDb = MockDb.FindProviderByID(existProviderID);
+    const providerFromDb = MockDb.Providers[existProviderID];
     expect(providerFromDb).toBeClone(providerForSave);
   });
 
@@ -66,7 +66,7 @@ describe("Mock gateway providers", () => {
   test("Delete should delete provider from providers array", async () => {
     const { existProviderID } = mocks;
     await Providers.Delete(existProviderID);
-    const providerFindResult = MockDb.FindProviderByID(existProviderID);
+    const providerFindResult = MockDb.Providers[existProviderID];
     expect(providerFindResult).toBeUndefined();
   });
 

@@ -17,7 +17,7 @@ describe("Mock data gateway products", () => {
   test("GetByID should return product clone with given productID", async () => {
     const { existProductID } = mocks;
     const product = await Products.GetByID(existProductID);
-    const productFromDb = MockDb.FindProductByID(existProductID);
+    const productFromDb = MockDb.Products[existProductID];
     expect(product).toBeClone(productFromDb);
   });
 
@@ -39,7 +39,7 @@ describe("Mock data gateway products", () => {
     const newProduct = mocks.getProductMock();
     const { id: newProductID } = await Products.Create(newProduct);
     newProduct.id = newProductID;
-    const productFromDb = MockDb.FindProductByID(newProductID);
+    const productFromDb = MockDb.Products[newProductID];
     expect(productFromDb).toBeClone(newProduct);
   });
 
@@ -48,7 +48,7 @@ describe("Mock data gateway products", () => {
     const productForSave = await Products.GetByID(existProductID);
     productForSave.name = "New product name";
     await Products.Save(productForSave);
-    const productFromDb = MockDb.FindProductByID(productForSave.id);
+    const productFromDb = MockDb.Products[productForSave.id];
     expect(productFromDb).toBeClone(productForSave);
   });
 
@@ -62,10 +62,10 @@ describe("Mock data gateway products", () => {
 
   test("Delete should delete product from products array", async () => {
     const { existProductID } = mocks;
-    const product = MockDb.FindProductByID(existProductID);
+    const product = MockDb.Products[existProductID];
     expect(product).not.toBeUndefined();
     await Products.Delete(existProductID);
-    const productSearchResult = MockDb.FindProductByID(existProductID);
+    const productSearchResult = MockDb.Products[existProductID];
     expect(productSearchResult).toBeUndefined();
   });
 

@@ -45,31 +45,27 @@ class Providers extends AbstractProviders {
   }
 
   public static async Save(provider: IProvider) {
-    const providerIndex = this.TryFindProviderIndexByID(provider.id);
-    MockDb.Providers[providerIndex] = structuredClone(provider);
+    if (this.IsProviderWithIDExist(provider.id)) {
+      MockDb.Providers[provider.id] = structuredClone(provider);
+    } else {
+      throw new DataGatewayError(
+        errorMessages.getProviderWithGivenIDNotFoundMessage(provider.id),
+      );
+    }
   }
 
   public static async Delete(providerID: number) {
-    const providerIndex = this.TryFindProviderIndexByID(providerID);
-    MockDb.Providers.splice(providerIndex, 1);
+    if (this.IsProviderWithIDExist(providerID)) {
+      delete MockDb.Providers[providerID];
+    } else {
+      throw new DataGatewayError(
+        errorMessages.getProviderWithGivenIDNotFoundMessage(providerID),
+      );
+    }
   }
 
   private static IsProviderWithIDExist(id: number) {
     return MockDb.Providers[id] !== undefined;
-  }
-
-  private static TryFindProviderIndexByID(id: number) {
-    const providerIndex = MockDb.Providers.findIndex(
-      (provider) => provider.id === id,
-    );
-
-    if (providerIndex === -1) {
-      throw new DataGatewayError(
-        errorMessages.getProviderWithGivenIDNotFoundMessage(id),
-      );
-    } else {
-      return providerIndex;
-    }
   }
 }
 

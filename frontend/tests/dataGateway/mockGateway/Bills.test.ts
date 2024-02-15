@@ -14,7 +14,7 @@ describe("Mock data gateway bills", () => {
   test("GetBillCloneByUserIDAndBillID should return bill clone with given userID and billID", async () => {
     const { userID, billID } = mocks.existBillMockInfo;
     const bill = await Bills.GetBillCloneByUserIDAndBillID(userID, billID);
-    const billFromDb = MockDb.FindBillByOwnerIDAndBillID(userID, billID);
+    const billFromDb = MockDb.Bills[userID][billID];
     expect(bill).toBeClone(billFromDb);
   });
 
@@ -41,10 +41,7 @@ describe("Mock data gateway bills", () => {
     const newBill = getBill();
     const { id: newBillID } = await Bills.Create(existUserID, newBill);
     newBill.id = newBillID;
-    const billFromDb = MockDb.FindBillByOwnerIDAndBillID(
-      existUserID,
-      newBillID,
-    );
+    const billFromDb = MockDb.Bills[existUserID][newBillID];
     expect(billFromDb).toBeClone(newBill);
   });
 
@@ -86,7 +83,7 @@ describe("Mock data gateway bills", () => {
     const bill = await Bills.GetBillCloneByUserIDAndBillID(userID, billID);
     bill.billNumber = uniqueBillNumber;
     await Bills.Save(userID, bill);
-    const savedBillFromDb = MockDb.FindBillByOwnerIDAndBillID(userID, billID);
+    const savedBillFromDb = MockDb.Bills[userID][billID];
     expect(savedBillFromDb).toBeClone(bill);
   });
 
@@ -112,10 +109,10 @@ describe("Mock data gateway bills", () => {
 
   test("Delete should delete bill from user bills array with given userID", async () => {
     const { userID, billID } = mocks.existBillMockInfo;
-    const bill = MockDb.FindBillByOwnerIDAndBillID(userID, billID);
+    const bill = MockDb.Bills[userID][billID];
     expect(bill).not.toBeUndefined();
     await Bills.Delete(userID, billID);
-    const findResult = MockDb.FindBillByOwnerIDAndBillID(userID, billID);
+    const findResult = MockDb.Bills[userID][billID];
     expect(findResult).toBeUndefined();
   });
 
