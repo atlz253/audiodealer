@@ -13,7 +13,7 @@ class Users extends AbstractUsers {
   }
 
   public static async GetByID(id: number): Promise<IUser> {
-    if (this.IsUserExist(id)) {
+    if (this.IsUserWithIDExist(id)) {
       return structuredClone(MockDb.Users[id]);
     } else {
       throw new DataGatewayError(
@@ -31,7 +31,7 @@ class Users extends AbstractUsers {
   }
 
   public static async Save(user: IUser): Promise<void> {
-    if (this.IsUserExist(user.id)) {
+    if (this.IsUserWithIDExist(user.id)) {
       MockDb.Users[user.id] = structuredClone(user);
     } else {
       throw new DataGatewayError(
@@ -45,7 +45,7 @@ class Users extends AbstractUsers {
       throw new DataGatewayError(
         errorMessages.getFirstAdminDeleteNotAllowedMessage(),
       );
-    } else if (this.IsUserExist(id)) {
+    } else if (this.IsUserWithIDExist(id)) {
       delete MockDb.Users[id];
     } else {
       throw new DataGatewayError(
@@ -54,7 +54,7 @@ class Users extends AbstractUsers {
     }
   }
 
-  private static IsUserExist(id: number) {
+  private static IsUserWithIDExist(id: number) {
     return MockDb.Users[id] !== undefined;
   }
 }

@@ -22,17 +22,13 @@ class Providers extends AbstractProviders {
   }
 
   public static async GetByID(providerID: number) {
-    const provider = MockDb.Providers.find(
-      (provider) => provider.id === providerID,
-    );
-
-    if (provider) {
-      return structuredClone(provider);
+    if (this.IsProviderWithIDExist(providerID)) {
+      return structuredClone(MockDb.Providers[providerID]);
+    } else {
+      throw new DataGatewayError(
+        errorMessages.getProviderWithGivenIDNotFoundMessage(providerID),
+      );
     }
-
-    throw new DataGatewayError(
-      errorMessages.getProviderWithGivenIDNotFoundMessage(providerID),
-    );
   }
 
   public static async GetCount() {
@@ -56,6 +52,10 @@ class Providers extends AbstractProviders {
   public static async Delete(providerID: number) {
     const providerIndex = this.TryFindProviderIndexByID(providerID);
     MockDb.Providers.splice(providerIndex, 1);
+  }
+
+  private static IsProviderWithIDExist(id: number) {
+    return MockDb.Providers[id] !== undefined;
   }
 
   private static TryFindProviderIndexByID(id: number) {
