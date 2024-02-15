@@ -13,7 +13,7 @@ import Manufacturers from "./Manufacturers";
 import Products from "./Products";
 import Providers from "./Providers";
 
-class DB {
+class DB { /* TODO: DataGateway inheritance */
   public static get Categories(): typeof Categories {
     return Categories;
   }

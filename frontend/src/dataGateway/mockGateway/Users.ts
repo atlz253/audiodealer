@@ -14,12 +14,12 @@ class Users extends AbstractUsers {
   }
 
   public static async GetByID(id: number): Promise<IUser> {
-    if (MockDb.Users[id] === undefined) {
+    if (this.IsUserExist(id)) {
+      return structuredClone(MockDb.Users[id]);
+    } else {
       throw new DataGatewayError(
         errorMessages.getUserWithGivenIDNotFoundMessage(id),
       );
-    } else {
-      return structuredClone(MockDb.Users[id]);
     }
   }
 
