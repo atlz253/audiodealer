@@ -6,11 +6,10 @@ import Bills from "./Bills";
 import MockDb from "./MockDb/MockDb";
 import { getNewMockBillUserID } from "./mockObjectID";
 import { default as errorMessages } from "../errors/UsersErrorsMessages";
-import objectToArray from "../../utils/objectToArray";
 
 class Users extends AbstractUsers {
   public static async Get(): Promise<IUser[]> {
-    return structuredClone(objectToArray(MockDb.Users));
+    return structuredClone(MockDb.Users);
   }
 
   public static async GetByID(id: number): Promise<IUser> {

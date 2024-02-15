@@ -3,7 +3,6 @@ import MockDb from "../../../src/dataGateway/mockGateway/MockDb/MockDb";
 import Users from "../../../src/dataGateway/mockGateway/Users";
 import { default as mocks } from "./mocks/usersMocks";
 import { default as errorMessages } from "../../../src/dataGateway/errors/UsersErrorsMessages";
-import objectToArray from "../../../src/utils/objectToArray";
 
 // FIXME: remove password and login from User object?
 describe("Mock data gateway users", () => {
@@ -14,7 +13,7 @@ describe("Mock data gateway users", () => {
 
   test("Get should return users array copy", async () => {
     const users = await Users.Get();
-    expect(users).toBeClone(objectToArray(MockDb.Users));
+    expect(users).toBeClone(MockDb.Users);
   });
 
   test("GetByID should return user copy with the given ID", async () => {

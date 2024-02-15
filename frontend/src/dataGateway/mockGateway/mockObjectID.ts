@@ -1,11 +1,8 @@
 import ID from "../../../../common/interfaces/ID";
-import objectToArray from "../../utils/objectToArray";
 import MockDb from "./MockDb/MockDb";
 
 export function getNewMockBillUserID() {
-  const usersNextID = getNewMockObjectID(
-    structuredClone(objectToArray(MockDb.Users)),
-  );
+  const usersNextID = getNewMockObjectID(structuredClone(MockDb.Users));
   const providersNextID = getNewMockObjectID(MockDb.Providers);
   const clientsNextID = getNewMockObjectID(MockDb.Clients);
   return Math.max(usersNextID, providersNextID, clientsNextID);

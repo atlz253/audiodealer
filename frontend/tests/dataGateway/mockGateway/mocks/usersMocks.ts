@@ -9,22 +9,22 @@ const notExistsUserID = 999;
 
 function getAdminAndDealerMock(): MockDbData {
   return {
-    users: {
-      0: {
+    users: [
+      {
         id: 0,
         type: "admin",
         firstName: "Admin",
         login: "admin",
         password: "admin",
       },
-      1: {
+      {
         id: existDealerID,
         type: "dealer",
         firstName: "Dealer",
         login: "dealer",
         password: "dealer",
       },
-    },
+    ],
     providers: [],
     providerProducts: [],
     products: [],
