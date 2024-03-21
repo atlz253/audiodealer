@@ -15,6 +15,10 @@ import clientsRouter from "./routers/clientsRouter/clientsRouter";
 import IUser from "../../common/interfaces/IUser";
 import providersRouter from "./routers/providersRouter/providersRouter";
 import queriesRouter from "./routers/queriesRouter/queriesRouter";
+import DataGateway from "../../frontend/src/dataGateway/DataGateway";
+import PostgresGateway from "../../common/src/dataGateway/postgresGateway/PostgresGateway";
+
+DataGateway.SetDataGatewayImplementation(PostgresGateway);
 
 const app: Express = express();
 

@@ -3,21 +3,21 @@ import IBaseProvider from "../../../common/interfaces/IBaseProvider";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import IconButton from "../components/IconButton";
 import { Table } from "react-bootstrap";
-import API from "../api/API";
 import tryServerRequest from "../utils/tryServerRequest";
 import { useNavigate } from "react-router-dom";
+import DataGateway from "../../../common/src/dataGateway/DataGateway";
 
 const Providers: FC = () => {
   const [providers, setProviders] = useState<IBaseProvider[]>([]);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (API.AuthToken === "") {
+    if (DataGateway.AuthToken === "") {
       return;
     }
 
     tryServerRequest(async () => {
-      const providers = await API.Providers.Get();
+      const providers = await DataGateway.Providers.Get();
 
       setProviders(providers as IBaseProvider[]);
     });

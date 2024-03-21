@@ -1,7 +1,7 @@
 import { Button, Spinner } from "react-bootstrap";
 import Categories from "../components/Categories/Categories";
 import useQueriesCategory from "../hooks/useQueriesCategory";
-import API from "../api/API";
+import DataGateway from "../../../common/src/dataGateway/DataGateway";
 
 const QueriesPage = () => {
   const [categories, isLoading] = useQueriesCategory();
@@ -29,7 +29,7 @@ const QueriesPage = () => {
                 key={item.name}
                 className="mt-2"
                 style={{ width: "500px" }}
-                onClick={() => API.DownloadFile(item.link, `${item.name}.xlsx`)}
+                onClick={() => DataGateway.DownloadFile(item.link, `${item.name}.xlsx`)}
               >
                 {item.name}
               </Button>

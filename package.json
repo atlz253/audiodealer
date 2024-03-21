@@ -3,16 +3,19 @@
   "version": "1.0.0",
   "author": "Fedor Alekseev",
   "scripts": {
-    "front:start": "cd frontend && react-scripts start",
-    "front:build": "cd frontend && react-scripts build",
-    "front:test": "cd frontend && react-scripts test",
-    "front:eject": "cd frontend && react-scripts eject",
+    "front:start": "cd frontend && node scripts/start.js",
+    "front:demo:start": "cd frontend && node scripts/start.js --demo",
+    "front:build": "cd frontend && node scripts/build.js",
+    "front:demo:build": "cd frontend && node scripts/build.js --demo",
+    "front:test": "cd frontend && node scripts/test.js",
     "back:test": "cd backend && jest",
     "back:build": "cd backend && npx tsc",
     "back:start": "cd backend && node dist/index.js",
-    "back:dev": "cd backend && concurrently \"npx tsc --watch\" \"nodemon -q dist/index.js\""
+    "back:dev": "cd backend && concurrently \"npx tsc --watch\" \"nodemon -q dist/index.js\"",
+    "test": "jest"
   },
   "dependencies": {
+    "@babel/preset-env": "^7.23.8",
     "@fortawesome/fontawesome-svg-core": "^6.4.0",
     "@fortawesome/free-solid-svg-icons": "^6.4.0",
     "@fortawesome/react-fontawesome": "^0.2.0",
@@ -32,6 +35,7 @@
     "@types/react": "^18.0.35",
     "@types/react-dom": "^18.0.11",
     "axios": "^1.3.5",
+    "babel-jest": "^29.7.0",
     "body-parser": "^1.20.2",
     "bootstrap": "^5.2.3",
     "classnames": "^2.3.2",
@@ -47,6 +51,7 @@
     "pg": "^8.10.0",
     "pg-format": "^1.0.4",
     "prettier": "^3.1.1",
+    "prettier-2": "npm:prettier@^2",
     "react": "^18.2.0",
     "react-bootstrap": "^2.7.3",
     "react-dom": "^18.2.0",
@@ -56,6 +61,7 @@
     "ts-jest": "^29.1.0",
     "typescript": "^4.9.5",
     "web-vitals": "^2.1.4",
+    "webpack-conditional-loader": "^1.0.12",
     "winston": "^3.8.2",
     "xlsx": "^0.18.5"
   }

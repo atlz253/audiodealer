@@ -2,8 +2,7 @@ import express, { Response } from "express";
 import RequestBody from "../../interfaces/RequestBody";
 import expressAsyncHandler from "express-async-handler";
 import ICheque from "../../../../common/interfaces/ICheque";
-import DB from "../../DB/DB";
-import Logger from "../../logger";
+import updateCheque from "../../../../common/src/cheques/updateCheque";
 
 const chequesRouter = express.Router({
   mergeParams: true,
@@ -14,20 +13,7 @@ chequesRouter.put(
   expressAsyncHandler(async (req: RequestBody<ICheque>, res: Response) => {
     const contractID = Number(req.params.contractID);
 
-    await DB.Cheques.Update(req.body);
-
-    DB.Products.UpdateQuantityByChequeID(
-      req.body.id,
-      req.body.type === "buy" ? "+" : "-",
-    );
-
-    DB.Cheques.Select({ contractID, chequeStatus: "unpaid" }).then(
-      (cheques) => {
-        if (cheques.length === 0) {
-          DB.Contracts.UpdateStatus(contractID, "close");
-        }
-      },
-    );
+    await updateCheque(contractID, req.body);
 
     res.sendStatus(200);
   }),

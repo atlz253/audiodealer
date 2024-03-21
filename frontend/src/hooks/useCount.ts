@@ -1,14 +1,14 @@
-import API from "../api/API";
+import DataGateway from "../../../common/src/dataGateway/DataGateway";
 import useFetchData from "./useFetchData";
 
-export const useContractsCount = (contractStatus?: string) =>
-  useFetchData(() => API.Contracts.GetCount(contractStatus), 0);
+export const useContractsCount = (contractStatus?: "open" | "close") =>
+  useFetchData(() => DataGateway.Contracts.GetCount(contractStatus), 0);
 
 export const useClientsCount = () =>
-  useFetchData(() => API.Clients.GetCount(), 0);
+  useFetchData(() => DataGateway.Clients.GetCount(), 0);
 
 export const useProvidersCount = () =>
-  useFetchData(() => API.Providers.GetCount(), 0);
+  useFetchData(() => DataGateway.Providers.GetCount(), 0);
 
 export const useProductsCount = () =>
-  useFetchData(() => API.Products.GetCount(), 0);
+  useFetchData(() => DataGateway.Products.GetCount(), 0);

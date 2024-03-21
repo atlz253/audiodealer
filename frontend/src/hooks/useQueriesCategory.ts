@@ -1,8 +1,8 @@
 import IQueriesCategory from "../../../common/interfaces/IQueriesCategory";
+import DataGateway from "../../../common/src/dataGateway/DataGateway";
 import useFetchData from "./useFetchData";
-import API from "../api/API";
 
 const useQueriesCategory = () =>
-  useFetchData<IQueriesCategory[]>(() => API.Queries.Get(), []);
+  useFetchData<IQueriesCategory[]>(() => DataGateway.Queries.Get(), []);
 
 export default useQueriesCategory;

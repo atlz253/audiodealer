@@ -6,7 +6,7 @@ interface IBaseContract extends ID, IStatus {
   buyerName?: string;
   price: number;
   created: string;
-  type: string;
+  type: "sell" | "buy";
 }
 
 export default IBaseContract;

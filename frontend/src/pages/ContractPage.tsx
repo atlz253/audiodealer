@@ -1,19 +1,12 @@
-import { FC, useContext, useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import IContract from "../../../common/interfaces/IContract";
-import API from "../api/API";
-import Bill from "../components/Bill";
-import IBill from "../../../common/interfaces/IBill";
-import { faArrowLeft, faTrash } from "@fortawesome/free-solid-svg-icons";
-import IconButton from "../components/IconButton";
-import DeleteModal from "../components/DeleteModal";
-import ProductsTable, { ProductsIndexing } from "../components/ProductsTable";
-import { AuthContext, IAuthContext } from "../context";
 import Contract from "../components/Contract";
 import ItemPage from "../components/ItemPage";
 import tryServerRequest from "../utils/tryServerRequest";
 import INewContract from "../../../common/interfaces/INewContract";
 import IContractProduct from "../../../common/interfaces/IContractProduct";
+import DataGateway from "../../../common/src/dataGateway/DataGateway";
 
 interface IContractPageProps {
   newContract?: boolean;
@@ -27,8 +20,8 @@ const ContractPage: FC<IContractPageProps> = ({ newContract }) => {
     buyerName: "",
     price: 0,
     created: "",
-    status: "",
-    type: "default",
+    status: "open",
+    type: "sell",
     sellerBill: {
       id: 0,
       correspondentBill: "",
@@ -59,7 +52,7 @@ const ContractPage: FC<IContractPageProps> = ({ newContract }) => {
 
   const getContract = (id: number) => {
     tryServerRequest(async () => {
-      const contract = await API.Contracts.GetByID(id);
+      const contract = await DataGateway.Contracts.GetByID(id);
 
       setContract(contract);
     });
@@ -72,7 +65,7 @@ const ContractPage: FC<IContractPageProps> = ({ newContract }) => {
       return;
     }
 
-    if (API.AuthToken === "") {
+    if (DataGateway.AuthToken === "") {
       return;
     }
 
@@ -101,7 +94,7 @@ const ContractPage: FC<IContractPageProps> = ({ newContract }) => {
         }),
       };
 
-      const response = await API.Contracts.Create(newContract);
+      const response = await DataGateway.Contracts.Create(newContract);
 
       navigate("/contracts/" + response.id);
 

@@ -1,31 +1,25 @@
 import IBill from "../../../common/interfaces/IBill";
 import Bill from "./Bill";
-import ProductsTable, { ProductsIndexing } from "./ProductsTable";
 import IContract from "../../../common/interfaces/IContract";
 import {
   FC,
   Dispatch,
   SetStateAction,
-  useEffect,
   useState,
-  ChangeEvent,
   useContext,
 } from "react";
 import Categories from "./Categories/Categories";
 import NamedSelect from "./NamedInputs/NamedSelect";
 import tryServerRequest from "../utils/tryServerRequest";
-import API from "../api/API";
 import IName from "../../../common/interfaces/IName";
 import IBillNumber from "../../../common/interfaces/IBillNumber";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import IconButton from "./IconButton";
-import ProductsModal from "./ProductsModal";
 import IBaseProduct from "../../../common/interfaces/IBaseProduct";
 import Products from "./Products";
 import CategoryItem from "./Categories/CategoryItem";
 import { AuthContext } from "../context";
 import ChequesTable from "./ChequesTable";
 import ICheque from "../../../common/interfaces/ICheque";
+import DataGateway from "../../../common/src/dataGateway/DataGateway";
 
 interface IContractProps {
   contract: IContract;
@@ -61,7 +55,7 @@ const Contract: FC<IContractProps> = ({
     tryServerRequest(async () => {
       const ID = Number(value);
 
-      const buyerBillsNumbers = await API.Clients.Bills.Get(ID, true);
+      const buyerBillsNumbers = await DataGateway.Clients.Bills.Get(ID, true);
 
       setBuyerBillOwnerSelect(value);
       setBuyerBillNumberSelect("default");
@@ -103,25 +97,25 @@ const Contract: FC<IContractProps> = ({
     tryServerRequest(async () => {
       switch (value) {
         case "sell":
-          const sellerBillsNumbers = await API.DealerBills.Get(true);
+          const sellerBillsNumbers = await DataGateway.DealerBills.Get(true);
 
           setSellersBillsNumbers(sellerBillsNumbers);
 
-          const products = await API.Products.Get();
+          const products = await DataGateway.Products.Get();
 
           setProducts(products);
 
-          const clientsNames = await API.Clients.Get(true);
+          const clientsNames = await DataGateway.Clients.Get(true);
 
           setBuyersNames(clientsNames as IName[]);
 
           break;
         case "buy":
-          const sellerNames = await API.Providers.Get(true);
+          const sellerNames = await DataGateway.Providers.Get(true);
 
           setSellersNames(sellerNames);
 
-          const dealerBillsNumbers = await API.DealerBills.Get(true);
+          const dealerBillsNumbers = await DataGateway.DealerBills.Get(true);
 
           setBuyerBillsNumbers(dealerBillsNumbers);
 
@@ -136,15 +130,15 @@ const Contract: FC<IContractProps> = ({
       setSellerBillNameSelect("default");
       setBuyerBillNumberSelect("default");
       setSellerBillNumberSelect("default");
-      setContract({ ...contract, type: value });
+      setContract({ ...contract, type: value as "sell" | "buy" });
     });
   };
 
   const sellerBillOwnerChange = (value: string) => {
     tryServerRequest(async () => {
-      const sellerBillsNumbers = await API.Providers.Bills.Get(Number(value));
+      const sellerBillsNumbers = await DataGateway.Providers.Bills.Get(Number(value));
 
-      const products = await API.Providers.Products.Get(Number(value));
+      const products = await DataGateway.Providers.Products.Get(Number(value));
 
       setProducts(products);
 
@@ -156,7 +150,7 @@ const Contract: FC<IContractProps> = ({
 
   const updateCheque = (cheque: ICheque) => {
     tryServerRequest(async () => {
-      await API.Contracts.Cheques.Save(contract.id, cheque);
+      await DataGateway.Cheques.Save(contract.id, cheque);
 
       const newCheques = contract.cheques.map((c) => {
         if (c.id === cheque.id) {

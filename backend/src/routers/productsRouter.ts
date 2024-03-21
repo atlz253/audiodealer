@@ -9,6 +9,7 @@ import RequestBody from "../interfaces/RequestBody";
 import expressAsyncHandler from "express-async-handler";
 import Logger from "../logger";
 import ICount from "../../../common/interfaces/ICount";
+import DataGateway from "../../../frontend/src/dataGateway/DataGateway";
 
 const productsRouter = express.Router();
 
@@ -23,7 +24,7 @@ productsRouter.get(
       res: Response<IBaseProduct[]>,
       next: NextFunction,
     ) => {
-      const products = await DB.Products.SelectAll();
+      const products = await DataGateway.Products.Get();
 
       res.json(products);
     },
@@ -33,16 +34,18 @@ productsRouter.get(
 productsRouter.get(
   "/count",
   expressAsyncHandler(async (req: RequestBody, res: Response<ICount>) => {
-    const count = await DB.Products.SelectCount();
+    const count = await DataGateway.Products.GetCount();
 
-    res.json(count);
+    res.json({ count });
   }),
 );
 
 productsRouter.get(
   "/:productID",
   expressAsyncHandler(async (req: RequestBody, res: Response<IProduct>) => {
-    const product = await DB.Products.SelectByID(Number(req.params.productID));
+    const product = await DataGateway.Products.GetByID(
+      Number(req.params.productID),
+    );
 
     res.json(product);
   }),
@@ -51,7 +54,7 @@ productsRouter.get(
 productsRouter.post(
   "/new",
   expressAsyncHandler(async (req: RequestBody<IProduct>, res: Response<ID>) => {
-    const id = await DB.Products.Insert(req.body);
+    const id = await DataGateway.Products.Create(req.body);
 
     res.json(id);
   }),
@@ -60,7 +63,7 @@ productsRouter.post(
 productsRouter.put(
   "/:productID",
   expressAsyncHandler(async (req: RequestBody<IProduct>, res: Response) => {
-    await DB.Products.Update(req.body);
+    await DataGateway.Products.Save(req.body);
 
     res.sendStatus(200);
   }),
@@ -69,7 +72,7 @@ productsRouter.put(
 productsRouter.delete(
   "/:productID",
   expressAsyncHandler(async (req: RequestBody, res: Response) => {
-    await DB.Products.Delete(Number(req.params.productID));
+    await DataGateway.Products.Delete(Number(req.params.productID));
 
     Logger.info(`${req.jwt?.login} удалил товар с ID ${req.params.productID}`);
 

@@ -1,20 +1,11 @@
-import {
-  faArrowLeft,
-  faFloppyDisk,
-  faPen,
-  faTrash,
-} from "@fortawesome/free-solid-svg-icons";
 import { FC, useState, useEffect, useRef } from "react";
-import ApproveModal from "../components/ApproveModal";
-import DeleteModal from "../components/DeleteModal";
-import IconButton from "../components/IconButton";
 import { useNavigate, useParams } from "react-router-dom";
 import tryServerRequest from "../utils/tryServerRequest";
-import API from "../api/API";
 import IDealer from "../../../common/interfaces/IDealer";
 import User from "../components/User";
 import IUser from "../../../common/interfaces/IUser";
 import ItemPage from "../components/ItemPage";
+import DataGateway from "../../../common/src/dataGateway/DataGateway";
 
 interface IUserProps {
   newUser?: boolean;
@@ -50,7 +41,7 @@ const UserPage: FC<IUserProps> = ({ newUser }) => {
     }
 
     tryServerRequest(async () => {
-      const user = await API.Users.GetByID(Number(userID));
+      const user = await DataGateway.Users.GetByID(Number(userID));
 
       setUser(user);
     });
@@ -84,11 +75,11 @@ const UserPage: FC<IUserProps> = ({ newUser }) => {
 
     tryServerRequest(async () => {
       if (newUser) {
-        const response = await API.Users.Create(user);
+        const response = await DataGateway.Users.Create(user);
 
         setUser({ ...user, id: response.id });
       } else {
-        await API.Users.Save(user);
+        await DataGateway.Users.Save(user);
       }
     });
 
@@ -97,7 +88,7 @@ const UserPage: FC<IUserProps> = ({ newUser }) => {
 
   const deleteUser = () => {
     tryServerRequest(async () => {
-      await API.Users.Delete(user.id);
+      await DataGateway.Users.Delete(user.id);
     });
 
     navigate("/users");
