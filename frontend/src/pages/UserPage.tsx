@@ -1,20 +1,11 @@
-import {
-  faArrowLeft,
-  faFloppyDisk,
-  faPen,
-  faTrash,
-} from "@fortawesome/free-solid-svg-icons";
 import { FC, useState, useEffect, useRef } from "react";
-import ApproveModal from "../components/ApproveModal";
-import DeleteModal from "../components/DeleteModal";
-import IconButton from "../components/IconButton";
 import { useNavigate, useParams } from "react-router-dom";
 import tryServerRequest from "../utils/tryServerRequest";
-import DataGateway from "../dataGateway/DataGateway";
 import IDealer from "../../../common/interfaces/IDealer";
 import User from "../components/User";
 import IUser from "../../../common/interfaces/IUser";
 import ItemPage from "../components/ItemPage";
+import DataGateway from "../../../common/src/dataGateway/DataGateway";
 
 interface IUserProps {
   newUser?: boolean;

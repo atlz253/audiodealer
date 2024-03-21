@@ -4,11 +4,11 @@ import IClient from "../../../common/interfaces/IClient";
 import { useNavigate, useParams } from "react-router-dom";
 import Client from "../components/Client";
 import tryServerRequest from "../utils/tryServerRequest";
-import DataGateway from "../dataGateway/DataGateway";
 import Categories from "../components/Categories/Categories";
 import IBaseBill from "../../../common/interfaces/IBaseBill";
 import IBill from "../../../common/interfaces/IBill";
 import Bills from "../components/Bills";
+import DataGateway from "../../../common/src/dataGateway/DataGateway";
 
 interface ClientPageProps {
   newClient?: boolean;

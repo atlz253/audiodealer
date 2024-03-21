@@ -11,7 +11,8 @@
     "back:test": "cd backend && jest",
     "back:build": "cd backend && npx tsc",
     "back:start": "cd backend && node dist/index.js",
-    "back:dev": "cd backend && concurrently \"npx tsc --watch\" \"nodemon -q dist/index.js\""
+    "back:dev": "cd backend && concurrently \"npx tsc --watch\" \"nodemon -q dist/index.js\"",
+    "test": "jest"
   },
   "dependencies": {
     "@babel/preset-env": "^7.23.8",

@@ -4,8 +4,8 @@ import { Table } from "react-bootstrap";
 import IconButton from "../components/IconButton";
 import { useNavigate } from "react-router-dom";
 import IBaseClient from "../../../common/interfaces/IBaseClient";
-import DataGateway from "../dataGateway/DataGateway";
 import tryServerRequest from "../utils/tryServerRequest";
+import DataGateway from "../../../common/src/dataGateway/DataGateway";
 
 const Clients: FC = () => {
   const [clients, setClients] = useState<IBaseClient[]>([]);

@@ -3,19 +3,14 @@ import ItemPage from "../components/ItemPage";
 import IProvider from "../../../common/interfaces/IProvider";
 import Provider from "../components/Provider";
 import Categories from "../components/Categories/Categories";
-import DataGateway from "../dataGateway/DataGateway";
 import tryServerRequest from "../utils/tryServerRequest";
 import { useNavigate, useParams } from "react-router-dom";
 import IBaseBill from "../../../common/interfaces/IBaseBill";
-import BillsTable from "../components/BillsTable";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import IconButton from "../components/IconButton";
-import BillModal from "../components/BillModal";
 import IBill from "../../../common/interfaces/IBill";
 import Bills from "../components/Bills";
 import Products from "../components/Products";
 import IBaseProduct from "../../../common/interfaces/IBaseProduct";
-import IProduct from "../../../common/interfaces/IProduct";
+import DataGateway from "../../../common/src/dataGateway/DataGateway";
 
 interface IProviderPageProps {
   newProvider?: boolean;

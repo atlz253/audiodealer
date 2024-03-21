@@ -1,7 +1,7 @@
-import DataGateway from "../dataGateway/DataGateway";
+import DataGateway from "../../../common/src/dataGateway/DataGateway";
 import useFetchData from "./useFetchData";
 
-export const useContractsCount = (contractStatus?: string) =>
+export const useContractsCount = (contractStatus?: "open" | "close") =>
   useFetchData(() => DataGateway.Contracts.GetCount(contractStatus), 0);
 
 export const useClientsCount = () =>

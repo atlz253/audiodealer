@@ -1,8 +1,6 @@
 import { Modal } from "react-bootstrap";
 import ProductsTable from "./ProductsTable";
-import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
-import tryServerRequest from "../utils/tryServerRequest";
-import DataGateway from "../dataGateway/DataGateway";
+import { Dispatch, FC, SetStateAction } from "react";
 import IBaseProduct from "../../../common/interfaces/IBaseProduct";
 
 interface IProductsModalProps {

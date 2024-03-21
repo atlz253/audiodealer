@@ -1,5 +1,7 @@
+export type Status = "open" | "close";
+
 interface IStatus {
-  status: string;
+  status: "open" | "close";
 }
 
 export default IStatus;

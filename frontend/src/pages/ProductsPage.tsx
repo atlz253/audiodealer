@@ -1,18 +1,13 @@
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import React, { FC, useContext, useEffect, useState } from "react";
-import IconButton from "../components/IconButton";
+import { FC, useEffect, useState } from "react";
 import IBaseProduct from "../../../common/interfaces/IBaseProduct";
-import DataGateway from "../dataGateway/DataGateway";
-import ProductsTable from "../components/ProductsTable";
-import { useNavigate } from "react-router-dom";
 import tryServerRequest from "../utils/tryServerRequest";
 import Products from "../components/Products";
 import IProduct from "../../../common/interfaces/IProduct";
 import ID from "../../../common/interfaces/ID";
+import DataGateway from "../../../common/src/dataGateway/DataGateway";
 
 const ProductsPage: FC = () => {
   const [products, setProducts] = useState<IBaseProduct[]>([]);
-  const navigate = useNavigate();
 
   useEffect(() => {
     if (DataGateway.AuthToken === "") {

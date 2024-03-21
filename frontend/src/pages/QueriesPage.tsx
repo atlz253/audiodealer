@@ -1,7 +1,7 @@
 import { Button, Spinner } from "react-bootstrap";
 import Categories from "../components/Categories/Categories";
 import useQueriesCategory from "../hooks/useQueriesCategory";
-import DataGateway from "../dataGateway/DataGateway";
+import DataGateway from "../../../common/src/dataGateway/DataGateway";
 
 const QueriesPage = () => {
   const [categories, isLoading] = useQueriesCategory();

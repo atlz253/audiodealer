@@ -5,14 +5,12 @@ import dealerAuthCheck from "../../middleware/dealerAuthCheck";
 import jwtCheck from "../../middleware/jwtCheck";
 import expressAsyncHandler from "express-async-handler";
 import RequestBody from "../../interfaces/RequestBody";
-import DB from "../../DB/DB";
-import Logger from "../../logger";
 import INewContract from "../../../../common/interfaces/INewContract";
 import ID from "../../../../common/interfaces/ID";
-import ICheques from "../../interfaces/ICheques";
-import { DateTime } from "luxon";
 import chequesRouter from "./chequesRouter";
 import ICount from "../../../../common/interfaces/ICount";
+import DataGateway from "../../../../frontend/src/dataGateway/DataGateway";
+import createContract from "../../../../common/src/contracts/createContract";
 
 const contractsRouter = express.Router();
 
@@ -25,7 +23,7 @@ contractsRouter.get(
   "/",
   expressAsyncHandler(
     async (req: RequestBody, res: Response<IBaseContract[]>) => {
-      const contracts = await DB.Contracts.Select();
+      const contracts = await DataGateway.Contracts.Get();
 
       res.json(contracts);
     },
@@ -41,9 +39,9 @@ contractsRouter.get(
       throw new Error("Был передан некорректный параметр contractStatus");
     }
 
-    const count = await DB.Contracts.SelectCount(contractStatus);
+    const count = await DataGateway.Contracts.GetCount(contractStatus);
 
-    res.json(count);
+    res.json({ count });
   }),
 );
 
@@ -52,7 +50,7 @@ contractsRouter.get(
   expressAsyncHandler(async (req: RequestBody, res: Response<IContract>) => {
     const contractID = Number(req.params.contractID);
 
-    const contract = await DB.Contracts.SelectByID(contractID);
+    const contract = await DataGateway.Contracts.GetByID(contractID);
 
     res.json(contract);
   }),
@@ -62,37 +60,9 @@ contractsRouter.post(
   "/new",
   expressAsyncHandler(
     async (req: RequestBody<INewContract>, res: Response<ID>) => {
-      const result = await DB.Contracts.Insert(req.body);
+      const id = await createContract(req.body);
 
-      const cheques: ICheques = {};
-
-      req.body.products.forEach((product) => {
-        const key = product.deliveryDays;
-
-        if (cheques[key] === undefined) {
-          cheques[key] = [product];
-        } else {
-          cheques[key].push(product);
-        }
-      });
-
-      for (let key in cheques) {
-        const deliveryDate = DateTime.now()
-          .plus({ days: Number(key) })
-          .toISO();
-
-        if (deliveryDate === null) {
-          Logger.error("Не получилось определить дату доставки");
-
-          continue;
-        }
-
-        const chequeID = await DB.Cheques.Insert(result.id, deliveryDate);
-
-        await DB.Cheques.Products.Insert(chequeID.id, cheques[key]);
-      }
-
-      res.json(result);
+      res.json(id);
     },
   ),
 );

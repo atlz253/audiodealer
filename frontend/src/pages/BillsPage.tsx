@@ -1,17 +1,12 @@
 import { FC, useState, useEffect } from "react";
-import IconButton from "../components/IconButton";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import IBaseBill from "../../../common/interfaces/IBaseBill";
-import DataGateway from "../dataGateway/DataGateway";
 import tryServerRequest from "../utils/tryServerRequest";
-import { useNavigate } from "react-router-dom";
-import BillsTable from "../components/BillsTable";
 import Bills from "../components/Bills";
 import IBill from "../../../common/interfaces/IBill";
+import DataGateway from "../../../common/src/dataGateway/DataGateway";
 
 const BillsPage: FC = () => {
   const [bills, setBills] = useState<IBaseBill[] | null>([]);
-  const navigate = useNavigate();
 
   useEffect(() => {
     if (DataGateway.AuthToken === "") {

@@ -66,7 +66,7 @@ const Contracts: FC<IContractsProps> = ({ contracts, setContracts }) => {
 
     setContracts(
       contracts.sort((a, b) => {
-        if (a.status === b.type) {
+        if (a.status === b.status) {
           return 0;
         }
         if (a.status === "open") {

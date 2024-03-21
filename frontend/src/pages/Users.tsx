@@ -4,8 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { Table } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import tryServerRequest from "../utils/tryServerRequest";
-import DataGateway from "../dataGateway/DataGateway";
 import IUser from "../../../common/interfaces/IUser";
+import DataGateway from "../../../common/src/dataGateway/DataGateway";
 
 const Users = () => {
   const [users, setUsers] = useState<IUser[]>([]);

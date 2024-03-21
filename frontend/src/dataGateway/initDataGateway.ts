@@ -1,9 +1,9 @@
-import DataGateway from "./DataGateway";
+import DataGateway from "../../../common/src/dataGateway/DataGateway";
 // #if process.env.DEMO === "demo"
-import MockGateway from "./mockGateway/MockGateway";
+import MockGateway from "../../../common/src/dataGateway/mockGateway/MockGateway";
 // #endif
 // #if process.env.DEMO !== "demo"
-import BackendGateway from "./backendGateway/BackendGateway";
+import BackendGateway from "../../../common/src/dataGateway/backendGateway/BackendGateway";
 // #endif
 
 export function initDataGateway() {
